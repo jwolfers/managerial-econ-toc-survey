@@ -1,0 +1,2357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Managerial Economics TOC Survey</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+  :root{
+    --paper:#fdfcfa; --ink:#2a2624; --ink-soft:#6b6258;
+    --red:#9f1912; --berry:#8e004d; --purple:#56246f; --blue:#0b8dc7;
+    --teal:#0e7a66; --slate:#6a898e; --gold:#fdc400; --chartreuse:#c1c400;
+    --line:#ddd8d0; --card:#ffffff; --wash:#f6f3ec;
+    --sans:"Source Sans 3","Source Sans Pro",-apple-system,"Segoe UI",Arial,sans-serif;
+    --serif:"Source Serif 4","Source Serif Pro",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45}
+  a{color:var(--blue)}
+  .shell{max-width:1160px;margin:0 auto;padding:0 20px 80px}
+
+  /* ---------- header ---------- */
+  header{padding:26px 0 0}
+  .eyebrow{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);font-weight:600}
+  .eyebrow .dot{color:var(--gold)}
+  h1.brand{font-family:var(--sans);font-weight:300;font-size:40px;margin:2px 0 0;color:var(--red);letter-spacing:.01em}
+  h1.brand b{font-weight:700}
+  .colorbar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:14px 0 0}
+  .colorbar span{flex:1}
+  .tagline{font-family:var(--serif);font-size:18px;color:var(--ink-soft);margin:12px 0 0}
+  .headrow{display:flex;align-items:flex-end;justify-content:space-between;gap:28px}
+  .headtext{min-width:0}
+  .coverthumb{flex-shrink:0;width:150px;border-radius:2px;border:1px solid var(--line);
+    box-shadow:0 5px 16px rgba(0,0,0,.18)}
+  @media (max-width:760px){.coverthumb{display:none}}
+
+  /* ---------- steps ---------- */
+  .step{display:none;margin-top:28px}
+  .step.active{display:block}
+  h2{font-family:var(--sans);font-weight:700;font-size:22px;margin:0 0 6px;color:var(--ink)}
+  .lede{font-family:var(--serif);max-width:62ch;color:var(--ink);margin:0 0 18px}
+  label.f{display:block;font-weight:600;font-size:14px;margin:14px 0 4px}
+  label.f small{font-weight:400;color:var(--ink-soft)}
+  input[type=text],input[type=email],input[type=number],input[type=password],textarea,select{
+    font-family:var(--sans);font-size:15px;color:var(--ink);background:var(--card);
+    border:1px solid var(--line);border-radius:6px;padding:9px 11px;width:100%;max-width:520px}
+  textarea{max-width:680px;min-height:110px;font-family:var(--serif)}
+  input[type=number]{width:110px}
+  input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+  .btn{display:inline-block;font-family:var(--sans);font-weight:600;font-size:15px;border:none;border-radius:6px;
+    padding:11px 22px;cursor:pointer;background:var(--red);color:#fff}
+  .btn:hover{background:#7f130e}
+  .btn.secondary{background:transparent;color:var(--red);border:1.5px solid var(--red)}
+  .btn.secondary:hover{background:#f7e9e8}
+  .btn:disabled{background:#c9c2b8;cursor:not-allowed}
+  .btn.secondary:disabled{background:transparent;color:#c9c2b8;border-color:#c9c2b8}
+  .btn.small{padding:7px 14px;font-size:13.5px}
+  .btnrow{margin-top:26px;display:flex;gap:12px;align-items:center}
+
+  /* ---------- builder layout ---------- */
+  .buildbar{display:flex;flex-wrap:wrap;align-items:center;gap:16px;background:var(--wash);
+    border:1px solid var(--line);border-radius:8px;padding:10px 16px;margin:0 0 18px}
+  .buildbar .count{font-weight:600;display:flex;align-items:center;gap:6px}
+  .buildbar .count input{width:64px;padding:5px 8px;text-align:center}
+  .stepbtn{width:30px;height:30px;border-radius:6px;border:1.5px solid var(--red);background:transparent;
+    color:var(--red);font-size:17px;font-weight:700;line-height:1;cursor:pointer}
+  .stepbtn:hover{background:#f7e9e8}
+  .addsession{width:100%;border:1.5px dashed var(--line);background:transparent;border-radius:8px;
+    color:var(--slate);font-family:var(--sans);font-size:14px;font-weight:600;padding:10px;cursor:pointer}
+  .addsession:hover{border-color:var(--slate);background:var(--wash)}
+  .progress{flex:1;min-width:180px;display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft)}
+  .pbar{flex:1;height:8px;background:#e8e3d9;border-radius:4px;overflow:hidden}
+  .pbar i{display:block;height:100%;background:var(--chartreuse);width:0%}
+  .builder{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px;align-items:start}
+  /* Narrow screens: chapters first (a phone user should see chapters, not empty sessions),
+     as a self-scrolling panel so the sessions stay within reach below. */
+  @media (max-width:900px){.builder{grid-template-columns:1fr}
+    .bank{position:static !important;order:-1;max-height:65vh}}
+  /* Phones: session-chip buttons get their own row so titles stay readable. */
+  @media (max-width:600px){
+    .slotbody .chip:not(.ghost) .row{flex-wrap:wrap}
+    .slotbody .chip:not(.ghost) .acts{flex-basis:100%;justify-content:flex-end;margin-top:2px}}
+  /* Touch devices: larger tap targets. */
+  @media (pointer:coarse){
+    .chip .acts button{width:30px;height:30px;font-size:15px}
+    .chip .caret{width:26px;height:26px;font-size:14px}
+    .qadd button{padding:10px 14px}}
+
+  /* sessions column */
+  .session{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:0 0 12px}
+  .session h3{display:flex;align-items:center;gap:10px;margin:0;padding:8px 14px;font-size:13px;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--slate);border-bottom:1px dashed var(--line)}
+  .session h3 .num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+    border-radius:50%;background:var(--chartreuse);color:#3a3a00;font-size:12.5px;font-weight:700;letter-spacing:0}
+  .slotbody{min-height:44px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+  .slotbody.dragover{background:#fdf6d8;box-shadow:inset 0 0 0 2px var(--gold);border-radius:0 0 8px 8px}
+  .empties{font-size:13px;color:#b0a89c;font-style:italic;padding:2px 4px}
+
+  /* chapter cards */
+  .chip{background:var(--card);border:1px solid var(--line);
+    border-left:5px solid var(--slate);border-radius:6px;padding:7px 9px;cursor:grab;user-select:none}
+  .chip:active{cursor:grabbing}
+  .chip.dragging{opacity:.45}
+  .chip .row{display:flex;align-items:center;gap:6px}
+  .chip .caret{border:none;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:13px;
+    width:22px;height:22px;border-radius:4px;line-height:1;flex-shrink:0;transition:transform .15s;padding:0}
+  .chip .caret.open{transform:rotate(90deg)}
+  .chip .caret:hover{background:var(--wash);color:var(--ink)}
+  .chip .t{flex:1;min-width:0}
+  .chip .t .ch{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+  .chip .t .ti{font-size:14.5px;font-weight:600;line-height:1.25}
+  .chip .t .ti:hover{text-decoration:underline;cursor:pointer}
+  .chip .acts{display:flex;gap:2px;flex-shrink:0}
+  .chip .acts button{border:none;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:14px;
+    width:26px;height:26px;border-radius:4px;line-height:1}
+  .chip .acts button:hover{background:var(--wash);color:var(--ink)}
+  .chip .acts button.danger:hover{background:#f7e9e8;color:var(--red)}
+  .chipdetails{border-top:1px dashed var(--line);margin:7px 0 2px;padding:8px 2px 2px 28px;cursor:default}
+  .chipdetails p.sum{font-family:var(--serif);font-size:13.5px;margin:0 0 6px;line-height:1.45}
+  .chipdetails .sech{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--ink-soft);margin:6px 0 2px}
+  .chipdetails ul{margin:2px 0 6px;padding-left:16px;font-family:var(--serif);font-size:13px}
+  .chipdetails .dep{font-size:12.5px;color:var(--ink-soft);margin:2px 0}
+  .chipdetails .dep b{color:var(--ink)}
+
+  /* bank column */
+  .bank{position:sticky;top:14px;background:var(--wash);border:1px solid var(--line);border-radius:8px;
+    padding:14px;max-height:calc(100vh - 28px);overflow-y:auto}
+  .bank h3{margin:0 0 4px;font-size:15px}
+  .bank .hint{font-size:13px;color:var(--ink-soft);margin:0 0 12px}
+  .partgroup{margin:0 0 14px}
+  .partgroup h4{margin:0 0 6px;font-size:12px;letter-spacing:.09em;text-transform:uppercase}
+  .partgroup .chips{display:flex;flex-direction:column;gap:6px}
+  .unused{border-top:2px dashed var(--line);margin-top:14px;padding-top:12px}
+  .unused h4{margin:0 0 2px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft)}
+  .unused .hint{font-size:12.5px;color:var(--ink-soft);margin:0 0 8px}
+  .unused .chips{display:flex;flex-direction:column;gap:6px;min-height:34px;border-radius:6px}
+  .unused .chips.dragover{background:#fdf6d8;box-shadow:0 0 0 2px var(--gold)}
+  .bank .chips.dragover{background:#fdf6d8;box-shadow:0 0 0 2px var(--gold)}
+
+  /* toast + modal */
+  #toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;
+    font-size:14.5px;padding:11px 18px;border-radius:8px;max-width:520px;box-shadow:0 6px 24px rgba(0,0,0,.25);
+    opacity:0;pointer-events:none;transition:opacity .25s;z-index:60}
+  #toast.show{opacity:1}
+  #toast.warn{background:var(--berry)}
+  .chip.ghost{border-style:dashed;background:var(--wash);cursor:default;opacity:.9}
+  .chip.ghost .t .ti{font-weight:400;font-style:italic}
+  .chip.ghost .t .ti:hover{text-decoration:none;cursor:default}
+
+  /* quick-add popup */
+  .qadd{position:absolute;background:var(--card);border:1px solid var(--line);border-radius:8px;
+    box-shadow:0 8px 24px rgba(0,0,0,.18);padding:6px;z-index:55;max-height:260px;overflow-y:auto}
+  .qadd button{display:block;width:100%;text-align:left;border:none;background:transparent;padding:7px 12px;
+    font-size:14px;cursor:pointer;border-radius:5px}
+  .qadd button:hover{background:var(--wash)}
+  .qadd button:disabled{color:#b0a89c;cursor:default;background:transparent}
+
+  /* wrap-up */
+  .q{margin:0 0 22px;max-width:680px}
+  .q .prompt{font-weight:600;margin:0 0 6px}
+  .q .opts{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .q .opts label{font-weight:400;font-size:15px;display:flex;align-items:center;gap:5px}
+  .q .endlab{font-size:13px;color:var(--ink-soft)}
+
+  .previewnote{background:#fdf6d8;border:1px solid var(--gold);border-radius:8px;padding:10px 14px;
+    font-size:14px;margin:16px 0 0}
+  .wrapqs{border-top:2px solid var(--line);margin-top:34px;padding-top:22px}
+
+  /* edit mode */
+  .editview{display:none;margin-top:28px}
+  body.editmode .step{display:none !important}
+  body.editmode .previewnote{display:none}
+  body.editmode .editview{display:block}
+  .edbar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+    background:var(--wash);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:0 0 18px}
+  .edbar .hint{font-size:13px;color:var(--ink-soft)}
+  .edbar label{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .edgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+  .edcard{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+  .edcard .edhead{display:flex;align-items:center;gap:8px;margin:0 0 4px}
+  .edcard .edid{font-weight:700;color:var(--slate);font-size:13px;letter-spacing:.06em;
+    text-transform:uppercase;flex-shrink:0}
+  .edcard .edhead input{flex:1;font-size:13px;padding:5px 8px}
+  .edcard .eddel{border:none;background:transparent;cursor:pointer;font-size:15px;color:var(--ink-soft);
+    width:28px;height:28px;border-radius:4px;flex-shrink:0}
+  .edcard .eddel:hover{background:#f7e9e8;color:var(--red)}
+  .edcard label.f{margin:8px 0 2px}
+  .edcard textarea{min-height:64px;font-family:var(--sans);font-size:13.5px;max-width:none}
+  .edcard input{max-width:none}
+  .pchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+  .pchip{border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:14px;
+    min-width:30px;padding:3px 8px;font-size:13px;font-weight:600;cursor:pointer}
+  .pchip:hover{border-color:var(--slate)}
+  .pchip.on{background:var(--purple);border-color:var(--purple);color:#fff}
+  .done{max-width:640px}
+  .done h2{color:var(--red)}
+  .done p{font-family:var(--serif);font-size:17px}
+  .credit{margin-top:40px;font-size:12.5px;color:var(--ink-soft)}
+
+  /* ---------- password gate ---------- */
+  #gate{position:fixed;inset:0;background:rgba(42,38,36,.45);display:none;align-items:center;
+    justify-content:center;z-index:80;padding:20px}
+  #gate.show{display:flex}
+  .gatecard{background:var(--card);border:1px solid var(--line);border-radius:10px;max-width:400px;width:100%;
+    padding:24px 26px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+  .gatecard h3{margin:0 0 4px;font-size:19px}
+  .gatecard p{font-size:14px;color:var(--ink-soft);margin:0 0 14px}
+  .gatecard .err{color:var(--berry);font-size:13.5px;min-height:18px;margin:8px 0 0}
+  .gatecard .row2{display:flex;gap:10px;margin-top:14px;align-items:center}
+
+  /* ---------- analyze mode ---------- */
+  .analyzeview{display:none;margin-top:28px}
+  body.anmode .step{display:none !important}
+  body.anmode .previewnote{display:none}
+  body.anmode .analyzeview{display:block}
+  .anbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--wash);
+    border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:0 0 20px}
+  .anbar .hint{font-size:13px;color:var(--ink-soft)}
+  .ansec{margin:0 0 34px}
+  .ansec h3{font-size:17px;margin:0 0 3px;color:var(--ink)}
+  .ansec .subt{font-size:13.5px;color:var(--ink-soft);margin:0 0 12px;max-width:74ch}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 8px}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+  .tile .v{font-size:28px;font-weight:700;line-height:1.1}
+  .tile .l{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+  .barrow{display:grid;grid-template-columns:230px 1fr 150px;gap:10px;align-items:center;padding:1px 0}
+  .barrow .lab{font-size:13px;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .barrow .lab b{font-weight:700}
+  .barrow .val{font-size:12.5px;color:var(--ink-soft);white-space:nowrap}
+  .btrack{height:14px;display:flex;align-items:center}
+  .bfill{height:12px;border-radius:0 4px 4px 0;min-width:2px}
+  .barrow:hover{background:var(--wash)}
+  @media (max-width:700px){.barrow{grid-template-columns:120px 1fr 90px}}
+  .heatwrap{overflow-x:auto}
+  .heat{border-collapse:separate;border-spacing:2px}
+  .heat td,.heat th{padding:0;font-weight:400}
+  .heat th{font-size:11.5px;color:var(--ink-soft);text-align:left;padding:0 8px 4px 0;white-space:nowrap}
+  .heat .rowlab{font-size:12.5px;padding-right:10px;white-space:nowrap;max-width:250px;overflow:hidden;text-overflow:ellipsis}
+  .heat .cell{width:34px;height:22px;border-radius:3px;background:var(--wash)}
+  .heat .cell:hover{outline:2px solid var(--ink);outline-offset:-1px}
+  .heat .inc{font-size:12px;color:var(--ink-soft);padding-left:10px;white-space:nowrap}
+  .consensus{counter-reset:cons;max-width:720px}
+  .consitem{display:flex;align-items:center;gap:10px;padding:5px 8px;border-radius:6px}
+  .consitem:hover{background:var(--wash)}
+  .consitem::before{counter-increment:cons;content:counter(cons);width:24px;height:24px;flex-shrink:0;
+    display:inline-flex;align-items:center;justify-content:center;border-radius:50%;
+    background:var(--chartreuse);color:#3a3a00;font-size:12px;font-weight:700}
+  .consitem .sw{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+  .consitem .nm{font-size:14px;flex:1;min-width:0}
+  .consitem .meta{font-size:12px;color:var(--ink-soft);white-space:nowrap}
+  .pairlist{max-width:760px}
+  .pairrow{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13.5px}
+  .pairbar{flex-shrink:0;width:120px;height:12px;border-radius:4px;overflow:hidden;display:flex;background:#e8e3d9}
+  .pairbar i{display:block;height:100%}
+  .campgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+  .camp{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+  .camp h4{margin:0 0 2px;font-size:14px}
+  .camp .sz{font-size:12.5px;color:var(--ink-soft);margin:0 0 8px}
+  .camp .ord{display:flex;flex-wrap:wrap;gap:4px}
+  .camp .ord span{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    padding:0 4px;border-radius:5px;color:#fff;font-size:12px;font-weight:700}
+  .camp .ord span.drop{background:#e8e3d9 !important;color:var(--ink-soft);text-decoration:line-through}
+  .quotes{columns:2;column-gap:20px;max-width:960px}
+  @media (max-width:760px){.quotes{columns:1}}
+  .quote{break-inside:avoid;background:var(--card);border:1px solid var(--line);border-radius:8px;
+    padding:10px 13px;margin:0 0 10px;font-family:var(--serif);font-size:13.5px}
+  .quote .who{font-family:var(--sans);font-size:11.5px;color:var(--ink-soft);margin-top:6px}
+  .quote .who a{color:var(--blue);cursor:pointer;text-decoration:none}
+  .rtable{width:100%;border-collapse:collapse;font-size:13.5px}
+  .rtable th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-soft);border-bottom:1.5px solid var(--line);padding:6px 8px}
+  .rtable td{border-bottom:1px solid var(--line);padding:6px 8px}
+  .rtable tr.sel td{background:#fdf6d8}
+  .rtable tbody tr{cursor:pointer}
+  .rtable tbody tr:hover td{background:var(--wash)}
+  .rdetail{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin-top:14px}
+  .rdetail h4{margin:0 0 2px;font-size:16px}
+  .rdetail .rmeta{font-size:13px;color:var(--ink-soft);margin:0 0 12px}
+  .rdetail .rsess .sh{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--slate);
+    font-weight:700;margin:10px 0 4px}
+  .minichip{display:flex;gap:8px;align-items:baseline;background:var(--paper);border:1px solid var(--line);
+    border-left:4px solid var(--slate);border-radius:5px;padding:4px 9px;margin:3px 0;font-size:13px}
+  .minichip .cn{font-weight:700;font-size:11.5px;flex-shrink:0}
+  .minichip.ghost2{border-style:dashed;color:var(--ink-soft);font-style:italic}
+  .rdetail .qa{margin:14px 0 0;font-size:13.5px}
+  .rdetail .qa .qq{font-weight:600;margin:10px 0 2px}
+  .rdetail .qa .aa{font-family:var(--serif);white-space:pre-wrap}
+  .rdetail .qa .aa.empty{color:#b0a89c;font-style:italic}
+  .llm{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;max-width:860px}
+  .llm .note{font-size:13px;color:var(--ink-soft);margin:0 0 12px}
+  .report{font-family:var(--serif);font-size:14.5px;line-height:1.55;max-width:74ch}
+  .report h3{font-family:var(--sans);font-size:16px;margin:18px 0 6px}
+  .report h4{font-family:var(--sans);font-size:14px;margin:14px 0 4px}
+  .report ul,.report ol{margin:4px 0 10px;padding-left:22px}
+  .report p{margin:0 0 10px}
+  .chatlog{margin:14px 0 0;display:flex;flex-direction:column;gap:10px}
+  .msg{border-radius:8px;padding:9px 13px;max-width:64ch;font-size:14px}
+  .msg.user{background:var(--wash);border:1px solid var(--line);align-self:flex-end;font-weight:600}
+  .msg.asst{background:var(--paper);border:1px solid var(--line);align-self:flex-start}
+  .chatrow{display:flex;gap:10px;margin-top:12px;align-items:flex-start}
+  .chatrow textarea{min-height:44px;flex:1;font-family:var(--sans)}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--red);
+    border-radius:50%;animation:spin .8s linear infinite;vertical-align:-2px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="headrow">
+      <div class="headtext">
+        <div class="eyebrow">Snowberg <span class="dot">&bull;</span> Stevenson <span class="dot">&bull;</span> Wolfers</div>
+        <h1 class="brand">MANAGERIAL <b>ECONOMICS</b></h1>
+        <div class="colorbar" id="colorbar" aria-hidden="true"></div>
+        <p class="tagline">Help us design the table of contents — build the course <em>you</em> would teach.</p>
+      </div>
+      <div class="coverthumb" aria-hidden="true">
+        <svg viewBox="0 0 1246 1588" xmlns="http://www.w3.org/2000/svg" style="display: block; width: 100%; height: auto; background: #ffffff;" font-family="'Source Sans 3','Source Sans Pro',Arial,sans-serif">
+  <rect x="0" y="0" width="1246" height="1588" fill="#ffffff"></rect>
+  <text x="623" y="136" text-anchor="middle" font-size="42" font-weight="600" fill="#6a898e">First Edition</text>
+  <text x="623" y="301" text-anchor="middle" font-size="152" font-weight="300" fill="#9f1912">MANAGERIAL</text>
+  <text x="623" y="489" text-anchor="middle" font-size="190" font-weight="900" fill="#9f1912" textLength="1105" lengthAdjust="spacingAndGlyphs">ECONOMICS</text>
+
+  <!-- capsule columns (127px wide, touching; ends capped by icon badges) -->
+  <rect x="-17.5" y="570.5" width="127" height="602" rx="63.5" fill="#f1e9b6"></rect>
+  <rect x="109.5" y="736.5" width="127" height="603" rx="63.5" fill="#f5cc76"></rect>
+  <rect x="236.5" y="552.5" width="127" height="582" rx="63.5" fill="#a8b8d6"></rect>
+  <rect x="363.5" y="687.5" width="127" height="559" rx="63.5" fill="#f1e9b6"></rect>
+  <rect x="490.5" y="583.5" width="127" height="470" rx="63.5" fill="#93a8ac"></rect>
+  <rect x="617.5" y="744.5" width="127" height="427" rx="63.5" fill="#bc98c5"></rect>
+  <rect x="744.5" y="538.5" width="127" height="524" rx="63.5" fill="#a3daf7"></rect>
+  <rect x="871.5" y="666.5" width="127" height="632" rx="63.5" fill="#e38435"></rect>
+  <rect x="998.5" y="526.5" width="127" height="608" rx="63.5" fill="#f5da49"></rect>
+  <rect x="1125.5" y="655.5" width="127" height="579" rx="63.5" fill="#bc98c5"></rect>
+
+  <!-- badges -->
+  <!-- col 1 top: handshake -->
+  <circle cx="46" cy="634" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(10,598)">
+    <rect x="0" y="30" width="17" height="18" fill="#f0c75e"></rect>
+    <rect x="55" y="25" width="17" height="18" fill="#0b8dc7"></rect>
+    <rect x="15" y="30" width="6" height="18" fill="#ffffff"></rect>
+    <rect x="51" y="25" width="6" height="18" fill="#ffffff"></rect>
+    <rect x="16" y="31" width="27" height="14" rx="7" fill="#e8b93c" transform="rotate(6 30 38)"></rect>
+    <rect x="29" y="27" width="27" height="14" rx="7" fill="#0b8dc7" transform="rotate(6 42 34)"></rect>
+  </g>
+  <!-- col 1 bottom: steering wheel -->
+  <circle cx="46" cy="1109" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(10,1073)">
+    <circle cx="36" cy="36" r="29" fill="#35342f"></circle>
+    <circle cx="36" cy="36" r="21" fill="#c1c400"></circle>
+    <rect x="8" y="33" width="56" height="7" fill="#35342f"></rect>
+    <rect x="32.5" y="36" width="7" height="28" fill="#35342f"></rect>
+    <path d="M26 33h20l-4 13h-12z" fill="#d9d9d4"></path>
+  </g>
+  <!-- col 2 top: grad cap -->
+  <circle cx="173" cy="800" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(137,764)">
+    <path d="M20 30v12c0 6 7 10 16 10s16-4 16-10V30l-16 8z" fill="#4a4644"></path>
+    <path d="M36 10 68 25 36 40 4 25z" fill="#2e2b2b"></path>
+    <path d="M62 27v15" stroke="#c0392b" stroke-width="3" fill="none"></path>
+    <circle cx="62" cy="45" r="3.5" fill="#c0392b"></circle>
+    <circle cx="36" cy="25" r="2.8" fill="#c9a227"></circle>
+  </g>
+  <!-- col 2 bottom: AI sparkle -->
+  <circle cx="173" cy="1276" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(137,1240)" fill="#1b6fae">
+    <text x="28" y="40" font-size="38" font-weight="700" font-family="'Source Sans 3',Arial,sans-serif">AI</text>
+    <path d="M16 12l2.2 5.8L24 20l-5.8 2.2L16 28l-2.2-5.8L8 20l5.8-2.2z"></path>
+    <path d="M13 42l1.7 4.3 4.3 1.7-4.3 1.7L13 54l-1.7-4.3L7 48l4.3-1.7z"></path>
+    <path d="M30 48l2.5 6.5 6.5 2.5-6.5 2.5L30 66l-2.5-6.5L21 57l6.5-2.5z"></path>
+  </g>
+  <!-- col 3 top: briefcase -->
+  <circle cx="300" cy="616" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(264,580)">
+    <path d="M27 21v-5a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v5" stroke="#6b4d2f" stroke-width="4" fill="none"></path>
+    <rect x="9" y="21" width="54" height="35" rx="5" fill="#a97c50"></rect>
+    <path d="M9 36h54v-10a5 5 0 0 0-5-5H14a5 5 0 0 0-5 5z" fill="#8a6540"></path>
+    <rect x="31" y="31" width="10" height="10" rx="2" fill="#e8b93c"></rect>
+  </g>
+  <!-- col 3 bottom: house -->
+  <circle cx="300" cy="1071" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(264,1035)">
+    <rect x="49" y="16" width="9" height="12" fill="#9c5b3f"></rect>
+    <rect x="14" y="31" width="44" height="27" fill="#1e8fd0"></rect>
+    <path d="M6 35 36 11l30 24-4 5-26-21-26 21z" fill="#b8412f"></path>
+    <rect x="20" y="38" width="13" height="14" fill="#d6ecf7"></rect>
+    <rect x="39" y="38" width="13" height="14" fill="#d6ecf7"></rect>
+  </g>
+  <!-- col 4 top: domed monument -->
+  <circle cx="427" cy="751" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(391,715)">
+    <rect x="32" y="8" width="8" height="9" fill="#7b5ea7"></rect>
+    <path d="M21 27a15 15 0 0 1 30 0z" fill="#7b5ea7"></path>
+    <rect x="17" y="27" width="38" height="5" fill="#efe9e2"></rect>
+    <rect x="18" y="32" width="36" height="17" fill="#3a3a3a"></rect>
+    <rect x="20" y="32" width="5" height="17" fill="#f5f1ea"></rect>
+    <rect x="28" y="32" width="5" height="17" fill="#f5f1ea"></rect>
+    <rect x="36" y="32" width="5" height="17" fill="#f5f1ea"></rect>
+    <rect x="44" y="32" width="5" height="17" fill="#f5f1ea"></rect>
+    <rect x="14" y="49" width="44" height="5" fill="#efe9e2"></rect>
+    <rect x="10" y="54" width="52" height="5" fill="#dcd4c8"></rect>
+  </g>
+  <!-- col 4 bottom: calendar + stopwatch -->
+  <circle cx="427" cy="1183" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(391,1147)">
+    <rect x="10" y="14" width="44" height="42" rx="4" fill="#ffffff"></rect>
+    <path d="M10 18a4 4 0 0 1 4-4h36a4 4 0 0 1 4 4v10H10z" fill="#e04b23"></path>
+    <rect x="18" y="8" width="5" height="11" rx="2" fill="#3a3a3a"></rect>
+    <rect x="41" y="8" width="5" height="11" rx="2" fill="#3a3a3a"></rect>
+    <rect x="16" y="33" width="7" height="7" fill="#3a3a3a"></rect>
+    <rect x="27" y="33" width="7" height="7" fill="#e04b23"></rect>
+    <rect x="38" y="33" width="7" height="7" fill="#3a3a3a"></rect>
+    <rect x="16" y="44" width="7" height="7" fill="#e04b23"></rect>
+    <rect x="27" y="44" width="7" height="7" fill="#3a3a3a"></rect>
+    <circle cx="52" cy="52" r="11" fill="#ffffff" stroke="#e04b23" stroke-width="3.5"></circle>
+    <path d="M52 52v-7M52 39v-3" stroke="#3a3a3a" stroke-width="2.5" fill="none"></path>
+  </g>
+  <!-- col 5 top: lightbulb -->
+  <circle cx="554" cy="647" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(518,611)">
+    <path d="M36 6a20 20 0 0 0-11.5 36c2.6 2 4.2 4.7 4.2 7.5h14.6c0-2.8 1.6-5.5 4.2-7.5A20 20 0 0 0 36 6z" fill="#f0d557"></path>
+    <path d="M36 6a20 20 0 0 1 11.5 36c-2.6 2-4.2 4.7-4.2 7.5H36z" fill="#fbf0bd"></path>
+    <rect x="29" y="52" width="14" height="3.5" rx="1.5" fill="#9a9a94"></rect>
+    <rect x="29" y="58" width="14" height="3.5" rx="1.5" fill="#9a9a94"></rect>
+    <rect x="32" y="63" width="8" height="3.5" rx="1.5" fill="#9a9a94"></rect>
+  </g>
+  <!-- col 5 bottom: gas pump -->
+  <circle cx="554" cy="990" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(518,954)">
+    <path d="M24 32c-10 0-10 16 0 16" stroke="#e04b23" stroke-width="4.5" fill="none"></path>
+    <rect x="16" y="22" width="10" height="10" rx="2" fill="#e04b23"></rect>
+    <rect x="30" y="12" width="27" height="46" rx="3" fill="#e04b23"></rect>
+    <rect x="35" y="18" width="17" height="11" rx="1.5" fill="#ffffff"></rect>
+    <rect x="35" y="34" width="17" height="3.5" fill="#b53a1b"></rect>
+    <rect x="35" y="41" width="17" height="3.5" fill="#b53a1b"></rect>
+    <rect x="26" y="58" width="35" height="5" rx="2" fill="#b53a1b"></rect>
+  </g>
+  <!-- col 6 top: couch -->
+  <circle cx="681" cy="808" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(645,772)">
+    <rect x="14" y="20" width="44" height="20" rx="6" fill="#e8912a"></rect>
+    <rect x="8" y="30" width="10" height="19" rx="4" fill="#d97f1d"></rect>
+    <rect x="54" y="30" width="10" height="19" rx="4" fill="#d97f1d"></rect>
+    <rect x="12" y="37" width="48" height="12" rx="4" fill="#f2a93b"></rect>
+    <path d="M36 37v12" stroke="#d97f1d" stroke-width="2.5"></path>
+    <rect x="15" y="49" width="5" height="9" fill="#8a5a20"></rect>
+    <rect x="52" y="49" width="5" height="9" fill="#8a5a20"></rect>
+  </g>
+  <!-- col 6 bottom: crane hook + beam -->
+  <circle cx="681" cy="1108" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(645,1072)">
+    <path d="M40 6v10" stroke="#8a8a86" stroke-width="3.5" fill="none"></path>
+    <path d="M40 16c7 2.5 7 11 0 13.5-4.5 1.6-8-2-7-5.5" stroke="#e8b93c" stroke-width="5" fill="none"></path>
+    <path d="M40 30 20 42M40 30l20 12" stroke="#e8b93c" stroke-width="3" fill="none"></path>
+    <rect x="12" y="42" width="48" height="9" fill="#8a8a86"></rect>
+    <rect x="12" y="40" width="48" height="3" fill="#6f6f6b"></rect>
+    <rect x="12" y="51" width="48" height="3" fill="#6f6f6b"></rect>
+    <rect x="8" y="58" width="56" height="5" fill="#b3b3ae"></rect>
+  </g>
+  <!-- col 7 top: family -->
+  <circle cx="808" cy="602" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(772,566)">
+    <g fill="#8e5bb5">
+      <circle cx="53" cy="13" r="6"></circle>
+      <rect x="47" y="21" width="12" height="28" rx="5"></rect>
+      <path d="M49 24 40 14M57 24l9-10" stroke="#8e5bb5" stroke-width="4.5" stroke-linecap="round" fill="none"></path>
+    </g>
+    <g fill="#d95f2b">
+      <circle cx="30" cy="10" r="6.5"></circle>
+      <rect x="24" y="19" width="13" height="30" rx="5.5"></rect>
+      <path d="M26 22 17 11M35 22l9-11" stroke="#d95f2b" stroke-width="4.5" stroke-linecap="round" fill="none"></path>
+    </g>
+    <g fill="#1e8fd0">
+      <circle cx="11" cy="27" r="5"></circle>
+      <rect x="6.5" y="34" width="9" height="21" rx="4"></rect>
+      <path d="M8 36 2 28M14 36l6-8" stroke="#1e8fd0" stroke-width="3.5" stroke-linecap="round" fill="none"></path>
+    </g>
+    <g fill="#f5c518">
+      <circle cx="40" cy="38" r="4.5"></circle>
+      <rect x="36" y="44" width="8" height="17" rx="3.5"></rect>
+      <path d="M37 46l-5-6M43 46l5-6" stroke="#f5c518" stroke-width="3" stroke-linecap="round" fill="none"></path>
+    </g>
+  </g>
+  <!-- col 7 bottom: smartphone -->
+  <circle cx="808" cy="999" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(772,963)">
+    <rect x="21" y="8" width="30" height="56" rx="5" fill="#2b2b2b"></rect>
+    <rect x="24.5" y="15" width="23" height="40" fill="#ffffff"></rect>
+    <rect x="27" y="18" width="5.5" height="5.5" fill="#e04b23"></rect>
+    <rect x="35" y="18" width="5.5" height="5.5" fill="#3aa757"></rect>
+    <rect x="43" y="18" width="5.5" height="5.5" fill="#1e8fd0"></rect>
+    <rect x="27" y="26" width="5.5" height="5.5" fill="#f5c518"></rect>
+    <rect x="35" y="26" width="5.5" height="5.5" fill="#8e5bb5"></rect>
+    <rect x="43" y="26" width="5.5" height="5.5" fill="#e8912a"></rect>
+    <rect x="27" y="34" width="5.5" height="5.5" fill="#1e8fd0"></rect>
+    <rect x="35" y="34" width="5.5" height="5.5" fill="#e04b23"></rect>
+    <rect x="43" y="34" width="5.5" height="5.5" fill="#3aa757"></rect>
+    <circle cx="36" cy="59.5" r="2.2" fill="#777777"></circle>
+  </g>
+  <!-- col 8 top: stethoscope -->
+  <circle cx="935" cy="730" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(899,694)">
+    <path d="M22 10v15a12 12 0 0 0 24 0V10" stroke="#1e6fb0" stroke-width="5" fill="none"></path>
+    <path d="M34 37c0 9-2 14 5 18 7 4 15 1 15-7v-4" stroke="#1e6fb0" stroke-width="4" fill="none"></path>
+    <rect x="18.5" y="5" width="7" height="9" rx="3" fill="#134f80"></rect>
+    <rect x="42.5" y="5" width="7" height="9" rx="3" fill="#134f80"></rect>
+    <circle cx="54" cy="40" r="7.5" fill="#bcd9ec" stroke="#1e6fb0" stroke-width="3.5"></circle>
+  </g>
+  <!-- col 8 bottom: clapperboard -->
+  <circle cx="935" cy="1235" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(899,1199)">
+    <path d="M9 19 61 9l2.5 13-52 10z" fill="#2e2b2b"></path>
+    <path d="M18 17.5 25 16l3 9-7 1.5zM33 14.5l7-1.5 3 9-7 1.5zM48 11.5 55 10l3 9-7 1.5z" fill="#ffffff"></path>
+    <rect x="10" y="30" width="52" height="30" rx="3" fill="#2e2b2b"></rect>
+    <rect x="18" y="38" width="36" height="4" fill="#ffffff"></rect>
+    <rect x="18" y="46" width="28" height="4" fill="#ffffff"></rect>
+    <rect x="18" y="54" width="32" height="4" fill="#ffffff"></rect>
+  </g>
+  <!-- col 9 top: van -->
+  <circle cx="1062" cy="590" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(1026,554)">
+    <path d="M10 46V30c0-9 7-17 17-17h18c10 0 17 8 17 17v16z" fill="#1f7f8c"></path>
+    <path d="M16 29c1.5-6.5 5.5-11 12-11h16c6.5 0 10.5 4.5 12 11z" fill="#123f46"></path>
+    <path d="M36 18v11" stroke="#1f7f8c" stroke-width="2.5"></path>
+    <rect x="13" y="36" width="11" height="6.5" rx="3" fill="#f5efb0"></rect>
+    <rect x="48" y="36" width="11" height="6.5" rx="3" fill="#f5efb0"></rect>
+    <rect x="8" y="46" width="56" height="8" rx="3" fill="#3a3a3a"></rect>
+    <circle cx="21" cy="56" r="4.5" fill="#222222"></circle>
+    <circle cx="51" cy="56" r="4.5" fill="#222222"></circle>
+  </g>
+  <!-- col 9 bottom: stroller -->
+  <circle cx="1062" cy="1071" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(1026,1035)">
+    <path d="M12 30A24 24 0 0 1 36 6v24z" fill="#f5c518"></path>
+    <path d="M12 30h32v4a14 14 0 0 1-14 14h-4a14 14 0 0 1-14-14z" fill="#e8b93c"></path>
+    <path d="M44 32 56 15M56 15l7-2" stroke="#3a3a3a" stroke-width="3" fill="none" stroke-linecap="round"></path>
+    <path d="M20 48l-2 8M40 44l6 12" stroke="#3a3a3a" stroke-width="3" fill="none"></path>
+    <circle cx="17" cy="59" r="5.5" fill="#3a3a3a"></circle>
+    <circle cx="48" cy="59" r="5.5" fill="#3a3a3a"></circle>
+  </g>
+  <!-- col 10 top: microphone -->
+  <circle cx="1189" cy="719" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(1153,683)">
+    <rect x="26" y="6" width="20" height="32" rx="10" fill="#5b7f9e"></rect>
+    <rect x="26" y="12" width="20" height="2.6" fill="#ffffff"></rect>
+    <rect x="26" y="18" width="20" height="2.6" fill="#ffffff"></rect>
+    <rect x="26" y="24" width="20" height="2.6" fill="#ffffff"></rect>
+    <rect x="26" y="30" width="20" height="2.6" fill="#ffffff"></rect>
+    <path d="M18 26v6a18 18 0 0 0 36 0v-6" stroke="#1e4f74" stroke-width="4.5" fill="none"></path>
+    <rect x="33.5" y="49" width="5" height="10" fill="#1e4f74"></rect>
+    <rect x="23" y="59" width="26" height="4.5" rx="2" fill="#1e4f74"></rect>
+  </g>
+  <!-- col 10 bottom: egg carton -->
+  <circle cx="1189" cy="1171" r="63.5" fill="#c1c400"></circle>
+  <g transform="translate(1153,1135)">
+    <ellipse cx="26" cy="33" rx="9.5" ry="12" fill="#fdfcf7"></ellipse>
+    <ellipse cx="46" cy="33" rx="9.5" ry="12" fill="#fdfcf7"></ellipse>
+    <path d="M9 40c4.5-3.5 11-3.5 14.5 0 3.5-3.5 10.5-3.5 14 0 3.5-3.5 10-3.5 14.5 0h11v8a7 7 0 0 1-7 7H16a7 7 0 0 1-7-7z" fill="#b3a58f"></path>
+  </g>
+
+  <text x="623" y="1426" text-anchor="middle" font-size="44" font-weight="700" fill="#56246f">Erik Snowberg <tspan font-size="52" fill="#e38435">&#8226;</tspan> Betsey Stevenson <tspan font-size="52" fill="#e38435">&#8226;</tspan> Justin Wolfers</text>
+
+  <!-- publisher mark (simplified placeholder) -->
+  <g transform="translate(1000,1465)">
+    <rect x="0" y="0" width="58" height="58" rx="10" fill="#e1251b"></rect>
+    <path d="M11 45V25c0-6.5 5-11 11-11 4.3 0 7.5 2 9 5.2 1.5-3.2 4.7-5.2 9-5.2 6 0 11 4.5 11 11v20h-7.5V26c0-3-2-5-4.8-5s-4.8 2-4.8 5v19h-7.5V26c0-3-2-5-4.8-5s-4.8 2-4.8 5v19z" fill="#ffffff"></path>
+    <text x="68" y="27" font-size="28" font-weight="700" fill="#e1251b">macmillan</text>
+    <text x="68" y="53" font-size="28" font-weight="400" fill="#58595b">learning</text>
+  </g>
+</svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="previewnote" id="previewNote" hidden><b>Preview mode.</b> This copy isn't connected to the
+    response database — nothing you submit here is saved. Admin?
+    <a href="#edit" id="previewEditLink">Chapter editor</a> &middot;
+    <a href="#analyze" id="previewAnalyzeLink">Results dashboard</a> (demo data).</div>
+
+  <!-- BUILDER -->
+  <section class="step active" id="step-build">
+    <p class="lede" id="ledeBuild">We are writing a new business economics textbook, and we want its structure to match the
+      way you actually teach. Drag the chapters on the right into your class sessions, in the order you'd
+      cover them — and toss anything you wouldn't teach into the unused pile. Click any title for details.</p>
+    <div class="buildbar">
+      <span class="count">Class sessions:
+        <button type="button" class="stepbtn" id="btnSessMinus" title="One fewer session">&minus;</button>
+        <input type="number" id="numSessions2" min="1" max="60">
+        <button type="button" class="stepbtn" id="btnSessPlus" title="One more session">+</button>
+      </span>
+      <button type="button" class="btn secondary small" id="btnPrefill"
+        title="Fill the sessions with the chapters in the book's planned order — a starting point you can rearrange">Start from book order</button>
+      <div class="progress"><span id="progText"></span><div class="pbar"><i id="progFill"></i></div></div>
+    </div>
+    <div class="builder">
+      <div class="sessions" id="sessionsCol"></div>
+      <aside class="bank" id="bankCol">
+        <h3>Chapters</h3>
+        <p class="hint" id="bankHint">Drag a chapter into a session, or use <b>+</b> to place it
+          (<b>&#8644;</b> moves a placed chapter). Click the arrow by a
+          title for details. Once placed, <b>&#10515;</b> continues a chapter into the next session.
+          Drag to <b>Unused</b> (or press 🗑) for anything you wouldn't teach.</p>
+        <div id="bankGroups"></div>
+        <div class="unused">
+          <h4>Unused pile</h4>
+          <p class="hint">Chapters you'd skip. (This is useful information for us!)</p>
+          <div class="chips" id="unusedChips" data-drop="unused"></div>
+        </div>
+      </aside>
+    </div>
+    <div class="wrapqs">
+      <h2>A few final questions</h2>
+      <div class="q"><p class="prompt">What do you like about the table of contents you've built?</p>
+        <textarea id="qLikes"></textarea></div>
+      <div class="q"><p class="prompt">Is anything missing — topics, chapters, or applications you'd want that you didn't see?</p>
+        <textarea id="qMissing"></textarea></div>
+      <div id="extraQs"></div>
+      <h2 style="font-size:18px;margin-top:26px">About you <small style="font-weight:400;color:var(--ink-soft)">(optional)</small></h2>
+      <label class="f" for="rName">Your name</label>
+      <input type="text" id="rName" autocomplete="name">
+      <label class="f" for="rEmail">Email</label>
+      <input type="email" id="rEmail" autocomplete="email">
+      <label class="f" for="rInst">Institution &amp; course <small>(e.g., “Ross MBA core micro”)</small></label>
+      <input type="text" id="rInst">
+      <div class="btnrow">
+        <button class="btn" id="btnSubmit">Submit my TOC</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 4: done -->
+  <section class="step done" id="step-done">
+    <h2>Thank you!</h2>
+    <p>Your table of contents and comments have been recorded. We read every one of these — your sequence
+      directly shapes how we organize the book.</p>
+    <p>— Erik, Betsey &amp; Justin</p>
+  </section>
+
+  <!-- EDIT MODE (admin) -->
+  <section class="editview" id="editView">
+    <h2>Edit chapters</h2>
+    <p class="lede">Edit titles, parts, section lists, notes, and prerequisites.
+      A prerequisite means that chapter must be scheduled <em>before</em> this one. <span id="edModeNote"></span></p>
+    <div class="edbar">
+      <button class="btn" id="edSave">Save changes</button>
+      <button class="btn secondary" id="edAdd">+ Add chapter</button>
+      <button class="btn secondary" id="edReload">Discard edits</button>
+      <span class="hint" id="edStatus"></span>
+    </div>
+    <div class="edgrid" id="edGrid"></div>
+  </section>
+
+  <!-- ANALYZE MODE (admin) -->
+  <section class="analyzeview" id="anView">
+    <h2>Results dashboard</h2>
+    <p class="lede">How instructors would structure the book, aggregated across every response.
+      Chapter positions are normalized to each respondent's course length, so a 10-session and a
+      28-session course are comparable.</p>
+    <div class="anbar">
+      <button class="btn secondary small" id="anRefresh">&#8635; Refresh data</button>
+      <button class="btn secondary small" id="anExport">Download all responses (JSON)</button>
+      <span class="hint" id="anStatus"></span>
+    </div>
+    <div id="anBody"></div>
+  </section>
+
+  <p class="credit">Snowberg, Stevenson &amp; Wolfers — <i>Managerial Economics</i> (in development, Macmillan Learning).</p>
+</div>
+
+<div id="toast" role="status"></div>
+
+<!-- PASSWORD GATE (edit + analyze pages) -->
+<div id="gate">
+  <div class="gatecard">
+    <h3 id="gateTitle">Admin access</h3>
+    <p>This page is for the authors. Enter the admin password
+      (TOC Survey menu in the Google Sheet).</p>
+    <input type="password" id="gateKey" autocomplete="current-password" placeholder="Password">
+    <div class="err" id="gateErr"></div>
+    <div class="row2">
+      <button class="btn" id="gateGo">Open</button>
+      <a href="./" style="font-size:13.5px;color:var(--ink-soft)">back to the survey</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= CONFIG ================= */
+/*  >>> THE ONE LINE YOU HAVE TO EDIT <<<
+    Paste your Apps Script web-app URL between the quotes below — the one ending
+    in /exec, from Deploy > Manage deployments in the Apps Script editor.
+    It should end up looking like:
+      var API_URL = "https://script.google.com/macros/s/AKfycb..../exec";
+    Leave it empty and the page runs in preview mode: it works, but nothing is
+    saved anywhere — submissions just go to the browser console. */
+var API_URL = "";
+
+/* In live deployment, config comes from the Google Sheet via getConfig().
+   This default is used in preview mode and as a fallback.
+   CFG_VERSION invalidates browser-saved preview edits when the default chapter list changes. */
+var CFG_VERSION = 2;
+var DEFAULT_CONFIG = {
+  chapters: [
+    {id:1, part:"Foundations", title:"A Principled Approach to Managerial Decision Making", sections:[],
+     notes:"Demonstrates how economists approach business decisions, building a practical toolkit around costs and benefits, opportunity costs, marginal thinking, and the interdependence of choices.", prereqs:[]},
+    {id:2, part:"Part I: Customers", title:"Consumer Choice and Demand Analysis", sections:[],
+     notes:"Explores how consumer choices translate into product market demand, examining individual and product demand, demand shifters, and how business practices can shape demand.", prereqs:[1]},
+    {id:3, part:"Part I: Customers", title:"Equilibrium and Optimal Pricing", sections:[],
+     notes:"Shows how sellers choose prices and quantities, connecting product market equilibrium to profit, economic surplus, and customer welfare.", prereqs:[2]},
+    {id:4, part:"Part I: Customers", title:"Price Discrimination and Advanced Pricing Strategies", sections:[],
+     notes:"Explores the ways in which firms can tailor prices to different customers, while examining the sometimes-blurry line between price discrimination and personal discrimination.", prereqs:[2]},
+    {id:5, part:"Part II: Profits and Shareholders", title:"The Point of a Company: A Risk-Management Perspective on Investors", sections:[],
+     notes:"Explores how investors and managers approach risk and uncertainty, using the economics of risk management to ask what investors ultimately want from a company.", prereqs:[1]},
+    {id:6, part:"Part II: Profits and Shareholders", title:"Market Power, Entry, and Exit", sections:[],
+     notes:"Explores the determinants of market power, and how entry, exit, barriers to entry, and innovation determine whether market power is sustainable over time.", prereqs:[5]},
+    {id:7, part:"Part II: Profits and Shareholders", title:"Market Structure and Strategy", sections:[],
+     notes:"Examines how firms compete through positioning and bargaining, and how these strategies shape market power and antitrust concerns.", prereqs:[5]},
+    {id:8, part:"Part II: Profits and Shareholders", title:"Game Theory and Competitive Strategy", sections:[],
+     notes:"Demonstrates how firms make strategic decisions when outcomes depend on how other firms choose to respond.", prereqs:[5]},
+    {id:9, part:"Part III: Employees", title:"Hiring Decisions", sections:[],
+     notes:"Examines how firms find and retain talent, and how productivity, search, and labor markets shape hiring decisions and outcomes.", prereqs:[1]},
+    {id:10, part:"Part III: Employees", title:"Contracts, Incentives, and Motivation in Organizations", sections:[],
+     notes:"Examines how managers can align individual and organizational goals to effectively allocate tasks, motivate employees, and improve performance.", prereqs:[9]},
+    {id:11, part:"Part III: Employees", title:"Organizing a Company", sections:[],
+     notes:"Explores how managers decide how work gets done, balancing information and coordination costs to determine who makes decisions, who reports to whom, and what gets done inside versus outside the company.", prereqs:[9]},
+    {id:12, part:"Part IV: Society", title:"Supply, Elasticity, and Market Equilibrium", sections:[],
+     notes:"Examines the special case of perfect competition, building on students' understanding of demand by introducing supply and elasticity as tools for economic analysis of markets.", prereqs:[2]},
+    {id:13, part:"Part IV: Society", title:"Asymmetric Information and Market Unraveling", sections:[],
+     notes:"Examines how differences in what buyers and sellers know can cause transactions — and even entire markets — to fail.", prereqs:[12]},
+    {id:14, part:"Part IV: Society", title:"Government Intervention: Regulation, Taxes, and Subsidies", sections:[],
+     notes:"Applies economic reasoning to understand when and how governments can address market failures.", prereqs:[12]},
+    {id:15, part:"Part IV: Society", title:"Macroeconomic Conditions, Business Cycles, and Business Strategy", sections:[],
+     notes:"Equips students to interpret changing macroeconomic conditions and assess their implications for business decisions.", prereqs:[12]}
+  ],
+  questions: [
+    {id:"q_adopt", type:"scale", prompt:"How likely would you be to adopt a textbook organized around the TOC you just built?",
+     options:"Not at all likely|Extremely likely"}
+  ]
+};
+
+var PART_COLORS = ["#9f1912","#0b8dc7","#8e004d","#56246f","#0e7a66","#b1740f","#446e29"];
+/* Lightened chart variants of the same hues (validated for adjacent-pair distinguishability
+   on the paper background). Survey chips keep PART_COLORS; dashboard chart fills use these. */
+var CHART_COLORS = ["#c4472f","#0b8dc7","#c22a72","#7d5bb5","#0c9377","#b1740f","#446e29"];
+
+/* ================= STATE ================= */
+var CONFIG = null;          // {chapters, questions}
+var byId = {};              // id -> chapter
+var partColor = {};         // part name -> color
+var chartColor = {};        // part name -> chart fill color
+var state = {n:14, sessions:[], unused:[], spans:{}};   // spans: chapter id -> # consecutive sessions (default 1)
+var openInfo = {};   // chapter id -> details dropdown expanded
+var HOSTED = (typeof google !== "undefined" && google.script && google.script.run);  // served by Apps Script
+var IS_LIVE = HOSTED || !!API_URL;
+var ADMIN = {key: ""};      // verified admin password (edit + analyze pages)
+
+/* ================= TRANSPORT =================
+   One call surface for both deployments: google.script.run when Apps Script serves
+   the page, fetch() against the Apps Script JSON API when hosted statically. fetch
+   POSTs send JSON as text/plain so browsers skip the CORS preflight, which Apps
+   Script cannot answer. */
+function apiCall(body, onOk, onFail){
+  onFail = onFail || function(){};
+  if (HOSTED){
+    var run = google.script.run.withSuccessHandler(onOk).withFailureHandler(onFail);
+    switch (body.action){
+      case "config":       run.getConfig(); break;
+      case "submit":       run.submitResponse(JSON.stringify(body.payload)); break;
+      case "auth":         run.verifyKey(body.key); break;
+      case "saveChapters": run.saveChapters(JSON.stringify(body.chapters), body.key); break;
+      case "responses":    run.getResponses(body.key); break;
+      case "llm":          run.callClaude(body.key, JSON.stringify(
+                             {system: body.system, messages: body.messages,
+                              maxTokens: body.maxTokens, purpose: body.purpose})); break;
+      default: onFail(new Error("Unknown action."));
+    }
+    return;
+  }
+  var req = (body.action === "config")
+    ? fetch(API_URL + (API_URL.indexOf("?") === -1 ? "?" : "&") + "action=config")
+    : fetch(API_URL, {method: "POST", body: JSON.stringify(body)});
+  req.then(function(r){ return r.json(); })
+    .then(function(res){
+      if (res && res.ok) onOk(res.data);
+      else onFail(new Error(res && res.error ? res.error : "Request failed."));
+    })
+    .catch(function(){ onFail(new Error("Couldn't reach the survey database — check your connection and try again.")); });
+}
+function errMsg(e, fallback){
+  var m = e && e.message ? String(e.message) : "";
+  return m ? m.replace(/^Error:\s*/, "") : fallback;
+}
+/* HTML5 drag events never fire on touch screens, so on a coarse-pointer device the
+   tap controls (+, ⇄, arrows, 🗑) ARE the interface — say so instead of "drag". */
+var IS_TOUCH = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+if (IS_TOUCH){
+  document.getElementById("ledeBuild").innerHTML =
+    "We are writing a new business economics textbook, and we want its structure to match the " +
+    "way you actually teach. Tap <b>+</b> on a chapter to place it into a class session, in the order " +
+    "you'd cover them &mdash; and send anything you wouldn't teach to the unused pile. Tap any title for details.";
+  document.getElementById("bankHint").innerHTML =
+    "Tap <b>+</b> to place a chapter into a session, and <b>&#8644;</b> to move it to another. " +
+    "Tap a title for details. Once placed, <b>&#10515;</b> continues a chapter into the next session. " +
+    "Press 🗑 for anything you wouldn't teach.";
+}
+
+/* ================= BOOT ================= */
+function boot(cfg){
+  CONFIG = cfg;
+  byId = {}; partColor = {}; chartColor = {};
+  var order = [];
+  CONFIG.chapters.forEach(function(c){
+    c.id = Number(c.id);
+    c.prereqs = (c.prereqs || []).map(Number).filter(function(p){return p && p !== c.id;});
+    byId[c.id] = c;
+    if (order.indexOf(c.part) === -1) order.push(c.part);
+  });
+  order.forEach(function(p,i){
+    partColor[p] = PART_COLORS[i % PART_COLORS.length];
+    chartColor[p] = CHART_COLORS[i % CHART_COLORS.length];
+  });
+  var bar = document.getElementById("colorbar");
+  bar.innerHTML = "";
+  order.forEach(function(p){ var s = document.createElement("span"); s.style.background = partColor[p]; bar.appendChild(s); });
+  restore();
+  setSessionCount(state.n);
+  renderExtraQs();
+  detectRoute();
+}
+if (IS_LIVE){
+  apiCall({action:"config"}, boot, function(){ boot(DEFAULT_CONFIG); });
+} else {
+  document.getElementById("previewNote").hidden = false;
+  var cfg = DEFAULT_CONFIG;
+  try{
+    var ov = JSON.parse(localStorage.getItem("meTocConfigOverride") || "null");
+    if (ov && ov.chapters && ov.chapters.length && ov.cfgv === CFG_VERSION) cfg = ov;
+  }catch(e){}
+  boot(cfg);
+}
+/* Static hosting navigates between survey/#edit/#analyze via the hash. */
+if (!HOSTED){
+  window.addEventListener("hashchange", function(){ location.reload(); });
+}
+
+function restore(){
+  try{
+    var saved = JSON.parse(localStorage.getItem("meTocSurvey") || "null");
+    if (saved && saved.sessions){
+      // drop any chapters that no longer exist in the config
+      saved.sessions = saved.sessions.map(function(l){ return l.filter(function(id){ return byId[id]; }); });
+      saved.unused = (saved.unused || []).filter(function(id){ return byId[id]; });
+      saved.spans = saved.spans || {};
+      state = saved;
+    }
+  }catch(e){}
+}
+function persist(){ try{ localStorage.setItem("meTocSurvey", JSON.stringify(state)); }catch(e){} }
+
+/* ================= HELPERS ================= */
+function chapLabel(c){ return "Chapter " + c.id + ": " + c.title; }
+function placedPos(id){
+  for (var s=0; s<state.sessions.length; s++){
+    var i = state.sessions[s].indexOf(id);
+    if (i !== -1) return {s:s, i:i};
+  }
+  return null;
+}
+function cmpPos(a,b){ return a.s !== b.s ? a.s - b.s : a.i - b.i; }
+function dependentsOf(id){
+  return CONFIG.chapters.filter(function(c){ return c.prereqs.indexOf(id) !== -1; }).map(function(c){ return c.id; });
+}
+function spanOf(id){ return Math.max(1, Number(state.spans[id]) || 1); }
+/* Where a chapter finishes: its own slot if it takes one session, else the top of its last session
+   (i:-0.5 sorts before every real slot in that session, so chapters there count as "after" it). */
+function endFrom(pos, k){ return k === 1 ? pos : {s: pos.s + k - 1, i: -0.5}; }
+function endPosOf(id){
+  var p = placedPos(id);
+  return p ? endFrom(p, spanOf(id)) : null;
+}
+/* Can chapter `id` sit at (s,i), given current placements (with `id` removed)? */
+function violationFor(id, s, i){
+  var me = {s:s, i:i};
+  var myEnd = endFrom(me, spanOf(id));
+  var c = byId[id];
+  for (var k=0;k<c.prereqs.length;k++){
+    var pe = endPosOf(c.prereqs[k]);
+    if (!pe) return chapLabel(c) + " requires " + chapLabel(byId[c.prereqs[k]]) + " to be scheduled first.";
+    if (cmpPos(pe, me) >= 0) return chapLabel(byId[c.prereqs[k]]) + " must finish before " + chapLabel(c) + " begins.";
+  }
+  var deps = dependentsOf(id);
+  for (var d=0;d<deps.length;d++){
+    var dp = placedPos(deps[d]);
+    if (dp && cmpPos(myEnd, dp) >= 0) return chapLabel(c) + " must finish before " + chapLabel(byId[deps[d]]) + " (a chapter that builds on it) begins.";
+  }
+  return null;
+}
+/* Sessions covered by continuations of chapters that started earlier. */
+function ghostsFor(s){
+  var out = [];
+  state.sessions.forEach(function(list, s0){
+    list.forEach(function(id){
+      var k = spanOf(id);
+      if (s0 < s && s <= s0 + k - 1) out.push({id:id, offset: s - s0});
+    });
+  });
+  return out;
+}
+function trySetSpan(id, k){
+  var p = placedPos(id);
+  if (!p) return;
+  k = Math.max(1, Math.round(k));
+  if (p.s + k - 1 > state.sessions.length - 1){
+    toast("No later session to continue into — use “+ Add a session” first.", true);
+    return;
+  }
+  var myEnd = endFrom(p, k);
+  var deps = dependentsOf(id);
+  for (var j=0;j<deps.length;j++){
+    var dp = placedPos(deps[j]);
+    if (dp && cmpPos(myEnd, dp) >= 0){
+      toast(chapLabel(byId[id]) + " must finish before " + chapLabel(byId[deps[j]]) + " begins — move that chapter later first.", true);
+      return;
+    }
+  }
+  state.spans[id] = k;
+  persist(); render();
+}
+function removalViolation(id){
+  var deps = dependentsOf(id).filter(function(d){ return placedPos(d); });
+  if (deps.length){
+    return chapLabel(byId[id]) + " can't be removed while " +
+      deps.map(function(d){ return "Chapter " + d; }).join(", ") + " (which builds on it) is scheduled. Remove that chapter first.";
+  }
+  return null;
+}
+function detach(id){
+  var p = placedPos(id);
+  if (p) state.sessions[p.s].splice(p.i, 1);
+  var u = state.unused.indexOf(id);
+  if (u !== -1) state.unused.splice(u, 1);
+}
+
+/* ================= ACTIONS (all validated) ================= */
+function tryPlace(id, s, i, quiet){
+  var from = placedPos(id);
+  detach(id);
+  if (from && from.s === s && from.i < i) i--;           // account for removal shift
+  i = Math.max(0, Math.min(i, state.sessions[s].length));
+  var v = violationFor(id, s, i);
+  if (v){
+    if (from) state.sessions[from.s].splice(from.i, 0, id);   // put it back
+    toast(v, true);
+    return false;
+  }
+  state.sessions[s].splice(i, 0, id);
+  // clamp the span if the new spot is too close to the last session
+  var k = spanOf(id);
+  if (s + k - 1 > state.sessions.length - 1){
+    state.spans[id] = state.sessions.length - s;
+    toast("Shortened " + chapLabel(byId[id]) + " to fit the remaining sessions.");
+  }
+  persist(); render();
+  if (!quiet) flashChip(id);
+  return true;
+}
+function tryReturnToBank(id){
+  var v = removalViolation(id);
+  if (v){ toast(v, true); return; }
+  detach(id); persist(); render();
+}
+function tryDiscard(id){
+  var v = removalViolation(id);
+  if (v){ toast(v, true); return; }
+  detach(id); state.unused.push(id); persist(); render();
+}
+function tryMove(id, dir){ // dir -1 up / +1 down, across session boundaries
+  var p = placedPos(id);
+  if (!p) return;
+  var s = p.s, i;
+  if (dir < 0){
+    i = p.i - 1;
+    if (i < 0){ if (s === 0) return; s--; i = state.sessions[s].length; }
+  } else if (p.i >= state.sessions[s].length - 1){   // last in its session: hop to the next
+    if (s === state.sessions.length - 1) return;
+    s++; i = 0;
+  } else {
+    i = p.i + 2;   // tryPlace indexes the list with this chip still in it
+  }
+  tryPlace(id, s, i, true);
+}
+function setSessionCount(n){
+  n = Math.max(1, Math.min(60, Math.round(n) || 1));
+  while (state.sessions.length < n) state.sessions.push([]);
+  if (n < state.sessions.length){
+    var spill = [];
+    for (var s=n; s<state.sessions.length; s++) spill = spill.concat(state.sessions[s]);
+    state.sessions.length = n;
+    if (spill.length) toast(spill.length + " chapter(s) from removed sessions went back to the chapter list.");
+  }
+  state.n = n;
+  // clamp spans that now hang past the last session
+  state.sessions.forEach(function(list, s){
+    list.forEach(function(id){
+      if (s + spanOf(id) - 1 > n - 1) state.spans[id] = n - s;
+    });
+  });
+  persist(); render();
+}
+
+/* ================= RENDER ================= */
+function chipEl(c, ctx){ // ctx: "session" | "bank" | "unused"
+  var el = document.createElement("div");
+  el.className = "chip";
+  el.style.borderLeftColor = partColor[c.part];
+  el.draggable = true;
+  el.dataset.id = c.id;
+  var acts = "";
+  if (ctx === "session"){
+    acts = '<button title="Move up" data-act="up">&#9650;</button>' +
+           '<button title="Move down" data-act="down">&#9660;</button>' +
+           '<button title="Move to another session" data-act="qadd">&#8644;</button>' +
+           '<button title="Continue this chapter into the next session" data-act="extend">&#10515;</button>' +
+           '<button title="Remove (back to chapter list)" data-act="return">&#10005;</button>' +
+           '<button title="Discard to unused pile" class="danger" data-act="discard">&#128465;</button>';
+  } else if (ctx === "bank"){
+    acts = '<button title="Add to a session" data-act="qadd"><b>+</b></button>' +
+           '<button title="Discard to unused pile" class="danger" data-act="discard">&#128465;</button>';
+  } else {
+    acts = '<button title="Restore to chapter list" data-act="restore">&#8634;</button>';
+  }
+  var open = !!openInfo[c.id];
+  var det = "";
+  if (open){
+    det = '<div class="chipdetails">';
+    if (c.notes) det += '<p class="sum">' + c.notes + '</p>';
+    if (c.sections && c.sections.length){
+      det += '<div class="sech">In this chapter</div><ul>' +
+        c.sections.map(function(s){ return "<li>" + s + "</li>"; }).join("") + '</ul>';
+    }
+    if (c.prereqs.length){
+      det += '<div class="dep"><b>Comes after:</b> ' + c.prereqs.map(function(p){
+        return '<span title="' + byId[p].title.replace(/"/g,"&quot;") + '">Ch ' + p + '</span>'; }).join(", ") + '</div>';
+    }
+    var deps = dependentsOf(c.id);
+    if (deps.length){
+      det += '<div class="dep"><b>Needed for:</b> ' + deps.map(function(d){
+        return '<span title="' + byId[d].title.replace(/"/g,"&quot;") + '">Ch ' + d + '</span>'; }).join(", ") + '</div>';
+    }
+    if (det === '<div class="chipdetails">') det += '<div class="dep">No details yet.</div>';
+    det += '</div>';
+  }
+  var chLabel = 'Ch ' + c.id;
+  if (ctx === "session" && spanOf(c.id) > 1) chLabel += ' &middot; runs ' + spanOf(c.id) + ' sessions';
+  el.innerHTML =
+    '<div class="row">' +
+    '<button class="caret' + (open ? " open" : "") + '" data-act="info" aria-expanded="' + open +
+      '" title="' + (open ? "Hide" : "Show") + ' chapter details">&#9656;</button>' +
+    '<div class="t"><div class="ch" style="color:' + partColor[c.part] + '">' + chLabel + '</div>' +
+    '<div class="ti" data-act="info" title="Click for details">' + c.title + '</div></div>' +
+    '<div class="acts">' + acts + '</div></div>' + det;
+  return el;
+}
+function ghostEl(c, offset){
+  var el = document.createElement("div");
+  el.className = "chip ghost";
+  el.style.borderLeftColor = partColor[c.part];
+  el.dataset.id = c.id;
+  el.dataset.offset = offset;
+  el.innerHTML =
+    '<div class="row"><div class="t" style="padding-left:28px">' +
+    '<div class="ch" style="color:' + partColor[c.part] + '">Ch ' + c.id + ' &middot; continued</div>' +
+    '<div class="ti">' + c.title + '</div></div>' +
+    '<div class="acts"><button title="Don\'t continue into this session" data-act="unextend">&#10005;</button></div></div>';
+  return el;
+}
+function render(){
+  // sessions
+  var col = document.getElementById("sessionsCol");
+  col.innerHTML = "";
+  state.sessions.forEach(function(list, s){
+    var box = document.createElement("div");
+    box.className = "session";
+    box.innerHTML = '<h3><span class="num">' + (s+1) + '</span> Session ' + (s+1) + '</h3>';
+    var body = document.createElement("div");
+    body.className = "slotbody";
+    body.dataset.drop = "session";
+    body.dataset.session = s;
+    var ghosts = ghostsFor(s);
+    if (!list.length && !ghosts.length) body.innerHTML = '<div class="empties">' +
+      (IS_TOUCH ? 'tap <b>+</b> on a chapter to place it here' : 'drop a chapter here') + '</div>';
+    ghosts.forEach(function(g){ body.appendChild(ghostEl(byId[g.id], g.offset)); });
+    list.forEach(function(id){ body.appendChild(chipEl(byId[id], "session")); });
+    box.appendChild(body);
+    col.appendChild(box);
+  });
+  var add = document.createElement("button");
+  add.type = "button";
+  add.className = "addsession";
+  add.id = "btnAddSession";
+  add.textContent = "+ Add a session";
+  col.appendChild(add);
+  // bank, grouped by part
+  var groups = document.getElementById("bankGroups");
+  groups.innerHTML = "";
+  var parts = [];
+  CONFIG.chapters.forEach(function(c){ if (parts.indexOf(c.part) === -1) parts.push(c.part); });
+  parts.forEach(function(p){
+    var free = CONFIG.chapters.filter(function(c){
+      return c.part === p && !placedPos(c.id) && state.unused.indexOf(c.id) === -1;
+    });
+    if (!free.length) return;
+    var g = document.createElement("div");
+    g.className = "partgroup";
+    g.innerHTML = '<h4 style="color:' + partColor[p] + '">' + p + '</h4>';
+    var chips = document.createElement("div");
+    chips.className = "chips";
+    chips.dataset.drop = "bank";
+    free.forEach(function(c){ chips.appendChild(chipEl(c, "bank")); });
+    g.appendChild(chips);
+    groups.appendChild(g);
+  });
+  if (!groups.children.length) groups.innerHTML = '<p class="hint" style="font-style:italic">All chapters placed — nice.</p>';
+  // unused
+  var un = document.getElementById("unusedChips");
+  un.innerHTML = "";
+  state.unused.forEach(function(id){ un.appendChild(chipEl(byId[id], "unused")); });
+  // progress
+  var placed = 0;
+  state.sessions.forEach(function(l){ placed += l.length; });
+  var total = CONFIG.chapters.length;
+  document.getElementById("progText").textContent =
+    placed + " of " + total + " chapters placed" + (state.unused.length ? " · " + state.unused.length + " unused" : "");
+  document.getElementById("progFill").style.width = Math.round(100 * (placed + state.unused.length) / total) + "%";
+  document.getElementById("numSessions2").value = state.n;
+}
+function flashChip(id){
+  var el = document.querySelector('.slotbody .chip[data-id="' + id + '"]');
+  if (!el) return;
+  el.style.transition = "none"; el.style.background = "#fdf6d8";
+  setTimeout(function(){ el.style.transition = "background .8s"; el.style.background = ""; }, 60);
+}
+/* Scroll a problem chip into view, then flash it — the toast alone sits at the bottom of a
+   long page, far from the chapter it's complaining about. */
+function revealChip(id){
+  var el = document.querySelector('.slotbody .chip:not(.ghost)[data-id="' + id + '"]');
+  if (!el) return;
+  el.scrollIntoView({behavior:"smooth", block:"center"});
+  setTimeout(function(){
+    el.style.transition = "none"; el.style.background = "#fbe3e1";
+    setTimeout(function(){ el.style.transition = "background 1.2s"; el.style.background = ""; }, 700);
+  }, 350);
+}
+
+/* ================= DRAG & DROP ================= */
+var dragId = null;
+document.addEventListener("dragstart", function(e){
+  var chip = e.target.closest ? e.target.closest(".chip") : null;
+  if (!chip || chip.classList.contains("ghost")) return;
+  dragId = Number(chip.dataset.id);
+  chip.classList.add("dragging");
+  e.dataTransfer.setData("text/plain", String(dragId));
+  e.dataTransfer.effectAllowed = "move";
+});
+document.addEventListener("dragend", function(){
+  dragId = null;
+  document.querySelectorAll(".dragging").forEach(function(el){ el.classList.remove("dragging"); });
+  document.querySelectorAll(".dragover").forEach(function(el){ el.classList.remove("dragover"); });
+});
+document.addEventListener("dragover", function(e){
+  var zone = e.target.closest ? e.target.closest("[data-drop]") : null;
+  if (!zone || dragId === null) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  document.querySelectorAll(".dragover").forEach(function(el){ if (el !== zone) el.classList.remove("dragover"); });
+  zone.classList.add("dragover");
+});
+document.addEventListener("drop", function(e){
+  var zone = e.target.closest ? e.target.closest("[data-drop]") : null;
+  if (!zone || dragId === null) return;
+  e.preventDefault();
+  var id = dragId; dragId = null;
+  zone.classList.remove("dragover");
+  var kind = zone.dataset.drop;
+  if (kind === "session"){
+    var s = Number(zone.dataset.session);
+    // insertion index from pointer position (ghost continuations aren't real slots)
+    var chips = Array.prototype.slice.call(zone.querySelectorAll(".chip:not(.ghost)"));
+    var i = chips.length;
+    for (var k=0;k<chips.length;k++){
+      var r = chips[k].getBoundingClientRect();
+      if (e.clientY < r.top + r.height/2){ i = k; break; }
+    }
+    tryPlace(id, s, i);
+  } else if (kind === "unused"){
+    tryDiscard(id);
+  } else if (kind === "bank"){
+    tryReturnToBank(id);
+  }
+});
+
+/* ================= CLICK ACTIONS ================= */
+document.addEventListener("click", function(e){
+  var btn = e.target.closest ? e.target.closest("[data-act]") : null;
+  closeQuickAdd(btn && btn.dataset.act === "qadd" ? btn : null);
+  if (!btn) return;
+  var chip = btn.closest(".chip");
+  if (!chip) return;
+  var id = Number(chip.dataset.id);
+  switch (btn.dataset.act){
+    case "up": tryMove(id, -1); break;
+    case "down": tryMove(id, +1); break;
+    case "extend": trySetSpan(id, spanOf(id) + 1); break;
+    case "unextend": trySetSpan(id, Number(chip.dataset.offset)); break;
+    case "return": tryReturnToBank(id); break;
+    case "restore": tryReturnToBank(id); break;
+    case "discard": tryDiscard(id); break;
+    case "info": toggleInfo(id); break;
+    case "qadd": openQuickAdd(btn, id); break;
+  }
+});
+var qaddEl = null;
+function openQuickAdd(anchor, id){
+  closeQuickAdd();
+  var cur = placedPos(id);   // set when opened from a placed chip's ⇄ button
+  qaddEl = document.createElement("div");
+  qaddEl.className = "qadd";
+  for (var s=0; s<state.sessions.length; s++){
+    (function(s){
+      var b = document.createElement("button");
+      if (cur && cur.s === s){
+        b.textContent = "Session " + (s+1) + "  ·  current";
+        b.disabled = true;
+      } else {
+        b.textContent = "Session " + (s+1) + (state.sessions[s].length ? "  ·  " + state.sessions[s].length + " ch." : "");
+      }
+      b.addEventListener("click", function(ev){
+        ev.stopPropagation();
+        closeQuickAdd();
+        tryPlace(id, s, state.sessions[s].length);
+      });
+      qaddEl.appendChild(b);
+    })(s);
+  }
+  document.body.appendChild(qaddEl);
+  var r = anchor.getBoundingClientRect();
+  qaddEl.style.left = Math.min(r.left, window.innerWidth - 180) + "px";
+  qaddEl.style.top = (r.bottom + window.scrollY + 4) + "px";
+}
+function closeQuickAdd(except){
+  if (qaddEl && (!except)){ qaddEl.remove(); qaddEl = null; }
+}
+
+/* ================= INFO DROPDOWN ================= */
+function toggleInfo(id){
+  openInfo[id] = !openInfo[id];
+  render();
+}
+document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeQuickAdd(); });
+
+/* ================= TOAST ================= */
+var toastTimer = null;
+function toast(msg, warn){
+  var t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = warn ? "warn show" : "show";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.className = ""; }, 4200);
+}
+
+/* ================= STEP NAV ================= */
+function show(step){
+  document.querySelectorAll(".step").forEach(function(s){ s.classList.remove("active"); });
+  document.getElementById(step).classList.add("active");
+  window.scrollTo({top:0});
+}
+document.getElementById("numSessions2").addEventListener("change", function(){ setSessionCount(Number(this.value)); });
+document.getElementById("btnSessMinus").addEventListener("click", function(){ setSessionCount(state.n - 1); });
+document.getElementById("btnSessPlus").addEventListener("click", function(){ setSessionCount(state.n + 1); });
+document.getElementById("sessionsCol").addEventListener("click", function(e){
+  if (e.target.closest && e.target.closest("#btnAddSession")) setSessionCount(state.n + 1);
+});
+/* Safety net: revalidates the full ordering (matters if the chapter config changed mid-response).
+   Returns {msg, id} — id is the chapter that needs to move — or null. */
+function wholeOrderViolation(){
+  for (var s=0; s<state.sessions.length; s++){
+    for (var i=0; i<state.sessions[s].length; i++){
+      var c = byId[state.sessions[s][i]];
+      for (var k=0; k<c.prereqs.length; k++){
+        var pe = endPosOf(c.prereqs[k]);
+        if (!pe || cmpPos(pe, {s:s, i:i}) >= 0)
+          return {id: c.id, msg: chapLabel(byId[c.prereqs[k]]) + " must finish before " + chapLabel(c) + " begins — the chapter requirements changed. Please adjust your ordering."};
+      }
+    }
+  }
+  return null;
+}
+
+/* ================= PREFILL ================= */
+/* Seeds the sessions with every chapter in the book's order, split as evenly as possible.
+   Lowers the effort for respondents who mostly agree with the book — they only express
+   deviations. The submission records that they started from the prefill. */
+document.getElementById("btnPrefill").addEventListener("click", function(){
+  if (!CONFIG) return;   // config still loading
+  var placed = 0;
+  state.sessions.forEach(function(l){ placed += l.length; });
+  if ((placed || state.unused.length) &&
+      !confirm("Replace your current arrangement with the book's chapter order?")) return;
+  var ids = CONFIG.chapters.map(function(c){ return c.id; });
+  var n = state.n, sessions = [];
+  for (var s=0; s<n; s++) sessions.push([]);
+  var base = Math.floor(ids.length / n), extra = ids.length % n, k = 0;
+  for (s=0; s<n && k<ids.length; s++){
+    var take = base + (s < extra ? 1 : 0);
+    for (var j=0; j<take; j++) sessions[s].push(ids[k++]);
+  }
+  var prev = state;
+  state = {n:n, sessions:sessions, unused:[], spans:{}, prefilled:true};
+  if (wholeOrderViolation()){   // possible if the sheet's row order disagrees with the prereqs
+    state = prev;
+    toast("The book's own chapter order conflicts with the chapter requirements — please build your TOC by hand.", true);
+    return;
+  }
+  persist(); render();
+  toast("All " + ids.length + " chapters placed in the book's order — now rearrange it to match how you'd teach.");
+});
+
+function renderExtraQs(){
+  var wrap = document.getElementById("extraQs");
+  wrap.innerHTML = "";
+  (CONFIG.questions || []).forEach(function(q){
+    var div = document.createElement("div");
+    div.className = "q";
+    var inner = '<p class="prompt">' + q.prompt + '</p>';
+    if (q.type === "textarea") inner += '<textarea data-q="' + q.id + '"></textarea>';
+    else if (q.type === "text") inner += '<input type="text" data-q="' + q.id + '">';
+    else if (q.type === "scale"){
+      var labs = String(q.options || "|").split("|");
+      inner += '<div class="opts"><span class="endlab">' + (labs[0] || "") + '</span>';
+      for (var v=1; v<=5; v++)
+        inner += '<label><input type="radio" name="q_' + q.id + '" value="' + v + '" data-q="' + q.id + '">' + v + '</label>';
+      inner += '<span class="endlab">' + (labs[1] || "") + '</span></div>';
+    } else if (q.type === "choice"){
+      inner += '<div class="opts" style="flex-direction:column;align-items:flex-start">';
+      String(q.options || "").split("|").forEach(function(opt){
+        opt = opt.trim();
+        if (opt) inner += '<label><input type="radio" name="q_' + q.id + '" value="' + opt + '" data-q="' + q.id + '">' + opt + '</label>';
+      });
+      inner += '</div>';
+    }
+    div.innerHTML = inner;
+    wrap.appendChild(div);
+  });
+}
+
+/* ================= ROUTING + PASSWORD GATE ================= */
+function detectRoute(){
+  function route(p){
+    p = String(p || "").toLowerCase();
+    if (p === "edit") requestAdmin("edit", enterEditMode);
+    else if (p === "analyze") requestAdmin("analyze", enterAnalyzeMode);
+  }
+  if (HOSTED && google.script.url && google.script.url.getLocation){
+    google.script.url.getLocation(function(loc){
+      var p = (loc && loc.parameters && loc.parameters.page) ? String(loc.parameters.page[0]) : "";
+      route(p);
+    });
+  } else {
+    var m = (location.search + location.hash).match(/(?:^|[?&#=])(edit|analyze)\b/);
+    route(m ? m[1] : "");
+    var lk = document.getElementById("previewEditLink");
+    if (lk && !lk.dataset.wired){
+      lk.dataset.wired = "1";
+      lk.addEventListener("click", function(e){ e.preventDefault(); requestAdmin("edit", enterEditMode); });
+    }
+    var la = document.getElementById("previewAnalyzeLink");
+    if (la && !la.dataset.wired){
+      la.dataset.wired = "1";
+      la.addEventListener("click", function(e){ e.preventDefault(); requestAdmin("analyze", enterAnalyzeMode); });
+    }
+  }
+}
+var gateAttempt;   // (key) -> void, set while the gate is open
+                   // (declaration only: in preview mode the router runs before this line)
+function requestAdmin(target, done){
+  if (!IS_LIVE){ done(); return; }              // preview: no backend to check against
+  if (ADMIN.key){ done(); return; }             // already verified this page load
+  function attempt(key, silent){
+    if (!key){ showGate(target, ""); return; }
+    document.getElementById("gateGo").disabled = true;
+    apiCall({action:"auth", key:key}, function(){
+      document.getElementById("gateGo").disabled = false;
+      ADMIN.key = key;
+      try{ localStorage.setItem("meTocAdminKey", key); }catch(e){}
+      document.getElementById("gate").className = "";
+      done();
+    }, function(err){
+      document.getElementById("gateGo").disabled = false;
+      showGate(target, silent ? "" : errMsg(err, "Wrong password."));
+    });
+  }
+  gateAttempt = function(key){ attempt(key, false); };
+  var stored = "";
+  try{ stored = localStorage.getItem("meTocAdminKey") || ""; }catch(e){}
+  if (stored) attempt(stored, true);      // silently retry the remembered password
+  else showGate(target, "");
+}
+function showGate(target, err){
+  document.getElementById("gateTitle").textContent =
+    target === "analyze" ? "Results dashboard" : "Chapter editor";
+  document.getElementById("gateErr").textContent = err || "";
+  document.getElementById("gate").className = "show";
+  var inp = document.getElementById("gateKey");
+  inp.value = ""; inp.focus();
+}
+document.getElementById("gateGo").addEventListener("click", function(){
+  if (gateAttempt) gateAttempt(document.getElementById("gateKey").value.trim());
+});
+document.getElementById("gateKey").addEventListener("keydown", function(e){
+  if (e.key === "Enter" && gateAttempt) gateAttempt(this.value.trim());
+});
+
+/* ================= EDIT MODE (admin) ================= */
+var EDIT;   // declaration only — an initializer here would run after (and clobber)
+            // a preview-mode enterEditMode(), which boot() calls synchronously
+function enterEditMode(){
+  EDIT = JSON.parse(JSON.stringify(CONFIG.chapters));
+  document.body.classList.remove("anmode");
+  document.body.classList.add("editmode");
+  document.getElementById("edModeNote").textContent = IS_LIVE
+    ? "Saving updates the Google Sheet, so changes reach all respondents immediately."
+    : "Preview copy: edits save only to this browser and apply to the preview survey.";
+  renderEditor();
+}
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
+function renderEditor(){
+  var g = document.getElementById("edGrid");
+  g.innerHTML = "";
+  EDIT.forEach(function(c){
+    var card = document.createElement("div");
+    card.className = "edcard";
+    card.dataset.id = c.id;
+    var chips = EDIT.filter(function(x){ return x.id !== c.id; }).map(function(x){
+      return '<button type="button" class="pchip' + (c.prereqs.indexOf(x.id) !== -1 ? " on" : "") +
+        '" data-pre="' + x.id + '" title="' + esc(x.title) + '">' + x.id + '</button>';
+    }).join("");
+    card.innerHTML =
+      '<div class="edhead"><span class="edid">Ch ' + c.id + '</span>' +
+      '<input data-f="part" value="' + esc(c.part) + '" title="Part / section name" aria-label="Part">' +
+      '<button class="eddel" title="Delete this chapter">&#128465;</button></div>' +
+      '<label class="f">Title<input data-f="title" value="' + esc(c.title) + '"></label>' +
+      '<label class="f">Summary <small>(shown when a respondent clicks the chapter)</small>' +
+      '<textarea data-f="notes">' + esc(c.notes || "") + '</textarea></label>' +
+      '<label class="f">Sections <small>(optional, one per line)</small>' +
+      '<textarea data-f="sections">' + esc(c.sections.join("\n")) + '</textarea></label>' +
+      '<div class="f" style="font-weight:600">Must come after chapter&hellip; <small style="font-weight:400;color:var(--ink-soft)">(click to toggle)</small></div>' +
+      '<div class="pchips">' + (chips || '<span class="hint">no other chapters</span>') + '</div>';
+    g.appendChild(card);
+  });
+}
+document.getElementById("edGrid").addEventListener("input", function(e){
+  var f = e.target.dataset.f;
+  if (!f) return;
+  var c = editChap(e.target);
+  if (!c) return;
+  if (f === "sections") c.sections = e.target.value.split("\n").map(function(s){ return s.trim(); }).filter(String);
+  else c[f] = e.target.value;
+});
+document.getElementById("edGrid").addEventListener("click", function(e){
+  var chip = e.target.closest(".pchip");
+  if (chip){
+    var c = editChap(chip), pre = Number(chip.dataset.pre);
+    var i = c.prereqs.indexOf(pre);
+    if (i === -1) c.prereqs.push(pre); else c.prereqs.splice(i, 1);
+    chip.classList.toggle("on");
+    return;
+  }
+  var del = e.target.closest(".eddel");
+  if (del){
+    var ch = editChap(del);
+    var deps = EDIT.filter(function(x){ return x.prereqs.indexOf(ch.id) !== -1; });
+    if (deps.length){
+      toast("Chapter " + deps.map(function(d){ return d.id; }).join(", ") + " lists Chapter " + ch.id +
+        " as a prerequisite — remove that dependency first.", true);
+      return;
+    }
+    if (!confirm("Delete Chapter " + ch.id + ": " + ch.title + "?")) return;
+    EDIT = EDIT.filter(function(x){ return x.id !== ch.id; });
+    renderEditor();
+  }
+});
+function editChap(el){
+  var id = Number(el.closest(".edcard").dataset.id);
+  for (var k=0;k<EDIT.length;k++) if (EDIT[k].id === id) return EDIT[k];
+  return null;
+}
+document.getElementById("edAdd").addEventListener("click", function(){
+  var maxId = EDIT.reduce(function(m,c){ return Math.max(m, c.id); }, 0);
+  EDIT.push({id: maxId + 1, part: EDIT.length ? EDIT[EDIT.length-1].part : "New part",
+             title: "New chapter", sections: [], notes: "", prereqs: []});
+  renderEditor();
+  var cards = document.querySelectorAll(".edcard");
+  cards[cards.length - 1].scrollIntoView({behavior:"smooth", block:"center"});
+});
+document.getElementById("edReload").addEventListener("click", function(){
+  EDIT = JSON.parse(JSON.stringify(CONFIG.chapters));
+  renderEditor();
+  toast("Edits discarded — showing the saved chapters.");
+});
+function findCycle(chs){
+  var map = {};
+  chs.forEach(function(c){ map[c.id] = c.prereqs; });
+  var seen = {}, stack = {}, cyc = null;
+  function dfs(id){
+    if (cyc) return;
+    seen[id] = 1; stack[id] = 1;
+    (map[id] || []).forEach(function(p){
+      if (cyc || !(p in map)) return;
+      if (stack[p]) cyc = "Circular dependency: Chapter " + id + " and Chapter " + p + " each require the other (directly or through a chain). Untangle before saving.";
+      else if (!seen[p]) dfs(p);
+    });
+    stack[id] = 0;
+  }
+  chs.forEach(function(c){ if (!seen[c.id]) dfs(c.id); });
+  return cyc;
+}
+function validateEdit(){
+  var ids = {};
+  for (var k=0;k<EDIT.length;k++){
+    var c = EDIT[k];
+    if (!String(c.title || "").trim()) return "Chapter " + c.id + " needs a title.";
+    if (ids[c.id]) return "Duplicate chapter ID " + c.id + ".";
+    ids[c.id] = 1;
+  }
+  for (k=0;k<EDIT.length;k++){
+    var bad = EDIT[k].prereqs.filter(function(p){ return !ids[p]; });
+    if (bad.length) return "Chapter " + EDIT[k].id + " requires a chapter that doesn't exist (Ch " + bad.join(", ") + ").";
+  }
+  return findCycle(EDIT);
+}
+document.getElementById("edSave").addEventListener("click", function(){
+  var err = validateEdit();
+  if (err){ toast(err, true); return; }
+  var btn = this;
+  function applied(msg){
+    CONFIG.chapters = JSON.parse(JSON.stringify(EDIT));
+    boot(CONFIG);
+    toast(msg);
+  }
+  if (IS_LIVE){
+    btn.disabled = true; btn.textContent = "Saving…";
+    apiCall({action:"saveChapters", chapters: EDIT, key: ADMIN.key},
+      function(){
+        btn.disabled = false; btn.textContent = "Save changes";
+        applied("Saved — the live survey now uses these chapters.");
+      },
+      function(e){
+        btn.disabled = false; btn.textContent = "Save changes";
+        toast(errMsg(e, "Save failed — please try again."), true);
+      });
+  } else {
+    try{ localStorage.setItem("meTocConfigOverride", JSON.stringify({cfgv: CFG_VERSION, chapters: EDIT, questions: CONFIG.questions})); }catch(e){}
+    applied("Saved to this browser — the preview survey now uses these chapters.");
+  }
+});
+
+/* ================= SUBMIT ================= */
+document.getElementById("btnSubmit").addEventListener("click", function(){
+  var btn = this;
+  var placed = 0;
+  state.sessions.forEach(function(l){ placed += l.length; });
+  if (!placed){
+    toast("Place at least one chapter into a session before submitting.", true);
+    document.querySelector(".buildbar").scrollIntoView({behavior:"smooth", block:"start"});
+    return;
+  }
+  var v = wholeOrderViolation();
+  if (v){ toast(v.msg, true); revealChip(v.id); return; }
+  var extra = {};
+  document.querySelectorAll("[data-q]").forEach(function(el){
+    var qid = el.dataset.q;
+    if (el.type === "radio"){ if (el.checked) extra[qid] = el.value; if (!(qid in extra)) extra[qid] = extra[qid] || ""; }
+    else extra[qid] = el.value.trim();
+  });
+  var tocReadable = state.sessions.map(function(list, s){
+    var items = ghostsFor(s).map(function(g){ return "Ch " + g.id + " — " + byId[g.id].title + " (continued)"; })
+      .concat(list.map(function(id){
+        var k = spanOf(id);
+        return "Ch " + id + " — " + byId[id].title + (k > 1 ? " (runs " + k + " sessions)" : "");
+      }));
+    return items.length ? "Session " + (s+1) + ": " + items.join(" | ") : null;
+  }).filter(Boolean).join("\n");
+  var spans = {};
+  state.sessions.forEach(function(list){ list.forEach(function(id){ if (spanOf(id) > 1) spans[id] = spanOf(id); }); });
+  var payload = {
+    name: document.getElementById("rName").value.trim(),
+    email: document.getElementById("rEmail").value.trim(),
+    institution: document.getElementById("rInst").value.trim(),
+    numSessions: state.n,
+    sessions: state.sessions,
+    unused: state.unused,
+    spans: spans,
+    startedFromPrefill: !!state.prefilled,
+    tocReadable: tocReadable,
+    unusedReadable: state.unused.map(function(id){ return "Ch " + id + " — " + byId[id].title; }).join(" | "),
+    likes: document.getElementById("qLikes").value.trim(),
+    missing: document.getElementById("qMissing").value.trim(),
+    extra: extra,
+    userAgent: navigator.userAgent
+  };
+  btn.disabled = true; btn.textContent = "Submitting…";
+  function ok(){
+    try{ localStorage.removeItem("meTocSurvey"); }catch(e){}
+    show("step-done");
+  }
+  function fail(){
+    btn.disabled = false; btn.textContent = "Submit my TOC";
+    toast("Something went wrong saving your response — please try again.", true);
+  }
+  if (IS_LIVE){
+    apiCall({action:"submit", payload: payload}, ok, fail);
+  } else {
+    console.log("PREVIEW SUBMISSION", payload);
+    setTimeout(ok, 400);
+  }
+});
+
+/* ================= ANALYZE MODE (admin) =================
+   Design principle: every statistic is computed deterministically here in the
+   browser; the AI report/chat receives those computed numbers plus verbatim free
+   text, so the model interprets rather than calculates. */
+var AN;   // declaration only — see the EDIT note above; initialized on entry
+function enterAnalyzeMode(){
+  if (!AN) AN = {responses: null, stats: null, sel: -1, chat: [], busy: false};
+  document.body.classList.remove("editmode");
+  document.body.classList.add("anmode");
+  loadResponses();
+}
+document.getElementById("anRefresh").addEventListener("click", function(){ loadResponses(); });
+document.getElementById("anExport").addEventListener("click", function(){
+  if (!AN.responses) return;
+  var blob = new Blob([JSON.stringify({chapters: CONFIG.chapters, questions: CONFIG.questions,
+    responses: AN.responses}, null, 2)], {type: "application/json"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "toc-survey-responses.json";
+  document.body.appendChild(a); a.click(); a.remove();
+});
+function loadResponses(){
+  var st = document.getElementById("anStatus");
+  if (!IS_LIVE){
+    AN.responses = demoResponses();
+    st.textContent = "Preview mode — showing " + AN.responses.length + " synthetic demo responses.";
+    analyzeRender();
+    return;
+  }
+  st.innerHTML = '<span class="spin"></span> Loading responses&hellip;';
+  apiCall({action:"responses", key: ADMIN.key}, function(rs){
+    AN.responses = rs || [];
+    st.textContent = AN.responses.length + " response" + (AN.responses.length === 1 ? "" : "s") + " loaded.";
+    analyzeRender();
+  }, function(e){
+    st.textContent = "";
+    toast(errMsg(e, "Couldn't load responses."), true);
+  });
+}
+
+/* ---------- per-response derived facts ---------- */
+function respFacts(r){
+  var n = Math.max(1, Number(r.numSessions) || (r.sessions ? r.sessions.length : 1));
+  var start = {};   // chapter id -> {s, i}
+  (r.sessions || []).forEach(function(list, s){
+    (list || []).forEach(function(id, i){ start[Number(id)] = {s:s, i:i}; });
+  });
+  var span = {};
+  Object.keys(r.spans || {}).forEach(function(k){ span[Number(k)] = Math.max(1, Number(r.spans[k]) || 1); });
+  return {
+    n: n, start: start, placed: Object.keys(start).map(Number),
+    unused: (r.unused || []).map(Number),
+    spanOf: function(id){ return span[id] || 1; },
+    pos: function(id){ return start[id] ? (start[id].s + 0.5) / n : null; },   // 0..1, where it starts
+    before: function(a, b){                                                    // a scheduled before b?
+      var A = start[a], B = start[b];
+      if (!A || !B) return null;
+      return A.s !== B.s ? A.s < B.s : A.i < B.i;
+    }
+  };
+}
+
+/* ---------- aggregate statistics ---------- */
+function quantile(sorted, q){
+  if (!sorted.length) return null;
+  var pos = (sorted.length - 1) * q, lo = Math.floor(pos);
+  return lo + 1 < sorted.length ? sorted[lo] + (sorted[lo+1] - sorted[lo]) * (pos - lo) : sorted[lo];
+}
+function mean(a){ return a.length ? a.reduce(function(x,y){ return x+y; }, 0) / a.length : null; }
+
+function computeStats(rs){
+  var chapters = CONFIG.chapters;
+  var facts = rs.map(respFacts);
+  var A = {n: rs.length, facts: facts, ch: {}};
+
+  chapters.forEach(function(c){
+    var positions = [], spans = [], discards = 0, bins = [0,0,0,0,0,0,0,0,0,0];
+    facts.forEach(function(f){
+      var p = f.pos(c.id);
+      if (p !== null){
+        positions.push(p);
+        spans.push(f.spanOf(c.id));
+        bins[Math.min(9, Math.floor(p * 10))]++;
+      } else if (f.unused.indexOf(c.id) !== -1) discards++;
+    });
+    positions.sort(function(a,b){ return a-b; });
+    A.ch[c.id] = {
+      placed: positions.length, discarded: discards,
+      incRate: rs.length ? positions.length / rs.length : 0,
+      meanPos: mean(positions), medPos: quantile(positions, 0.5),
+      q1: quantile(positions, 0.25), q3: quantile(positions, 0.75),
+      meanSpan: mean(spans), bins: bins
+    };
+  });
+
+  var sess = facts.map(function(f){ return f.n; }).sort(function(a,b){ return a-b; });
+  A.medSessions = quantile(sess, 0.5);
+  A.meanPlaced = mean(facts.map(function(f){ return f.placed.length; }));
+
+  // pairwise precedence: share of respondents placing a before b, among those placing both
+  A.pairs = [];
+  for (var x=0; x<chapters.length; x++){
+    for (var y=x+1; y<chapters.length; y++){
+      var a = chapters[x].id, b = chapters[y].id, ab = 0, both = 0;
+      facts.forEach(function(f){
+        var r = f.before(a, b);
+        if (r !== null){ both++; if (r) ab++; }
+      });
+      if (both >= 3) A.pairs.push({a:a, b:b, both:both, aFirst: ab / both});
+    }
+  }
+
+  // consensus order: every chapter someone placed, by median normalized position
+  A.consensus = chapters.filter(function(c){ return A.ch[c.id].placed > 0; })
+    .map(function(c){ return c.id; })
+    .sort(function(a,b){
+      var d = A.ch[a].medPos - A.ch[b].medPos;
+      return d !== 0 ? d : (A.ch[a].meanPos - A.ch[b].meanPos);
+    });
+
+  // agreement with the book's chapter-number order (share of concordant pairs per response)
+  A.agreement = facts.map(function(f){
+    var conc = 0, tot = 0;
+    for (var i=0; i<f.placed.length; i++){
+      for (var j=i+1; j<f.placed.length; j++){
+        var a = Math.min(f.placed[i], f.placed[j]), b = Math.max(f.placed[i], f.placed[j]);
+        var r = f.before(a, b);
+        if (r !== null){ tot++; if (r) conc++; }
+      }
+    }
+    return tot ? conc / tot : null;
+  });
+
+  A.camps = computeCamps(facts);
+
+  // extra questions
+  A.questions = (CONFIG.questions || []).map(function(q){
+    var answers = rs.map(function(r){ return (r.extra || {})[q.id]; })
+      .filter(function(v){ return v !== undefined && v !== null && String(v) !== ""; });
+    var out = {q: q, count: answers.length};
+    if (q.type === "scale"){
+      var nums = answers.map(Number).filter(function(v){ return v >= 1 && v <= 5; });
+      out.dist = [0,0,0,0,0];
+      nums.forEach(function(v){ out.dist[v-1]++; });
+      out.mean = mean(nums);
+    } else if (q.type === "choice"){
+      out.counts = {};
+      answers.forEach(function(v){ out.counts[v] = (out.counts[v] || 0) + 1; });
+    } else {
+      out.texts = rs.map(function(r, i){ return {i: i, text: String((r.extra || {})[q.id] || "")}; })
+        .filter(function(t){ return t.text; });
+    }
+    return out;
+  });
+  var adopt = A.questions.filter(function(x){ return x.q.type === "scale" && x.count; })[0];
+  A.adoptMean = adopt ? adopt.mean : null;
+  return A;
+}
+
+/* Dissimilarity between two responses: discordant ordering share on shared
+   chapters, blended with disagreement about which chapters to include at all. */
+function respDistance(fa, fb){
+  var shared = fa.placed.filter(function(id){ return fb.start[id]; });
+  var disc = 0, tot = 0;
+  for (var i=0; i<shared.length; i++){
+    for (var j=i+1; j<shared.length; j++){
+      var ra = fa.before(shared[i], shared[j]), rb = fb.before(shared[i], shared[j]);
+      if (ra !== null && rb !== null){ tot++; if (ra !== rb) disc++; }
+    }
+  }
+  var ordDist = tot ? disc / tot : 0.5;
+  var union = {};
+  fa.placed.concat(fb.placed).forEach(function(id){ union[id] = 1; });
+  var uSize = Object.keys(union).length;
+  var incDist = uSize ? 1 - shared.length / uSize : 0;
+  return 0.6 * ordDist + 0.4 * incDist;
+}
+/* Average-linkage agglomerative clustering; stops when the closest pair of camps
+   is genuinely far apart (or when down to a displayable handful). */
+function computeCamps(facts){
+  if (facts.length < 6) return null;
+  var clusters = facts.map(function(f, i){ return {members: [i]}; });
+  function cdist(A, B){
+    var tot = 0, k = 0;
+    A.members.forEach(function(i){ B.members.forEach(function(j){ tot += respDistance(facts[i], facts[j]); k++; }); });
+    return tot / k;
+  }
+  while (clusters.length > 2){
+    var bi = -1, bj = -1, bd = Infinity;
+    for (var i=0; i<clusters.length; i++)
+      for (var j=i+1; j<clusters.length; j++){
+        var d = cdist(clusters[i], clusters[j]);
+        if (d < bd){ bd = d; bi = i; bj = j; }
+      }
+    if (bd > 0.35 && clusters.length <= 4) break;
+    clusters[bi].members = clusters[bi].members.concat(clusters[bj].members);
+    clusters.splice(bj, 1);
+  }
+  clusters.sort(function(a,b){ return b.members.length - a.members.length; });
+  return clusters.slice(0, 4).map(function(cl){
+    var order = CONFIG.chapters.map(function(c){
+      var ps = cl.members.map(function(i){ return facts[i].pos(c.id); })
+        .filter(function(p){ return p !== null; });
+      ps.sort(function(a,b){ return a-b; });
+      return {id: c.id, share: ps.length / cl.members.length, med: quantile(ps, 0.5)};
+    });
+    return {
+      size: cl.members.length,
+      members: cl.members,
+      order: order.filter(function(o){ return o.share >= 0.5; })
+        .sort(function(a,b){ return a.med - b.med; }).map(function(o){ return o.id; }),
+      dropped: order.filter(function(o){ return o.share < 0.5; }).map(function(o){ return o.id; })
+    };
+  });
+}
+
+/* ---------- rendering ---------- */
+function pct(v){ return v === null || v === undefined ? "—" : Math.round(v * 100) + "%"; }
+function num(v, d){ return v === null || v === undefined ? "—" : Number(v).toFixed(d === undefined ? 1 : d); }
+function chapShort(id){ return "Ch " + id + " — " + (byId[id] ? byId[id].title : "removed chapter"); }
+function heatColor(t){ // 0..1 -> wash..deep red, one hue, lightness-monotonic
+  if (t <= 0) return "var(--wash)";
+  var mix = Math.pow(Math.min(1, t), 0.7);
+  function ch(a, b){ return Math.round(a + (b - a) * mix); }
+  return "rgb(" + ch(246,159) + "," + ch(243,25) + "," + ch(236,18) + ")";
+}
+function respLabel(r, i){ return r.name ? r.name : "Respondent #" + (i + 1); }
+
+function analyzeRender(){
+  var rs = AN.responses || [];
+  var body = document.getElementById("anBody");
+  if (!rs.length){
+    body.innerHTML = '<div class="ansec"><h3>No responses yet</h3><p class="subt">Once the first survey ' +
+      'is submitted, every chart on this page fills in automatically. The raw rows are always in the ' +
+      'Google Sheet&rsquo;s <b>Responses</b> tab.</p></div>';
+    return;
+  }
+  var A = AN.stats = computeStats(rs);
+  AN.sel = -1;
+  var chapters = CONFIG.chapters;
+  var h = "";
+
+  /* --- headline tiles --- */
+  h += '<div class="ansec"><div class="tiles">' +
+    tile(A.n, "response" + (A.n === 1 ? "" : "s")) +
+    tile(num(A.medSessions, A.medSessions === Math.round(A.medSessions) ? 0 : 1), "median class sessions") +
+    tile(num(A.meanPlaced, 1) + " / " + chapters.length, "chapters used on average") +
+    (A.adoptMean !== null ? tile(num(A.adoptMean, 1) + " / 5", "mean adoption likelihood") : "") +
+    tile(pct(mean(A.agreement.filter(function(x){ return x !== null; }))), "agreement with book order") +
+    '</div></div>';
+
+  /* --- consensus TOC --- */
+  h += '<div class="ansec"><h3>Consensus ordering</h3>' +
+    '<p class="subt">Chapters ranked by the median point in the course where instructors start them, with ' +
+    'how many respondents include each one.</p><div class="consensus">' +
+    A.consensus.map(function(id){
+      var c = byId[id], s = A.ch[id];
+      if (!c) return "";
+      return '<div class="consitem"><span class="sw" style="background:' + chartColor[c.part] + '"></span>' +
+        '<span class="nm"><b>Ch ' + id + '</b> ' + esc(c.title) + '</span>' +
+        '<span class="meta">' + pct(s.incRate) + ' include &middot; median at ' + pct(s.medPos) + ' of course</span></div>';
+    }).join("") + '</div></div>';
+
+  /* --- placement heatmap --- */
+  h += '<div class="ansec"><h3>Where each chapter lands</h3>' +
+    '<p class="subt">Each row is a chapter (in book order); each cell is a tenth of the course. Darker means ' +
+    'more respondents start the chapter there — a tight dark band is consensus, a smear is disagreement. ' +
+    'Hover any cell for the exact count.</p>' +
+    '<div class="heatwrap"><table class="heat"><tr><th></th>' +
+    '<th colspan="4" style="text-align:left">start of course</th><th colspan="3">middle</th>' +
+    '<th colspan="3" style="text-align:right">end</th><th></th></tr>' +
+    chapters.map(function(c){
+      var s = A.ch[c.id];
+      var mx = Math.max.apply(null, s.bins.concat([1]));
+      return '<tr><td class="rowlab" style="color:' + partColor[c.part] + '"><b>Ch ' + c.id + '</b> ' +
+        esc(c.title) + '</td>' +
+        s.bins.map(function(v, b){
+          var tt = "Ch " + c.id + " starts in the " + (b*10) + "–" + (b*10+10) + "% stretch of the course in " +
+            v + " of " + A.n + " responses";
+          return '<td><div class="cell" style="background:' +
+            heatColor((v / mx) * (s.placed / Math.max(1, A.n))) + '" title="' + esc(tt) + '"></div></td>';
+        }).join("") +
+        '<td class="inc">' + pct(s.incRate) + ' include</td></tr>';
+    }).join("") + '</table></div></div>';
+
+  /* --- inclusion + time allocation --- */
+  h += '<div class="ansec"><h3>Inclusion and class time</h3>' +
+    '<p class="subt">Share of respondents who schedule each chapter (bar, colored by part), and the average ' +
+    'number of sessions they give it when they do. Low bars are candidates for cutting or merging.</p>' +
+    chapters.slice().sort(function(a,b){ return A.ch[b.id].incRate - A.ch[a.id].incRate; })
+      .map(function(c){
+        var s = A.ch[c.id];
+        return '<div class="barrow" title="' + esc(chapShort(c.id) + ": scheduled by " + s.placed + " of " + A.n +
+            ", explicitly discarded by " + s.discarded) + '">' +
+          '<span class="lab"><b>Ch ' + c.id + '</b> ' + esc(c.title) + '</span>' +
+          '<span class="btrack"><i class="bfill" style="width:' + Math.round(s.incRate * 100) + '%;background:' +
+            chartColor[c.part] + '"></i></span>' +
+          '<span class="val">' + pct(s.incRate) + (s.meanSpan ? ' &middot; ' + num(s.meanSpan) + ' sess.' : '') + '</span></div>';
+      }).join("") + '</div>';
+
+  /* --- contested pairs --- */
+  var contested = A.pairs.filter(function(p){ return Math.abs(p.aFirst - 0.5) < 0.35; })
+    .sort(function(a,b){ return Math.abs(a.aFirst - 0.5) - Math.abs(b.aFirst - 0.5); }).slice(0, 6);
+  if (contested.length){
+    h += '<div class="ansec"><h3>Most contested orderings</h3>' +
+      '<p class="subt">Chapter pairs that respondents order both ways — the genuine sequencing debates. ' +
+      'Pairs everyone orders the same way don&rsquo;t appear.</p><div class="pairlist">' +
+      contested.map(function(p){
+        return '<div class="pairrow"><span class="pairbar" title="' +
+          esc(Math.round(p.aFirst*100) + "% schedule Ch " + p.a + " first (" + p.both + " placed both)") + '">' +
+          '<i style="width:' + Math.round(p.aFirst*100) + '%;background:' + CHART_COLORS[0] + '"></i>' +
+          '<i style="flex:1;background:' + CHART_COLORS[1] + '"></i></span>' +
+          '<span><b>' + Math.round(p.aFirst*100) + '%</b> put Ch ' + p.a + ' (' + esc(byId[p.a].title) +
+          ') before Ch ' + p.b + ' (' + esc(byId[p.b].title) + ')</span></div>';
+      }).join("") + '</div></div>';
+  }
+
+  /* --- camps --- */
+  if (A.camps && A.camps.length > 1){
+    h += '<div class="ansec"><h3>Camps</h3>' +
+      '<p class="subt">Respondents clustered by how similarly they build the course (ordering and chapter ' +
+      'selection together). Each card shows the camp&rsquo;s majority ordering; struck-through chapters are ' +
+      'ones most of the camp leaves out. Hover a number for the chapter title.</p><div class="campgrid">' +
+      A.camps.map(function(cp, i){
+        return '<div class="camp"><h4>Camp ' + (i+1) + '</h4>' +
+          '<p class="sz">' + cp.size + ' respondent' + (cp.size === 1 ? '' : 's') + ' — ' +
+          cp.members.slice(0, 6).map(function(m){ return esc(respLabel(rs[m], m)); }).join(", ") +
+          (cp.members.length > 6 ? "&hellip;" : "") + '</p>' +
+          '<div class="ord">' +
+          cp.order.map(function(id){
+            return '<span style="background:' + chartColor[byId[id].part] + '" title="' + esc(chapShort(id)) + '">' + id + '</span>';
+          }).join("") +
+          cp.dropped.map(function(id){
+            return '<span class="drop" title="' + esc(chapShort(id)) + ' — left out by most of this camp">' + id + '</span>';
+          }).join("") +
+          '</div></div>';
+      }).join("") + '</div></div>';
+  }
+
+  /* --- extra questions --- */
+  A.questions.forEach(function(qs){
+    if (!qs.count) return;
+    if (qs.q.type === "scale"){
+      var labs = String(qs.q.options || "|").split("|");
+      var mx = Math.max.apply(null, qs.dist.concat([1]));
+      h += '<div class="ansec"><h3>' + esc(qs.q.prompt) + '</h3>' +
+        '<p class="subt">Mean ' + num(qs.mean, 1) + ' of 5 &middot; ' + qs.count + ' answered &middot; 1 = ' +
+        esc(labs[0] || "low") + ', 5 = ' + esc(labs[1] || "high") + '</p>' +
+        qs.dist.map(function(v, i){
+          return '<div class="barrow"><span class="lab"><b>' + (i+1) + '</b></span>' +
+            '<span class="btrack"><i class="bfill" style="width:' + Math.round(v / mx * 100) +
+            '%;background:' + CHART_COLORS[1] + '"></i></span><span class="val">' + v + '</span></div>';
+        }).join("") + '</div>';
+    } else if (qs.q.type === "choice"){
+      var keys = Object.keys(qs.counts);
+      var mx2 = Math.max.apply(null, keys.map(function(k){ return qs.counts[k]; }).concat([1]));
+      h += '<div class="ansec"><h3>' + esc(qs.q.prompt) + '</h3>' +
+        '<p class="subt">' + qs.count + ' answered</p>' +
+        keys.map(function(k){
+          return '<div class="barrow"><span class="lab">' + esc(k) + '</span>' +
+            '<span class="btrack"><i class="bfill" style="width:' + Math.round(qs.counts[k] / mx2 * 100) +
+            '%;background:' + CHART_COLORS[4] + '"></i></span><span class="val">' + qs.counts[k] + '</span></div>';
+        }).join("") + '</div>';
+    }
+  });
+
+  /* --- free text --- */
+  h += quotesSection("What they like", rs.map(function(r, i){ return {i: i, text: r.likes}; }));
+  h += quotesSection("What's missing", rs.map(function(r, i){ return {i: i, text: r.missing}; }));
+  A.questions.forEach(function(qs){
+    if ((qs.q.type === "text" || qs.q.type === "textarea") && qs.texts && qs.texts.length){
+      h += quotesSection(qs.q.prompt, qs.texts);
+    }
+  });
+
+  /* --- individual responses --- */
+  h += '<div class="ansec"><h3>Individual responses</h3>' +
+    '<p class="subt">Click a row to see that instructor&rsquo;s course exactly as they built it.</p>' +
+    '<div style="overflow-x:auto"><table class="rtable"><thead><tr><th>#</th><th>When</th><th>Name</th>' +
+    '<th>Institution / course</th><th>Sessions</th><th>Used</th><th>Unused</th></tr></thead><tbody>' +
+    rs.map(function(r, i){
+      var f = A.facts[i];
+      var when = r.timestamp ? String(r.timestamp).slice(0, 10) : "—";
+      return '<tr data-resp="' + i + '"><td>' + (i+1) + '</td>' +
+        '<td>' + esc(when) + '</td><td>' + esc(r.name || "—") + '</td><td>' + esc(r.institution || "—") + '</td>' +
+        '<td>' + f.n + '</td><td>' + f.placed.length + '</td><td>' + (f.unused.length || "—") + '</td></tr>';
+    }).join("") + '</tbody></table></div><div id="anDetail"></div></div>';
+
+  /* --- AI analysis --- */
+  h += '<div class="ansec"><h3>AI analysis</h3>' +
+    '<p class="subt">A Claude-written synthesis of everything above, plus a chat for follow-up questions.</p>' +
+    '<div class="llm">' +
+    (IS_LIVE
+      ? '<p class="note">Runs through the survey backend using the Anthropic API key stored with the Google ' +
+        'Sheet (TOC Survey menu &rarr; Set Anthropic API key). A full report can take a minute or two.</p>'
+      : '<p class="note"><b>Preview mode:</b> the AI features need the deployed backend, so these are disabled here.</p>') +
+    '<div class="btnrow" style="margin-top:0"><button class="btn" id="llmReport"' + (IS_LIVE ? '' : ' disabled') +
+    '>Generate report</button><span class="hint" id="llmStatus"></span></div>' +
+    '<div class="report" id="llmReportOut"></div>' +
+    '<div class="chatlog" id="chatLog"></div>' +
+    '<div class="chatrow"><textarea id="chatIn" placeholder="Ask about the responses — e.g. “Which two chapters could we merge with the least resistance?”"' +
+    (IS_LIVE ? '' : ' disabled') + '></textarea>' +
+    '<button class="btn secondary" id="chatGo"' + (IS_LIVE ? '' : ' disabled') + '>Ask</button></div>' +
+    '</div></div>';
+
+  body.innerHTML = h;
+  renderChatLog();
+
+  body.querySelectorAll("tr[data-resp]").forEach(function(tr){
+    tr.addEventListener("click", function(){ selectResp(Number(this.dataset.resp)); });
+  });
+  var rb = document.getElementById("llmReport");
+  if (rb) rb.addEventListener("click", runReport);
+  var cg = document.getElementById("chatGo");
+  if (cg) cg.addEventListener("click", runChat);
+  var ci = document.getElementById("chatIn");
+  if (ci) ci.addEventListener("keydown", function(e){
+    if (e.key === "Enter" && !e.shiftKey){ e.preventDefault(); runChat(); }
+  });
+}
+function tile(v, l){ return '<div class="tile"><div class="v">' + v + '</div><div class="l">' + l + '</div></div>'; }
+function quotesSection(title, items){
+  items = items.filter(function(t){ return t.text && String(t.text).trim(); });
+  if (!items.length) return "";
+  return '<div class="ansec"><h3>' + esc(title) + '</h3><div class="quotes">' +
+    items.map(function(t){
+      var r = AN.responses[t.i];
+      return '<div class="quote">&ldquo;' + esc(String(t.text).trim()) + '&rdquo;' +
+        '<div class="who">&mdash; <a data-jump="' + t.i + '">' + esc(respLabel(r, t.i)) +
+        (r.institution ? ", " + esc(r.institution) : "") + '</a></div></div>';
+    }).join("") + '</div></div>';
+}
+/* Quote attributions jump to the individual view (delegated: quotes re-render often). */
+document.getElementById("anBody").addEventListener("click", function(e){
+  var a = e.target.closest ? e.target.closest("[data-jump]") : null;
+  if (a) selectResp(Number(a.dataset.jump));
+});
+function selectResp(i){
+  AN.sel = i;
+  document.querySelectorAll("tr[data-resp]").forEach(function(tr){
+    tr.className = Number(tr.dataset.resp) === i ? "sel" : "";
+  });
+  renderDetail(i);
+  var d = document.getElementById("anDetail");
+  if (d) d.scrollIntoView({behavior: "smooth", block: "nearest"});
+}
+function renderDetail(i){
+  var r = AN.responses[i];
+  if (!r) return;
+  var f = AN.stats.facts[i];
+  var h = '<div class="rdetail"><h4>' + esc(respLabel(r, i)) + '</h4>' +
+    '<p class="rmeta">' + (esc([r.institution, r.email, r.timestamp ? String(r.timestamp).slice(0,10) : ""]
+      .filter(String).join(" · ")) || "no contact details given") +
+    (r.row ? ' · Sheet row ' + r.row : '') + '</p><div class="rsess">';
+  for (var s=0; s<f.n; s++){
+    var items = (r.sessions[s] || []);
+    var ghosts = [];
+    (r.sessions || []).forEach(function(list, s0){
+      (list || []).forEach(function(id){
+        id = Number(id);
+        if (s0 < s && s <= s0 + f.spanOf(id) - 1) ghosts.push(id);
+      });
+    });
+    if (!items.length && !ghosts.length) continue;
+    h += '<div class="sh">Session ' + (s+1) + '</div>';
+    ghosts.forEach(function(id){
+      var c = byId[id];
+      h += '<div class="minichip ghost2" style="border-left-color:' + (c ? partColor[c.part] : "#999") + '">' +
+        '<span class="cn">Ch ' + id + '</span> ' + esc(c ? c.title : "removed chapter") + ' (continued)</div>';
+    });
+    items.forEach(function(id){
+      id = Number(id);
+      var c = byId[id], k = f.spanOf(id);
+      h += '<div class="minichip" style="border-left-color:' + (c ? partColor[c.part] : "#999") + '">' +
+        '<span class="cn" style="color:' + (c ? partColor[c.part] : "#999") + '">Ch ' + id + '</span> ' +
+        esc(c ? c.title : "removed chapter") + (k > 1 ? ' <i>(runs ' + k + ' sessions)</i>' : '') + '</div>';
+    });
+  }
+  if (f.unused.length){
+    h += '<div class="sh">Unused pile</div>';
+    f.unused.forEach(function(id){
+      var c = byId[id];
+      h += '<div class="minichip" style="border-left-color:#c9c2b8;color:var(--ink-soft)">' +
+        '<span class="cn">Ch ' + id + '</span> ' + esc(c ? c.title : "removed chapter") + '</div>';
+    });
+  }
+  h += '</div><div class="qa">';
+  h += qaBlock("What do you like about the TOC you built?", r.likes);
+  h += qaBlock("Is anything missing?", r.missing);
+  (CONFIG.questions || []).forEach(function(q){
+    h += qaBlock(q.prompt, (r.extra || {})[q.id]);
+  });
+  h += '</div></div>';
+  document.getElementById("anDetail").innerHTML = h;
+}
+function qaBlock(q, a){
+  a = a === undefined || a === null ? "" : String(a).trim();
+  return '<div class="qq">' + esc(q) + '</div><div class="aa' + (a ? '' : ' empty') + '">' +
+    (a ? esc(a) : "no answer") + '</div>';
+}
+
+/* ---------- AI report + chat ---------- */
+function buildDigest(){
+  var A = AN.stats, rs = AN.responses;
+  var L = [];
+  L.push("You are a research analyst for Erik Snowberg, Betsey Stevenson, and Justin Wolfers, who are " +
+    "writing the MBA textbook \"Managerial Economics\" (Macmillan Learning, in development). They surveyed " +
+    "instructors, each of whom built their ideal table of contents by dragging the planned chapters into " +
+    "their own course's class sessions (in teaching order), optionally running a chapter across several " +
+    "sessions, and discarding chapters they would not teach to an 'unused' pile. Positions below are " +
+    "normalized: 0% = first session, 100% = last session of that respondent's course.");
+  L.push("All statistics were computed deterministically by the dashboard. Rely on them; do not recompute. " +
+    "Quote respondents verbatim where it helps, and refer to them by name/number so the authors can look " +
+    "them up. Be candid about weak spots in the data (small n, selection effects) where relevant.");
+  L.push("\n== CHAPTERS (the book's planned order) ==");
+  CONFIG.chapters.forEach(function(c){
+    L.push("Ch " + c.id + " [" + c.part + "] " + c.title +
+      (c.prereqs.length ? " (requires Ch " + c.prereqs.join(", ") + ")" : ""));
+  });
+  L.push("\n== AGGREGATES (n=" + A.n + "; median course length " + num(A.medSessions, 1) +
+    " sessions; mean chapters used " + num(A.meanPlaced, 1) + " of " + CONFIG.chapters.length + ") ==");
+  L.push("Per chapter — included%, explicitly-discarded count, median/mean start position, IQR, mean sessions allocated:");
+  CONFIG.chapters.forEach(function(c){
+    var s = A.ch[c.id];
+    L.push("Ch " + c.id + ": incl " + pct(s.incRate) + " (discarded by " + s.discarded + "), median pos " +
+      pct(s.medPos) + ", mean " + pct(s.meanPos) + ", IQR " + pct(s.q1) + "-" + pct(s.q3) +
+      ", mean sessions " + num(s.meanSpan));
+  });
+  L.push("Consensus ordering (by median position): " + A.consensus.join(" > "));
+  var agr = A.agreement.filter(function(x){ return x !== null; });
+  if (agr.length){
+    L.push("Agreement with book-number order (share of concordant chapter pairs per response): mean " +
+      pct(mean(agr)) + ", min " + pct(Math.min.apply(null, agr)) + ", max " + pct(Math.max.apply(null, agr)));
+  }
+  var contested = A.pairs.slice().sort(function(a,b){
+    return Math.abs(a.aFirst - 0.5) - Math.abs(b.aFirst - 0.5); }).slice(0, 8);
+  if (contested.length){
+    L.push("Most contested pairs (share putting first-named chapter first): " + contested.map(function(p){
+      return "Ch" + p.a + " before Ch" + p.b + ": " + Math.round(p.aFirst * 100) + "% (n=" + p.both + ")";
+    }).join("; "));
+  }
+  if (A.camps && A.camps.length > 1){
+    L.push("Camps (clustered by TOC similarity): " + A.camps.map(function(cp, i){
+      return "Camp " + (i+1) + " (" + cp.size + ": " +
+        cp.members.map(function(m){ return respLabel(rs[m], m); }).join(", ") + ") majority order " +
+        cp.order.join(">") + (cp.dropped.length ? ", mostly drops " + cp.dropped.join(",") : "");
+    }).join(" | "));
+  }
+  A.questions.forEach(function(qs){
+    if (qs.q.type === "scale" && qs.count)
+      L.push("Scale Q \"" + qs.q.prompt + "\": mean " + num(qs.mean, 2) + "/5, distribution 1..5 = " + qs.dist.join("/"));
+    if (qs.q.type === "choice" && qs.count)
+      L.push("Choice Q \"" + qs.q.prompt + "\": " + Object.keys(qs.counts).map(function(k){
+        return k + "=" + qs.counts[k]; }).join(", "));
+  });
+  L.push("\n== INDIVIDUAL RESPONSES ==");
+  var clip = rs.length > 80 ? 400 : 1200;   // keeps the digest well inside the context window
+  rs.forEach(function(r, i){
+    var f = A.facts[i];
+    var toc = [];
+    for (var s=0; s<f.n; s++){
+      var items = (r.sessions[s] || []).map(function(id){
+        var k = f.spanOf(Number(id));
+        return id + (k > 1 ? "(x" + k + " sessions)" : "");
+      });
+      if (items.length) toc.push("S" + (s+1) + ":" + items.join(","));
+    }
+    var extras = Object.keys(r.extra || {}).filter(function(k){ return String(r.extra[k]) !== ""; })
+      .map(function(k){ return k + "=" + String(r.extra[k]).slice(0, clip); });
+    L.push("#" + (i+1) + (r.row ? " (sheet row " + r.row + ")" : "") + " | " +
+      (r.name || "anonymous") + (r.institution ? " — " + r.institution : "") +
+      " | " + f.n + " sessions | " + toc.join(" ") +
+      (f.unused.length ? " | unused: " + f.unused.join(",") : "") +
+      (extras.length ? " | " + extras.join("; ") : "") +
+      (r.likes ? " | likes: \"" + String(r.likes).slice(0, clip) + "\"" : "") +
+      (r.missing ? " | missing: \"" + String(r.missing).slice(0, clip) + "\"" : ""));
+  });
+  return L.join("\n");
+}
+var REPORT_PROMPT =
+  "Write a report for the three authors synthesizing this survey. Use markdown with short sections: " +
+  "(1) headline findings; (2) the consensus TOC versus our planned chapter order — what to keep and what " +
+  "to reorder; (3) genuinely contested placements and, if the camps are meaningful, what distinguishes " +
+  "them; (4) chapters at risk (rarely included or given little time) and what respondents say about them; " +
+  "(5) themes in the free-text feedback, with short attributed quotes; (6) concrete recommendations, each " +
+  "grounded in the numbers or quotes above. Be direct; flag any claim the small sample can't support.";
+
+function runReport(){
+  if (AN.busy) return;
+  llmSend("report", [{role: "user", content: REPORT_PROMPT}], 10000, function(text){
+    document.getElementById("llmReportOut").innerHTML = mdToHtml(text);
+  });
+}
+function runChat(){
+  if (AN.busy) return;
+  var inp = document.getElementById("chatIn");
+  var q = inp.value.trim();
+  if (!q) return;
+  inp.value = "";
+  AN.chat.push({role: "user", content: q});
+  renderChatLog();
+  var msgs = [{role: "user", content: "Answer the authors' questions about this survey data. Be specific — " +
+      "cite respondents and numbers from the data you were given. If the data can't answer something, say so."},
+    {role: "assistant", content: "Understood — ask away."}].concat(AN.chat);
+  llmSend("chat", msgs, 3000, function(text){
+    AN.chat.push({role: "assistant", content: text});
+    renderChatLog();
+  }, function(){
+    AN.chat.pop();   // remove the unanswered question so it can be retried
+    renderChatLog();
+  });
+}
+/* purpose is "report" or "chat" — the backend maps it to a thinking-effort level. */
+function llmSend(purpose, messages, maxTokens, onOk, onFailExtra){
+  AN.busy = true;
+  var st = document.getElementById("llmStatus");
+  st.innerHTML = '<span class="spin"></span> Thinking&hellip;';
+  var rb = document.getElementById("llmReport"), cg = document.getElementById("chatGo");
+  if (rb) rb.disabled = true;
+  if (cg) cg.disabled = true;
+  function unlock(){
+    AN.busy = false; st.textContent = "";
+    if (rb) rb.disabled = false;
+    if (cg) cg.disabled = false;
+  }
+  apiCall({action: "llm", key: ADMIN.key, system: buildDigest(), messages: messages,
+           maxTokens: maxTokens, purpose: purpose},
+    function(res){
+      unlock();
+      onOk(res && res.text ? res.text : String(res));
+    },
+    function(e){
+      unlock();
+      toast(errMsg(e, "The AI request failed — please try again."), true);
+      if (onFailExtra) onFailExtra();
+    });
+}
+function renderChatLog(){
+  var log = document.getElementById("chatLog");
+  if (!log) return;
+  log.innerHTML = AN.chat.map(function(m){
+    return '<div class="msg ' + (m.role === "user" ? "user" : "asst") + '">' +
+      (m.role === "user" ? esc(m.content) : mdToHtml(m.content)) + '</div>';
+  }).join("");
+}
+
+/* Minimal markdown renderer for model output (headings, bold/italic/code, lists, paragraphs). */
+function mdToHtml(md){
+  var lines = String(md).split(/\r?\n/);
+  var out = [], list = null;   // list: "ul" | "ol" | null
+  function closeList(){ if (list){ out.push("</" + list + ">"); list = null; } }
+  function inline(s){
+    s = esc(s);
+    s = s.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+    s = s.replace(/(^|[\s(])\*([^*\n]+)\*/g, "$1<i>$2</i>");
+    s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
+    return s;
+  }
+  lines.forEach(function(ln){
+    var m;
+    if ((m = ln.match(/^\s*#{1,3}\s+(.*)$/))){ closeList(); out.push("<h3>" + inline(m[1]) + "</h3>"); }
+    else if ((m = ln.match(/^\s*#{4,6}\s+(.*)$/))){ closeList(); out.push("<h4>" + inline(m[1]) + "</h4>"); }
+    else if ((m = ln.match(/^\s*[-*•]\s+(.*)$/))){
+      if (list !== "ul"){ closeList(); out.push("<ul>"); list = "ul"; }
+      out.push("<li>" + inline(m[1]) + "</li>");
+    }
+    else if ((m = ln.match(/^\s*\d+[.)]\s+(.*)$/))){
+      if (list !== "ol"){ closeList(); out.push("<ol>"); list = "ol"; }
+      out.push("<li>" + inline(m[1]) + "</li>");
+    }
+    else if (!ln.trim()){ closeList(); }
+    else { closeList(); out.push("<p>" + inline(ln) + "</p>"); }
+  });
+  closeList();
+  return out.join("\n");
+}
+
+/* ---------- synthetic demo data (preview mode only) ---------- */
+function demoResponses(){
+  var names = ["Ada Chen","Ben Ortiz","Carla Novak","Dev Patel","Elena Ruiz","Frank Osei",
+               "Grace Kim","Hugo Lind","Iris Wang","Jon Baker","Kim Salo","Lena Voss"];
+  var insts = ["Ross MBA core","Booth evening MBA","Wharton exec ed","Haas core micro",
+               "Kellogg MBA","Sloan core","Tuck MBA","Fuqua core","Stern MBA","Anderson MBA",
+               "Darden core","Yale SOM core"];
+  var likeTx = ["Love leading with decision making before any market mechanics.",
+    "Pricing early is exactly how I teach it.",
+    "Good balance of strategy and fundamentals.",
+    "The employees part is a differentiator — most texts bury it.",
+    "Clean arc from customers to society.", ""];
+  var missTx = ["Needs a data/analytics chapter.", "Where is platform economics?",
+    "More on negotiation would help.", "A capstone case chapter would be great.", "", ""];
+  var ids = CONFIG.chapters.map(function(c){ return c.id; });
+  return names.map(function(nm, i){
+    var order = ids.slice();
+    // structured variation: a third pull supply/elasticity early; everyone gets local shuffles
+    if (i % 3 === 0 && order.indexOf(12) > 3){
+      order.splice(order.indexOf(12), 1); order.splice(3, 0, 12);
+    }
+    for (var k=1; k<order.length-1; k++){
+      if (Math.random() < 0.25){
+        var t = order[k]; order[k] = order[k+1]; order[k+1] = t;
+      }
+    }
+    var unused = [];
+    if (i % 4 === 1) unused.push(15);
+    if (i % 5 === 2){ unused.push(13); unused.push(14); }
+    order = order.filter(function(id){ return unused.indexOf(id) === -1; });
+    var n = [10, 12, 14, 14, 14, 26][i % 6];
+    var sessions = [];
+    for (var s=0; s<n; s++) sessions.push([]);
+    order.forEach(function(id, j){
+      sessions[Math.min(n-1, Math.floor(j * n / order.length))].push(id);
+    });
+    var spans = {};
+    if (i % 3 === 1) spans[8] = 2;
+    return {
+      row: i + 2, timestamp: "2026-0" + (5 + (i % 4)) + "-1" + (i % 9) + "T12:00:00Z",
+      name: nm, email: nm.toLowerCase().replace(/[^a-z]/g, ".") + "@example.edu",
+      institution: insts[i], numSessions: n, sessions: sessions, unused: unused, spans: spans,
+      likes: likeTx[i % likeTx.length], missing: missTx[i % missTx.length],
+      extra: {q_adopt: String(2 + ((i * 7) % 4))}
+    };
+  });
+}
+</script>
+</body>
+</html>

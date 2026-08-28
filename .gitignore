@@ -1,0 +1,3 @@
+# Code.gs is the Apps Script backend. It holds the admin password, so it lives
+# in the Apps Script editor only and must never reach this public repo.
+Code.gs
