@@ -2,19 +2,21 @@
 
 A one-page drag-and-drop survey in which instructors build their preferred table of
 contents for *Managerial Economics* (Snowberg, Stevenson & Wolfers). Respondents set
-their number of class sessions (default 14, adjustable with ± or "+ Add a session"),
+their number of class sessions (default 15, adjustable with ± or "+ Add a session"),
 drag the 15 planned chapters into those sessions (or discard them to an "unused" pile),
 optionally stretch a chapter across consecutive sessions (the ⤓ button; later sessions
-show a dashed "continued" card), answer the wrap-up questions at the bottom of the same
-page, and submit. Every response lands as one row in a Google Sheet; multi-session
+show a dashed "continued" card), answer the survey's own questions — which can sit above
+the sessions, below them, or both — and submit. Every response lands as one row in a Google Sheet; multi-session
 chapters are recorded in the readable TOC ("runs N sessions") and as `spans` in the JSON
 column. Prerequisite enforcement treats a spanned chapter as finishing in its last
 session: dependent chapters must start at or after that session.
 
 A **Start from book order** button seeds the sessions with all chapters in the book's
-order, so respondents who mostly agree only express deviations; whether a response
-started from that prefill is recorded (`prefilled` in the JSON column) so anchored
-responses can be segmented in analysis. On phones and tablets — where browsers don't
+order — one chapter per session, so the session count becomes the chapter count — so
+respondents who mostly agree only express deviations; whether a response started from
+that prefill is recorded (`prefilled` in the JSON column) so anchored responses can be
+segmented in analysis. **Start over** (next to it) empties every session and the unused
+pile and returns the count to 15, after a confirmation; the written answers are kept. On phones and tablets — where browsers don't
 support drag-and-drop — the chapter list appears first, the instructions switch to
 tap-based wording, and everything is doable by buttons alone: **+** places a chapter,
 **⇄** moves it between sessions, ▲▼ reorder, ⤓ extends, 🗑 discards.
@@ -32,7 +34,7 @@ copy of `index.html` to keep in sync.
 
 | File | What it is | Goes where |
 |---|---|---|
-| `index.html` | The whole app: survey, plus the password-gated `/edit` and `/analyze` pages. | GitHub repo |
+| `index.html` | The whole app: survey, plus the password-gated `/edit` (chapters **and** questions) and `/analyze` pages. | GitHub repo |
 | `edit.html`, `analyze.html` | Tiny redirects so `yoursite/…/edit` and `…/analyze` work as URLs. | GitHub repo |
 | `Code.gs` | Apps Script backend: serves config, stores responses, checks the admin password, emails you each submission, proxies the Claude API for the dashboard's AI features. | Apps Script only — **never** push it to a public repo (it contains the admin password). `.gitignore` enforces this. |
 
@@ -88,11 +90,32 @@ Both are gated by the **admin password** — see or change it in the Sheet under
 privileged call and never appears in the public front-end files; your browser remembers
 it after the first successful entry.
 
-**`/edit` — chapter editor.** Edit titles, parts, section lists, notes; toggle
-prerequisite chips; add or delete chapters. Saving updates the Sheet, so changes reach
-respondents immediately. The page blocks impossible saves (missing titles, dangling or
-circular dependencies). In the local preview, `index.html#edit` saves only to that
-browser.
+**`/edit` — survey editor**, in two tabs.
+
+*Chapters.* Edit titles, parts, section lists, notes; toggle prerequisite chips; add or
+delete chapters. The page blocks impossible saves (missing titles, dangling or circular
+dependencies).
+
+*Questions.* Everything respondents are asked, in the order they see it, split into the
+questions that come **before** the chapter sort (shown above the class sessions — screening
+or context) and those that come **after** it (under "A few final questions"). Add a
+question to either side, delete one, drag a card by its handle — or press ▲▼ — to reorder
+it, and drag it across to the other list (or use its Placement menu) to move it to the
+other side of the sort. Each question has a type, an optional description, an optional
+*required* flag, and an answer ID that names its column in the Sheet. The available types
+match a Google Form:
+
+| | |
+|---|---|
+| Short answer, Paragraph | one line, or a box |
+| Multiple choice, Checkboxes, Dropdown | one-of and many-of, each with an optional "Other…" write-in |
+| Linear scale, Star rating | any range (a scale may start at 0), with optional end labels |
+| Multiple-choice grid, Checkbox grid | rows × columns, one-of or many-of per row |
+| Date, Time, Date and time, Number, Email address, Link (URL) | validated single fields |
+| Section heading | a heading and blurb — not a question, collects no answer |
+
+Saving either tab updates the Sheet, so changes reach respondents immediately. In the
+local preview, `index.html#edit` saves only to that browser.
 
 **`/analyze` — results dashboard.** Every statistic is computed in the page from the raw
 responses; chapter positions are normalized to each respondent's course length so a
@@ -106,11 +129,16 @@ responses; chapter positions are normalized to each respondent's course length s
 - **inclusion & class time** per chapter — who schedules it, how many sessions it gets;
 - the **most contested pairs** — orderings respondents genuinely disagree about;
 - **camps** — respondents clustered by TOC similarity, each with its majority ordering;
-- distributions for every scale/choice question, and all free-text answers as quotes
-  linked to their authors;
+- a chart per question, in the shape its answers take — a distribution for scales and
+  ratings, counts for choice, dropdown, checkbox and date/time answers, mean/median/range
+  for numbers, a shaded matrix for grids — and all free-text answers as quotes linked to
+  their authors;
 - an **individual browser** — click any respondent to see their course rendered exactly
   as they built it, plus all their answers;
-- **Download all responses (JSON)** for offline analysis.
+- **Download all responses** for offline analysis, as **CSV** (one row per respondent,
+  with a column per extra question and, for every chapter, the session it was placed in
+  — or `unused` — and how many sessions it runs) or as **JSON** (the raw structure,
+  bundled with the chapter and question definitions).
 
 ### AI report & chat
 
@@ -151,18 +179,27 @@ Two equivalent ways to manage chapters — the `/edit` page above, or the Sheet 
   direct dependencies need listing. Seeded with the real dependencies: Ch 1 before
   everything (each part opener requires it); each part's opening chapter (2, 5, 9, 12)
   before the rest of its part; and Ch 2 before Ch 12.
-- **Extra questions** — add rows to **Extra Questions**. Types: `text` (one line),
-  `textarea` (paragraph), `scale` (1–5 with end labels, e.g. `Not at all|Extremely`),
-  `choice` (options separated by `|`).
+- **Extra questions** — the `/edit` page's Questions tab is much the easier way, but the
+  **Extra Questions** tab holds the same data, one row per question in the order asked:
+  *ID*, *Type* (`text`, `textarea`, `choice`, `checkbox`, `dropdown`, `scale`, `rating`,
+  `grid`, `checkgrid`, `date`, `time`, `datetime`, `number`, `email`, `url`, `section`),
+  *Prompt*, *Options* (`a|b|c` — for a scale, the two end labels), *Placement* (`before` or
+  `after` the chapter sort), *Required?* (`yes`/`no`), *Description*, *Grid rows* (`r1|r2`),
+  and *Advanced settings* (JSON: a scale's `min`/`max`, and `other` for a write-in option).
+  Sheets from before the richer types keep working — the first four columns are unchanged,
+  and the rest default to an optional question after the sort. Re-run **TOC Survey menu →
+  Set up / repair survey tabs** once to add the new column headers.
 
 ## Where the data lives, and getting it out
 
 Every submission is one row in the Sheet's **Responses** tab: the readable TOC, the
 unused pile, all answers, and a JSON copy of the full structure for programmatic
 analysis. Each extra question also gets its own `Q: <id>` column (created automatically
-after the core columns) so answers can be filtered and pivoted directly. Free-text cells
+after the core columns) so answers can be filtered and pivoted directly; a checkbox answer
+flattens to `a | b` there and a grid answer to `row: value | row: value`, while the JSON
+copy keeps them structured. Free-text cells
 are sanitized against formula injection. Export any time with File → Download →
-CSV/XLSX, or the dashboard's JSON download. The Sheet itself stays private to your
+CSV/XLSX, or the dashboard's CSV/JSON downloads. The Sheet itself stays private to your
 Google account; only the survey page is public.
 
 **Response notifications** — the sheet owner gets a short email per submission (name,
@@ -173,4 +210,4 @@ top of `Code.gs`.
 
 Double-click `index.html`. It runs with the built-in chapter list, shows a "Preview mode"
 banner, logs would-be submissions to the browser console, and the preview links open the
-chapter editor (browser-local saves) and the dashboard with demo data.
+survey editor (browser-local saves) and the dashboard with demo data.

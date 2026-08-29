@@ -190,6 +190,33 @@
   .q .endlab{font-size:13px;color:var(--ink-soft)}
   .qfs{border:0;margin:0;padding:0;min-width:0}
   .qfs legend.prompt{padding:0;margin:0 0 6px}
+  .q .qhelp{font-size:13.5px;color:var(--ink-soft);margin:-2px 0 8px;max-width:70ch}
+  .q .req{color:var(--berry);margin-left:3px}
+  .q .qclear{border:none;background:transparent;color:var(--link);font-size:13px;cursor:pointer;
+    padding:3px 0 0;text-decoration:underline;display:block}
+  .q select{max-width:360px}
+  .q input[type=date],.q input[type=time],.q input[type=datetime-local]{width:auto}
+  .q .optcol{flex-direction:column;align-items:flex-start;gap:4px}
+  .q .otherwrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .q .otherwrap input[type=text]{max-width:260px;padding:6px 9px;font-size:14px}
+  .q h3.qhead2{font-size:17px;margin:22px 0 4px}
+  /* Star rating: the inputs sit in descending order and the row is reversed, so a
+     checked star's *following* siblings are the ones drawn to its left. */
+  .stars{display:flex;flex-direction:row-reverse;justify-content:flex-end;align-items:center}
+  .stars input{position:absolute;width:1px;height:1px;opacity:0}
+  .stars label{cursor:pointer;font-size:27px;line-height:1;color:#d9d3c9;padding:0 1px}
+  .stars input:checked ~ label{color:var(--gold)}
+  .stars label:hover{color:#e0ae00}
+  .stars input:focus-visible + label{outline:2px solid var(--blue);outline-offset:2px}
+  .qscroll{overflow-x:auto;max-width:100%}
+  .qgrid{border-collapse:collapse;font-size:14px}
+  .qgrid th,.qgrid td{border:1px solid var(--line);padding:7px 12px;text-align:center}
+  .qgrid th[scope=row]{text-align:left;font-weight:600;font-size:13.5px}
+  .qgrid thead th{background:var(--wash);font-weight:600;font-size:12.5px}
+  .qgrid tbody tr:nth-child(even) td,.qgrid tbody tr:nth-child(even) th{background:#faf8f4}
+  .preqs{display:none;border-bottom:2px solid var(--line);margin:0 0 24px;padding-bottom:8px}
+  .preqs.on{display:block}
+  .preqs h2{font-size:18px}
 
   .previewnote{background:#fdf6d8;border:1px solid var(--gold);border-radius:8px;padding:10px 14px;
     font-size:14px;margin:16px 0 0}
@@ -221,6 +248,47 @@
     min-width:30px;min-height:24px;padding:3px 8px;font-size:13px;font-weight:600;cursor:pointer}
   .pchip:hover{border-color:var(--slate)}
   .pchip.on{background:var(--purple);border-color:var(--purple);color:#fff}
+  .edtabs{display:flex;gap:4px;margin:0 0 18px;border-bottom:2px solid var(--line)}
+  .edtabs button{border:none;background:transparent;font-family:var(--sans);font-weight:600;
+    font-size:15px;color:var(--ink-soft);padding:9px 16px;cursor:pointer;border-radius:6px 6px 0 0;
+    margin-bottom:-2px;border-bottom:3px solid transparent}
+  .edtabs button:hover{background:var(--wash)}
+  .edtabs button[aria-selected=true]{color:var(--red);border-bottom-color:var(--red)}
+  .qgroup{margin:0 0 30px}
+  .qgroup h3{font-size:13px;margin:0 0 2px;color:var(--slate);letter-spacing:.07em;text-transform:uppercase}
+  .qgroup .ghint{font-size:13px;color:var(--ink-soft);margin:0 0 10px;max-width:70ch}
+  .qlist{display:flex;flex-direction:column;gap:12px;margin:0 0 10px;
+    border:1.5px dashed transparent;border-radius:8px;padding:2px}
+  .qlist.empty{border-color:var(--line);padding:18px;text-align:center}
+  .qlist.empty::after{content:"No questions here yet.";color:var(--ink-soft);font-size:13.5px}
+  .qlist.dragover{border-color:var(--blue);background:#eef7fb}
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 14px 14px}
+  .qcard.dragging{opacity:.4}
+  .qhead{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .qgrip{cursor:grab;color:#b7afa4;font-size:15px;padding:2px 3px;line-height:1;
+    letter-spacing:-2px;user-select:none;flex-shrink:0}
+  .qnum{font-weight:700;color:var(--slate);font-size:12.5px;letter-spacing:.06em;
+    text-transform:uppercase;flex-shrink:0}
+  .qhead select{width:auto;min-width:180px;max-width:none;font-size:13.5px;padding:5px 8px}
+  .qhead .spacer{flex:1}
+  .qbtn{border:none;background:transparent;cursor:pointer;font-size:13px;color:var(--ink-soft);
+    width:28px;height:28px;border-radius:4px;flex-shrink:0}
+  .qbtn:hover:not(:disabled){background:var(--wash);color:var(--ink)}
+  .qbtn:disabled{opacity:.25;cursor:default}
+  .qbtn.del:hover{background:#f7e9e8;color:var(--red)}
+  .qcard label.f{margin:9px 0 2px}
+  .qcard input,.qcard textarea,.qcard select{max-width:none}
+  .qcard textarea{min-height:58px;font-family:var(--sans);font-size:13.5px}
+  .qrow{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:flex-end}
+  .qrow > label.f{margin:9px 0 0;flex:1;min-width:150px}
+  .qrow > label.f.narrow{flex:0 0 96px;min-width:96px}
+  .qcheck{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:600;margin-top:11px}
+  .qcheck input[type=checkbox]{width:auto;margin:0}
+  .angrid{border-collapse:collapse;font-size:13.5px}
+  .angrid th,.angrid td{border:1px solid var(--line);padding:6px 11px;text-align:center;min-width:54px}
+  .angrid th[scope=row]{text-align:left;font-weight:600;background:var(--wash);white-space:nowrap}
+  .angrid thead th{background:var(--wash);font-weight:600;font-size:12px;letter-spacing:.04em;
+    text-transform:uppercase}
   .done{max-width:640px}
   .done h2{color:var(--red)}
   .done p{font-family:var(--serif);font-size:17px}
@@ -370,6 +438,8 @@
     .chipdetails{padding-left:12px}
     .edgrid{grid-template-columns:minmax(0,1fr)}
     .campgrid{grid-template-columns:minmax(0,1fr)}
+    .qhead select{min-width:0;flex:1 1 100%;order:9}
+    .edtabs button{padding:9px 12px;font-size:14px}
     .credit .adminlinks{white-space:normal}
   }
 
@@ -387,6 +457,10 @@
     .edcard .eddel{width:36px;height:36px}
     .pchip{padding:8px 12px;font-size:14px;min-width:38px}
     .qadd button{padding:11px 14px;font-size:15px}
+    .qcard textarea,.qcard input,.qcard select{font-size:16px}
+    .qbtn{width:36px;height:36px;font-size:15px}
+    .qgrid th,.qgrid td{padding:9px 12px}
+    .qgrid input[type=radio],.qgrid input[type=checkbox]{width:20px;height:20px}
     /* radio/checkbox rows in the wrap-up questions */
     .q .opts{gap:10px 18px}
     .q .opts label{padding:5px 0}
@@ -666,7 +740,7 @@
 
   <div class="previewnote" id="previewNote" hidden><b>Preview mode.</b> This copy isn't connected to the
     response database — nothing you submit here is saved. Admin?
-    <a href="#edit" id="previewEditLink">Chapter editor</a> &middot;
+    <a href="#edit" id="previewEditLink">Survey editor</a> &middot;
     <a href="#analyze" id="previewAnalyzeLink">Results dashboard</a> (demo data).</div>
 
   <!-- BUILDER -->
@@ -675,6 +749,10 @@
     <p class="lede" id="ledeBuild">We are writing a new business economics textbook, and we want its structure to match the
       way you actually teach. Drag the chapters on the right into your class sessions, in the order you'd
       cover them — and toss anything you wouldn't teach into the unused pile. Click any title for details.</p>
+    <div class="preqs" id="preQs">
+      <h2>First, a few questions</h2>
+      <div id="extraQsBefore"></div>
+    </div>
     <div class="loadcard" id="loadCard" hidden>
       <div class="loadrow" role="status" aria-live="polite">
         <span class="spin" id="loadSpin" aria-hidden="true"></span>
@@ -688,12 +766,14 @@
       <span class="count"><label for="numSessions2">Class sessions:</label>
         <button type="button" class="stepbtn" id="btnSessMinus" aria-label="One fewer class session"
           title="One fewer session">&minus;</button>
-        <input type="number" id="numSessions2" min="1" max="60" value="14">
+        <input type="number" id="numSessions2" min="1" max="60" value="15">
         <button type="button" class="stepbtn" id="btnSessPlus" aria-label="One more class session"
           title="One more session">+</button>
       </span>
       <button type="button" class="btn secondary small" id="btnPrefill"
-        title="Fill the sessions with the chapters in the book's planned order — a starting point you can rearrange">Start from book order</button>
+        title="Give every chapter its own session, in the book's planned order — a starting point you can rearrange">Start from book order</button>
+      <button type="button" class="btn secondary small" id="btnReset"
+        title="Empty every session and put all the chapters back in the chapter list">Start over</button>
       <div class="progress"><span id="progText" role="status"></span>
         <div class="pbar" aria-hidden="true"><i id="progFill"></i></div></div>
     </div>
@@ -745,16 +825,54 @@
 
   <!-- EDIT MODE (admin) -->
   <section class="editview" id="editView">
-    <h2>Edit chapters</h2>
-    <p class="lede">Edit titles, parts, section lists, notes, and prerequisites.
-      A prerequisite means that chapter must be scheduled <em>before</em> this one. <span id="edModeNote"></span></p>
-    <div class="edbar">
-      <button class="btn" id="edSave">Save changes</button>
-      <button class="btn secondary" id="edAdd">+ Add chapter</button>
-      <button class="btn secondary" id="edReload">Discard edits</button>
-      <span class="hint" id="edStatus" role="status"></span>
+    <h2>Survey editor</h2>
+    <p class="lede">Two things to edit: the chapters respondents sort, and the questions they
+      answer around the sort. <span id="edModeNote"></span></p>
+    <div class="edtabs" role="tablist" aria-label="What to edit">
+      <button type="button" role="tab" id="tabChapters" aria-controls="panelChapters"
+        aria-selected="true">Chapters</button>
+      <button type="button" role="tab" id="tabQuestions" aria-controls="panelQuestions"
+        aria-selected="false" tabindex="-1">Questions</button>
     </div>
-    <div class="edgrid" id="edGrid"></div>
+
+    <div id="panelChapters" role="tabpanel" aria-labelledby="tabChapters" tabindex="-1">
+      <p class="lede">Edit titles, parts, section lists, notes, and prerequisites.
+        A prerequisite means that chapter must be scheduled <em>before</em> this one.</p>
+      <div class="edbar">
+        <button class="btn" id="edSave">Save changes</button>
+        <button class="btn secondary" id="edAdd">+ Add chapter</button>
+        <button class="btn secondary" id="edReload">Discard edits</button>
+        <span class="hint" id="edStatus" role="status"></span>
+      </div>
+      <div class="edgrid" id="edGrid"></div>
+    </div>
+
+    <div id="panelQuestions" role="tabpanel" aria-labelledby="tabQuestions" tabindex="-1" hidden>
+      <p class="lede">Every question respondents answer, in the order they see them. Each one sits
+        either <em>before</em> the chapter sort or <em>after</em> it; drag a card by its handle
+        (or use &#9650;&#9660;) to reorder, and drag it across to move it to the other side.</p>
+      <div class="edbar">
+        <button class="btn" id="eqSave">Save questions</button>
+        <button class="btn secondary" id="eqReload">Discard edits</button>
+        <span class="hint" id="eqStatus" role="status"></span>
+      </div>
+      <div id="qLists">
+        <div class="qgroup">
+          <h3>Before the chapter sort</h3>
+          <p class="ghint">Shown at the top of the page, above the class sessions &mdash; screening or
+            context questions respondents answer before they start building.</p>
+          <div class="qlist" id="qlistBefore" data-place="before"></div>
+          <button type="button" class="btn secondary small" data-addq="before">+ Add question here</button>
+        </div>
+        <div class="qgroup">
+          <h3>After the chapter sort</h3>
+          <p class="ghint">Shown under &ldquo;A few final questions&rdquo;, below the two built-in
+            free-text prompts and above the name/email fields.</p>
+          <div class="qlist" id="qlistAfter" data-place="after"></div>
+          <button type="button" class="btn secondary small" data-addq="after">+ Add question here</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ANALYZE MODE (admin) -->
@@ -765,15 +883,16 @@
       28-session course are comparable.</p>
     <div class="anbar">
       <button class="btn secondary small" id="anRefresh">&#8635; Refresh data</button>
+      <button class="btn secondary small" id="anExportCsv">Download all responses (CSV)</button>
       <button class="btn secondary small" id="anExport">Download all responses (JSON)</button>
       <span class="hint" id="anStatus" role="status"></span>
     </div>
     <div id="anBody"></div>
   </section>
 
-  <p class="credit"><span>Snowberg, Stevenson &amp; Wolfers — <i>Managerial Economics</i> (in development, Macmillan Learning).</span> <span class="adminlinks"><a href="#edit">Chapter editor</a> &middot; <a href="#analyze">Results dashboard</a></span></p>
+  <p class="credit"><span>Snowberg, Stevenson &amp; Wolfers — <i>Managerial Economics</i> (in development, Macmillan Learning).</span> <span class="adminlinks"><a href="#edit">Survey editor</a> &middot; <a href="#analyze">Results dashboard</a></span></p>
   <!-- Bump both the datetime attribute and the fallback text whenever this file is deployed. -->
-  <p class="updated">Last updated <time id="lastUpdated" datetime="2026-08-29T14:20:00-04:00">29 August 2026, 2:20&#8239;PM ET</time></p>
+  <p class="updated">Last updated <time id="lastUpdated" datetime="2026-08-29T14:45:00-04:00">29 August 2026, 2:45&#8239;PM ET</time></p>
 </div>
 
 <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
@@ -843,8 +962,9 @@ var DEFAULT_CONFIG = {
      notes:"Equips students to interpret changing macroeconomic conditions and assess their implications for business decisions.", prereqs:[12]}
   ],
   questions: [
-    {id:"q_adopt", type:"scale", prompt:"How likely would you be to adopt a textbook organized around the TOC you just built?",
-     options:"Not at all likely|Extremely likely"}
+    {id:"q_adopt", type:"scale", placement:"after",
+     prompt:"How likely would you be to adopt a textbook organized around the TOC you just built?",
+     min:1, max:5, lowLabel:"Not at all likely", highLabel:"Extremely likely"}
   ]
 };
 
@@ -855,6 +975,50 @@ var PART_TEXT_COLORS = ["#9f1912","#0a6f9e","#8e004d","#56246f","#0e7a66","#8a5a
 /* Lightened chart variants of the same hues (validated for adjacent-pair distinguishability
    on the paper background). Survey chips keep PART_COLORS; dashboard chart fills use these. */
 var CHART_COLORS = ["#c4472f","#0b8dc7","#c22a72","#7d5bb5","#0c9377","#b1740f","#446e29"];
+
+/* ================= SURVEY QUESTIONS =================
+   The questions around the chapter sort cover the same ground as a Google Form.
+   Each one carries a placement ("before" or "after" the sort) and its position in
+   CONFIG.questions is the order respondents see within that placement, so adding,
+   deleting and reordering are all just edits to this one array — which is exactly
+   what the /edit page's Questions tab does.
+
+   This vocabulary is shared with Code.gs (normType_ / parseQuestionRow_ /
+   questionRow_ there) — change both together. */
+var QTYPES = [
+  {t:"text",      label:"Short answer"},
+  {t:"textarea",  label:"Paragraph"},
+  {t:"choice",    label:"Multiple choice"},
+  {t:"checkbox",  label:"Checkboxes"},
+  {t:"dropdown",  label:"Dropdown"},
+  {t:"scale",     label:"Linear scale"},
+  {t:"rating",    label:"Star rating"},
+  {t:"grid",      label:"Multiple-choice grid"},
+  {t:"checkgrid", label:"Checkbox grid"},
+  {t:"date",      label:"Date"},
+  {t:"time",      label:"Time"},
+  {t:"datetime",  label:"Date and time"},
+  {t:"number",    label:"Number"},
+  {t:"email",     label:"Email address"},
+  {t:"url",       label:"Link (URL)"},
+  {t:"section",   label:"Section heading (not a question)"}
+];
+var QTYPE_ALIAS = {
+  "short":"text", "short answer":"text", "shortanswer":"text", "input":"text", "string":"text",
+  "paragraph":"textarea", "long":"textarea", "longtext":"textarea", "essay":"textarea",
+  "radio":"choice", "multiple choice":"choice", "multiplechoice":"choice", "mc":"choice",
+  "checkboxes":"checkbox", "multi":"checkbox", "multiselect":"checkbox",
+  "select":"dropdown", "list":"dropdown", "menu":"dropdown",
+  "linear scale":"scale", "linearscale":"scale", "likert":"scale",
+  "stars":"rating", "star":"rating", "star rating":"rating",
+  "multiple choice grid":"grid", "radiogrid":"grid", "radio grid":"grid",
+  "checkbox grid":"checkgrid", "checkboxgrid":"checkgrid",
+  "datetime-local":"datetime", "date and time":"datetime", "date & time":"datetime",
+  "numeric":"number", "integer":"number", "link":"url", "website":"url",
+  "header":"section", "heading":"section", "title":"section", "text block":"section"
+};
+var QTYPES_VALID = {};
+QTYPES.forEach(function(x){ QTYPES_VALID[x.t] = 1; });
 
 /* Footer version stamp: shown in the reader's own time zone, falling back to the
    text already in the markup if anything about the date is unparseable. */
@@ -875,7 +1039,8 @@ var byId = {};              // id -> chapter
 var partColor = {};         // part name -> color
 var textColor = {};         // part name -> the same hue, dark enough to use as text
 var chartColor = {};        // part name -> chart fill color
-var state = {n:14, sessions:[], unused:[], spans:{}};   // spans: chapter id -> # consecutive sessions (default 1)
+var DEFAULT_SESSIONS = 15;   // sessions a respondent starts with
+var state = {n:DEFAULT_SESSIONS, sessions:[], unused:[], spans:{}};   // spans: chapter id -> # consecutive sessions (default 1)
 var openInfo = {};   // chapter id -> details dropdown expanded
 var HOSTED = (typeof google !== "undefined" && google.script && google.script.run);  // served by Apps Script
 var IS_LIVE = HOSTED || !!API_URL;
@@ -895,6 +1060,7 @@ function apiCall(body, onOk, onFail){
       case "submit":       run.submitResponse(JSON.stringify(body.payload)); break;
       case "auth":         run.verifyKey(body.key); break;
       case "saveChapters": run.saveChapters(JSON.stringify(body.chapters), body.key); break;
+      case "saveQuestions": run.saveQuestions(JSON.stringify(body.questions), body.key); break;
       case "responses":    run.getResponses(body.key); break;
       case "llm":          run.callClaude(body.key, JSON.stringify(
                              {system: body.system, messages: body.messages,
@@ -951,6 +1117,15 @@ function boot(cfg){
     partColor[p] = PART_COLORS[i % PART_COLORS.length];
     textColor[p] = PART_TEXT_COLORS[i % PART_TEXT_COLORS.length];
     chartColor[p] = CHART_COLORS[i % CHART_COLORS.length];
+  });
+  /* Questions arrive either from the Sheet (already structured) or from
+     DEFAULT_CONFIG / a preview-mode override (possibly in the old flat shape), so
+     everything downstream reads one normalized form. */
+  var qseen = {};
+  CONFIG.questions = (CONFIG.questions || []).map(normQuestion).filter(function(q){
+    if (!q.id || !q.prompt || qseen[q.id]) return false;
+    qseen[q.id] = 1;
+    return true;
   });
   var bar = document.getElementById("colorbar");
   bar.innerHTML = "";
@@ -1593,9 +1768,11 @@ function wholeOrderViolation(){
 }
 
 /* ================= PREFILL ================= */
-/* Seeds the sessions with every chapter in the book's order, split as evenly as possible.
-   Lowers the effort for respondents who mostly agree with the book — they only express
-   deviations. The submission records that they started from the prefill. */
+/* Seeds the sessions with every chapter in the book's order, one chapter per session, so the
+   session count becomes the chapter count. Lowers the effort for respondents who mostly agree
+   with the book — they only express deviations, merging or dropping sessions as they see fit.
+   (Past the 60-session cap the chapters split as evenly as the remaining sessions allow.)
+   The submission records that they started from the prefill. */
 document.getElementById("btnPrefill").addEventListener("click", function(){
   if (!CONFIG) return;   // config still loading
   var placed = 0;
@@ -1603,7 +1780,7 @@ document.getElementById("btnPrefill").addEventListener("click", function(){
   if ((placed || state.unused.length) &&
       !confirm("Replace your current arrangement with the book's chapter order?")) return;
   var ids = CONFIG.chapters.map(function(c){ return c.id; });
-  var n = state.n, sessions = [];
+  var n = Math.max(1, Math.min(60, ids.length)), sessions = [];
   for (var s=0; s<n; s++) sessions.push([]);
   var base = Math.floor(ids.length / n), extra = ids.length % n, k = 0;
   for (s=0; s<n && k<ids.length; s++){
@@ -1619,48 +1796,328 @@ document.getElementById("btnPrefill").addEventListener("click", function(){
     return;
   }
   persist(); render();
-  toast("All " + ids.length + " chapters placed in the book's order — now rearrange it to match how you'd teach.");
+  toast("All " + ids.length + " chapters placed in the book's order, one per session — now rearrange it to match how you'd teach.");
 });
 
+/* ================= START OVER ================= */
+/* Empties the builder — every session, the unused pile, spans and the prefill flag — and puts
+   the session count back to the default. The survey's own questions are deliberately left
+   alone: this button lives in the builder bar and only claims the arrangement. */
+document.getElementById("btnReset").addEventListener("click", function(){
+  var placed = 0;
+  state.sessions.forEach(function(l){ placed += l.length; });
+  if ((placed || state.unused.length || state.n !== DEFAULT_SESSIONS) &&
+      !confirm("Start over? This clears every chapter you've placed and resets the count to " +
+               DEFAULT_SESSIONS + " sessions. Your written answers are kept.")) return;
+  state = {n:DEFAULT_SESSIONS, sessions:[], unused:[], spans:{}};
+  openInfo = {};
+  setSessionCount(DEFAULT_SESSIONS);   // fills in the empty sessions, then persists and renders
+  toast("Cleared — every chapter is back in the chapter list.");
+});
+
+/* ================= SURVEY QUESTIONS =================
+   The vocabulary itself (QTYPES / QTYPE_ALIAS) sits up with the config, because
+   boot() normalizes questions before this point in the file is reached. */
+function normType(t){
+  t = String(t == null ? "" : t).trim().toLowerCase();
+  if (QTYPE_ALIAS[t]) t = QTYPE_ALIAS[t];
+  return QTYPES_VALID[t] ? t : "text";
+}
+function typeLabel(t){
+  for (var i=0; i<QTYPES.length; i++) if (QTYPES[i].t === t) return QTYPES[i].label;
+  return t;
+}
+function isScale(t){ return t === "scale" || t === "rating"; }
+function hasOptions(t){
+  return t === "choice" || t === "checkbox" || t === "dropdown" || t === "grid" || t === "checkgrid";
+}
+function hasRows(t){ return t === "grid" || t === "checkgrid"; }
+function canWriteIn(t){ return t === "choice" || t === "checkbox" || t === "dropdown"; }
+function splitList(v){
+  var a = Array.isArray(v) ? v : String(v == null ? "" : v).split("|");
+  return a.map(function(x){ return String(x).trim(); }).filter(String);
+}
+/** Answer IDs become Sheet column names and HTML name/id attributes, so keep them tame. */
+function slugId(v){
+  return String(v == null ? "" : v).trim().replace(/[^A-Za-z0-9_\-]+/g, "_").replace(/^[-_]+|[-_]+$/g, "");
+}
+
+/** Every question, whatever shape it arrived in, in one predictable form. */
+function normQuestion(q){
+  q = q || {};
+  var t = normType(q.type);
+  var o = {
+    id: String(q.id == null ? "" : q.id).trim(),
+    type: t,
+    prompt: String(q.prompt == null ? "" : q.prompt).trim(),
+    help: String(q.help == null ? "" : q.help).trim(),
+    placement: String(q.placement || "after").toLowerCase() === "before" ? "before" : "after",
+    required: !!q.required,
+    other: !!q.other && canWriteIn(t),
+    options: isScale(t) ? [] : splitList(q.options),
+    rows: hasRows(t) ? splitList(q.rows) : []
+  };
+  if (isScale(t)){
+    // A scale's end labels live in the same "options" slot, positionally — an empty
+    // low label must not let the high label slide into its place.
+    var labs = Array.isArray(q.options) ? q.options
+             : String(q.options == null ? "" : q.options).split("|");
+    o.lowLabel  = String(q.lowLabel  != null ? q.lowLabel  : (labs[0] || "")).trim();
+    o.highLabel = String(q.highLabel != null ? q.highLabel : (labs[1] || "")).trim();
+    o.min = Math.round(Number(q.min));
+    o.max = Math.round(Number(q.max));
+    if (!isFinite(o.min)) o.min = 1;
+    if (!isFinite(o.max)) o.max = 5;
+    if (t === "rating") o.min = 1;
+    o.min = Math.max(t === "rating" ? 1 : 0, Math.min(o.min, 10));
+    o.max = Math.max(o.min + 1, Math.min(o.max, t === "rating" ? 10 : 20));
+  }
+  return o;
+}
+
+/* ---------- rendering the questions into the survey ---------- */
 function renderExtraQs(){
-  var wrap = document.getElementById("extraQs");
-  wrap.innerHTML = "";
+  var before = document.getElementById("extraQsBefore");
+  var after  = document.getElementById("extraQs");
+  before.innerHTML = ""; after.innerHTML = "";
   (CONFIG.questions || []).forEach(function(q){
-    var div = document.createElement("div");
-    div.className = "q";
-    var lid = "qlab_" + q.id;
-    var inner = "";
-    if (q.type === "scale" || q.type === "choice"){
-      /* Radios need a group name, and the group name is the question. */
-      inner = '<fieldset class="qfs"><legend class="prompt">' + esc(q.prompt) + '</legend>';
-    } else {
-      inner = '<p class="prompt" id="' + esc(lid) + '">' + esc(q.prompt) + '</p>';
-    }
-    if (q.type === "textarea") inner += '<textarea data-q="' + esc(q.id) + '" aria-labelledby="' + esc(lid) + '"></textarea>';
-    else if (q.type === "text") inner += '<input type="text" data-q="' + esc(q.id) + '" aria-labelledby="' + esc(lid) + '">';
-    else if (q.type === "scale"){
-      var labs = String(q.options || "|").split("|");
-      var lo = labs[0] || "low", hi = labs[1] || "high";
-      inner += '<div class="opts"><span class="endlab" aria-hidden="true">' + esc(labs[0] || "") + '</span>';
-      for (var v=1; v<=5; v++){
-        // The endpoint wording is only printed at the two ends, so carry it in the radio's name.
-        var al = v === 1 ? "1 — " + lo : (v === 5 ? "5 — " + hi : String(v));
-        inner += '<label><input type="radio" name="q_' + esc(q.id) + '" value="' + v + '" data-q="' +
-          esc(q.id) + '" aria-label="' + esc(al) + '">' + v + '</label>';
-      }
-      inner += '<span class="endlab" aria-hidden="true">' + esc(labs[1] || "") + '</span></div></fieldset>';
-    } else if (q.type === "choice"){
-      inner += '<div class="opts" style="flex-direction:column;align-items:flex-start">';
-      String(q.options || "").split("|").forEach(function(opt){
-        opt = opt.trim();
-        if (opt) inner += '<label><input type="radio" name="q_' + esc(q.id) + '" value="' + esc(opt) +
-          '" data-q="' + esc(q.id) + '">' + esc(opt) + '</label>';
-      });
-      inner += '</div></fieldset>';
-    }
-    div.innerHTML = inner;
-    wrap.appendChild(div);
+    (q.placement === "before" ? before : after).appendChild(questionEl(q));
   });
+  document.getElementById("preQs").classList.toggle("on", !!before.children.length);
+}
+
+function questionEl(q){
+  var div = document.createElement("div");
+  div.className = "q";
+  div.setAttribute("data-qwrap", q.id);
+  var help = q.help ? '<p class="qhelp">' + esc(q.help) + '</p>' : "";
+  if (q.type === "section"){
+    div.innerHTML = '<h3 class="qhead2">' + esc(q.prompt) + '</h3>' + help;
+    return div;
+  }
+  var lid = "qlab_" + slugId(q.id);
+  var star = q.required ? '<span class="req" aria-hidden="true">*</span><span class="sr-only"> (required)</span>' : "";
+  /* Radios and checkboxes need a group label, which is what a legend is for; a lone
+     input is cheaper to label with aria-labelledby. */
+  var grouped = q.type === "choice" || q.type === "checkbox" || isScale(q.type) || hasRows(q.type);
+  div.innerHTML = grouped
+    ? '<fieldset class="qfs"><legend class="prompt">' + esc(q.prompt) + star + '</legend>' + help +
+      questionBody(q, lid) + '</fieldset>'
+    : '<p class="prompt" id="' + lid + '">' + esc(q.prompt) + star + '</p>' + help +
+      questionBody(q, lid);
+  return div;
+}
+
+function questionBody(q, lid){
+  var dq = ' data-q="' + esc(q.id) + '"';
+  var nm = ' name="q_' + esc(q.id) + '"';
+  var lab = ' aria-labelledby="' + lid + '"' + (q.required ? ' aria-required="true"' : '');
+  var h, i, v;
+  switch (q.type){
+    case "textarea": return '<textarea' + dq + lab + '></textarea>';
+    case "text":     return '<input type="text"' + dq + lab + '>';
+    case "email":    return '<input type="email" autocomplete="email"' + dq + lab + '>';
+    case "url":      return '<input type="url" placeholder="https://"' + dq + lab + '>';
+    case "number":   return '<input type="number" step="any"' + dq + lab + '>';
+    case "date":     return '<input type="date"' + dq + lab + '>';
+    case "time":     return '<input type="time"' + dq + lab + '>';
+    case "datetime": return '<input type="datetime-local"' + dq + lab + '>';
+
+    case "dropdown":
+      h = '<select' + dq + lab + '><option value="">Choose&hellip;</option>' +
+        q.options.map(function(o){
+          return '<option value="' + esc(o) + '">' + esc(o) + '</option>';
+        }).join("");
+      if (q.other) h += '<option value="__other__">Other&hellip;</option>';
+      h += '</select>';
+      if (q.other){
+        h += '<div class="otherwrap" style="margin-top:8px"><input type="text" data-otherfor="' +
+          esc(q.id) + '" aria-label="Other, please specify" placeholder="please specify"></div>';
+      }
+      return h;
+
+    case "choice":
+    case "checkbox": {
+      var kind = q.type === "choice" ? "radio" : "checkbox";
+      h = '<div class="opts optcol">' + q.options.map(function(o){
+        return '<label><input type="' + kind + '"' + nm + ' value="' + esc(o) + '"' + dq + '>' +
+          esc(o) + '</label>';
+      }).join("");
+      if (q.other){
+        h += '<div class="otherwrap"><label><input type="' + kind + '"' + nm +
+          ' value="__other__" data-other="1"' + dq + '>Other</label>' +
+          '<input type="text" data-otherfor="' + esc(q.id) +
+          '" aria-label="Other, please specify" placeholder="please specify"></div>';
+      }
+      h += '</div>';
+      return h + (q.type === "choice" && !q.required ? clearBtn(q) : "");
+    }
+
+    case "scale":
+      h = '<div class="opts">' +
+        (q.lowLabel ? '<span class="endlab" aria-hidden="true">' + esc(q.lowLabel) + '</span>' : "");
+      for (v = q.min; v <= q.max; v++){
+        // The end wording is printed only at the two ends, so carry it in the radio's label.
+        var al = (v === q.min && q.lowLabel)  ? v + " — " + q.lowLabel
+               : (v === q.max && q.highLabel) ? v + " — " + q.highLabel : String(v);
+        h += '<label><input type="radio"' + nm + ' value="' + v + '"' + dq +
+          ' aria-label="' + esc(al) + '">' + v + '</label>';
+      }
+      h += (q.highLabel ? '<span class="endlab" aria-hidden="true">' + esc(q.highLabel) + '</span>' : "") + '</div>';
+      return h + (q.required ? "" : clearBtn(q));
+
+    case "rating":
+      // Descending in the DOM, reversed by CSS: a checked star's following siblings
+      // are the ones drawn to its left, which is what fills them in.
+      h = '<div class="stars">';
+      for (v = q.max; v >= q.min; v--){
+        var sid = "st_" + lid + "_" + v;
+        var sl = v + " of " + q.max +
+          (v === q.max && q.highLabel ? " — " + q.highLabel : "") +
+          (v === q.min && q.lowLabel  ? " — " + q.lowLabel  : "");
+        h += '<input type="radio" id="' + sid + '"' + nm + ' value="' + v + '"' + dq +
+          ' aria-label="' + esc(sl) + '">' +
+          '<label for="' + sid + '" title="' + esc(sl) + '">&#9733;</label>';
+      }
+      h += '</div>';
+      return h + (q.required ? "" : clearBtn(q));
+
+    case "grid":
+    case "checkgrid": {
+      var kind2 = q.type === "grid" ? "radio" : "checkbox";
+      h = '<div class="qscroll"><table class="qgrid"><thead><tr><td></td>' +
+        q.options.map(function(o){ return '<th scope="col">' + esc(o) + '</th>'; }).join("") +
+        '</tr></thead><tbody>';
+      q.rows.forEach(function(row, ri){
+        h += '<tr><th scope="row">' + esc(row) + '</th>' + q.options.map(function(o){
+          return '<td><input type="' + kind2 + '" name="q_' + esc(q.id) + '_r' + ri +
+            '" value="' + esc(o) + '"' + dq + ' data-row="' + ri +
+            '" aria-label="' + esc(row + ": " + o) + '"></td>';
+        }).join("") + '</tr>';
+      });
+      return h + '</tbody></table></div>';
+    }
+  }
+  return "";
+}
+function clearBtn(q){
+  return '<button type="button" class="qclear" data-clear="' + esc(q.id) + '">Clear selection</button>';
+}
+
+/* Clearing a radio group, and keeping the write-in box and its option in step. */
+["extraQsBefore", "extraQs"].forEach(function(id){
+  var wrap = document.getElementById(id);
+  wrap.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("[data-clear]") : null;
+    if (!b) return;
+    var qid = b.getAttribute("data-clear");
+    wrap.querySelectorAll("[data-q]").forEach(function(el){
+      if (el.getAttribute("data-q") === qid && (el.type === "radio" || el.type === "checkbox")) el.checked = false;
+    });
+    wrap.querySelectorAll("[data-otherfor]").forEach(function(el){
+      if (el.getAttribute("data-otherfor") === qid) el.value = "";
+    });
+  });
+  wrap.addEventListener("input", function(e){
+    if (!e.target.getAttribute || !e.target.getAttribute("data-otherfor")) return;
+    var row = e.target.closest ? e.target.closest(".otherwrap") : null;
+    var box = row ? row.querySelector("[data-other]") : null;
+    if (box && e.target.value) box.checked = true;
+  });
+});
+
+/* ---------- reading the answers back ---------- */
+/* Answer IDs come from a hand-editable Sheet, so they can't be trusted inside a CSS
+   selector — index the fields by their data-q instead of querying for each one. */
+function collectAnswers(){
+  var byQ = {}, others = {};
+  document.querySelectorAll("[data-q]").forEach(function(el){
+    var k = el.getAttribute("data-q");
+    (byQ[k] || (byQ[k] = [])).push(el);
+  });
+  document.querySelectorAll("[data-otherfor]").forEach(function(el){
+    others[el.getAttribute("data-otherfor")] = el.value.trim();
+  });
+  var out = {};
+  (CONFIG.questions || []).forEach(function(q){
+    if (q.type === "section") return;
+    out[q.id] = readAnswer(q, byQ[q.id] || [], others[q.id] || "");
+  });
+  return out;
+}
+/** Checkboxes answer with an array, grids with a {row: value} map, everything else
+ *  with a string. The Sheet flattens these for their own column and keeps the
+ *  structure in the JSON copy. */
+function readAnswer(q, els, other){
+  var i;
+  if (q.type === "checkbox"){
+    var vals = [];
+    for (i=0; i<els.length; i++){
+      if (!els[i].checked) continue;
+      vals.push(els[i].getAttribute("data-other") ? other : els[i].value);
+    }
+    return vals.filter(String);
+  }
+  if (hasRows(q.type)){
+    var obj = {};
+    for (i=0; i<els.length; i++){
+      if (!els[i].checked) continue;
+      var row = q.rows[Number(els[i].getAttribute("data-row"))];
+      if (row === undefined) continue;
+      if (q.type === "grid") obj[row] = els[i].value;
+      else (obj[row] || (obj[row] = [])).push(els[i].value);
+    }
+    return obj;
+  }
+  if (q.type === "choice" || isScale(q.type)){
+    for (i=0; i<els.length; i++){
+      if (els[i].checked) return els[i].getAttribute("data-other") ? other : els[i].value;
+    }
+    return "";
+  }
+  if (!els.length) return "";
+  var v = String(els[0].value).trim();
+  return (q.type === "dropdown" && v === "__other__") ? other : v;
+}
+function answerEmpty(v){
+  if (v === undefined || v === null) return true;
+  if (Array.isArray(v)) return !v.length;
+  if (typeof v === "object") return !Object.keys(v).length;
+  return String(v).trim() === "";
+}
+/** A required grid isn't answered until every row is. */
+function answerMissing(q, v){
+  if (!q.required || q.type === "section") return false;
+  if (hasRows(q.type)) return Object.keys(v || {}).length < q.rows.length;
+  return answerEmpty(v);
+}
+/** One answer as one line of readable text — for the Sheet, the digest and the dashboard. */
+function answerText(v){
+  if (v === undefined || v === null) return "";
+  if (Array.isArray(v)) return v.map(String).join(" | ");
+  if (typeof v === "object"){
+    return Object.keys(v).map(function(k){
+      var x = v[k];
+      return k + ": " + (Array.isArray(x) ? x.join(", ") : String(x));
+    }).join(" | ");
+  }
+  return String(v);
+}
+/** The reverse, for reading stored answers back: a checkbox answer as a list. */
+function asList(v){
+  if (Array.isArray(v)) return v.map(String).map(function(x){ return x.trim(); }).filter(String);
+  if (v === undefined || v === null) return [];
+  return String(v).split("|").map(function(x){ return x.trim(); }).filter(String);
+}
+/** …and a grid answer as a {row: value} map, parsing the flattened form if needed. */
+function asMap(v){
+  if (v && typeof v === "object" && !Array.isArray(v)) return v;
+  var m = {};
+  String(v == null ? "" : v).split("|").forEach(function(part){
+    var i = part.indexOf(":");
+    if (i > 0) m[part.slice(0, i).trim()] = part.slice(i + 1).trim();
+  });
+  return m;
 }
 
 /* ================= ROUTING + PASSWORD GATE ================= */
@@ -1717,7 +2174,7 @@ function requestAdmin(target, done){
 }
 function showGate(target, err){
   document.getElementById("gateTitle").textContent =
-    target === "analyze" ? "Results dashboard" : "Chapter editor";
+    target === "analyze" ? "Results dashboard" : "Survey editor";
   document.getElementById("gateErr").textContent = err || "";
   document.getElementById("gate").className = "show";
   var inp = document.getElementById("gateKey");
@@ -1741,17 +2198,47 @@ document.getElementById("gate").addEventListener("keydown", function(e){
 });
 
 /* ================= EDIT MODE (admin) ================= */
-var EDIT;   // declaration only — an initializer here would run after (and clobber)
-            // a preview-mode enterEditMode(), which boot() calls synchronously
+var EDIT, QEDIT;   // declaration only — an initializer here would run after (and
+                   // clobber) a preview-mode enterEditMode(), which boot() calls
+                   // synchronously
 function enterEditMode(){
-  EDIT = JSON.parse(JSON.stringify(CONFIG.chapters));
+  EDIT  = JSON.parse(JSON.stringify(CONFIG.chapters));
+  QEDIT = (CONFIG.questions || []).map(normQuestion);
   document.body.classList.remove("anmode");
   document.body.classList.add("editmode");
   document.getElementById("edModeNote").textContent = IS_LIVE
     ? "Saving updates the Google Sheet, so changes reach all respondents immediately."
     : "Preview copy: edits save only to this browser and apply to the preview survey.";
   renderEditor();
+  renderQEditor();
 }
+
+/* The two editors save to different Sheet tabs, so each panel keeps its own save
+   button; the tabs just decide which panel is on screen. */
+function showEdTab(which){
+  var isQ = which === "questions";
+  document.getElementById("panelChapters").hidden = isQ;
+  document.getElementById("panelQuestions").hidden = !isQ;
+  [["tabChapters", !isQ], ["tabQuestions", isQ]].forEach(function(p){
+    var b = document.getElementById(p[0]);
+    b.setAttribute("aria-selected", p[1] ? "true" : "false");
+    b.tabIndex = p[1] ? 0 : -1;
+  });
+}
+document.querySelector(".edtabs").addEventListener("click", function(e){
+  var b = e.target.closest ? e.target.closest("[role=tab]") : null;
+  if (b) showEdTab(b.id === "tabQuestions" ? "questions" : "chapters");
+});
+document.querySelector(".edtabs").addEventListener("keydown", function(e){
+  if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+  var tabs = ["tabChapters", "tabQuestions"];
+  var i = tabs.indexOf(document.activeElement.id);
+  if (i === -1) return;
+  e.preventDefault();
+  var next = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+  showEdTab(next === "tabQuestions" ? "questions" : "chapters");
+  document.getElementById(next).focus();
+});
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
 function renderEditor(){
   var g = document.getElementById("edGrid");
@@ -1871,6 +2358,7 @@ document.getElementById("edSave").addEventListener("click", function(){
   function applied(msg){
     CONFIG.chapters = JSON.parse(JSON.stringify(EDIT));
     boot(CONFIG);
+    showEdTab("chapters");
     toast(msg);
   }
   if (IS_LIVE){
@@ -1885,10 +2373,339 @@ document.getElementById("edSave").addEventListener("click", function(){
         toast(errMsg(e, "Save failed — please try again."), true);
       });
   } else {
-    try{ localStorage.setItem("meTocConfigOverride", JSON.stringify({cfgv: CFG_VERSION, chapters: EDIT, questions: CONFIG.questions})); }catch(e){}
+    savePreviewConfig(EDIT, QEDIT);
     applied("Saved to this browser — the preview survey now uses these chapters.");
   }
 });
+
+
+/* ================= QUESTION EDITOR (admin) =================
+   QEDIT is one flat array in respondent order; a question's `placement` decides
+   which of the two lists it is drawn into, and its position in the array decides
+   where inside that list. So adding, deleting, reordering and moving a question
+   from one side of the chapter sort to the other are all edits to this array. */
+function renderQEditor(){
+  if (!QEDIT) return;
+  ["before", "after"].forEach(function(place){
+    var list = document.getElementById(place === "before" ? "qlistBefore" : "qlistAfter");
+    list.innerHTML = "";
+    var items = [];
+    QEDIT.forEach(function(q, i){ if (q.placement === place) items.push({q: q, i: i}); });
+    list.classList.toggle("empty", !items.length);
+    items.forEach(function(it, k){ list.appendChild(qCard(it.q, it.i, k, items.length)); });
+  });
+}
+
+function qCard(q, idx, k, total){
+  var card = document.createElement("div");
+  card.className = "qcard";
+  card.setAttribute("data-i", idx);
+  var t = q.type, body = "";
+
+  body += '<label class="f">' + (t === "section" ? "Heading" : "Question") +
+    '<input data-qf="prompt" value="' + esc(q.prompt) + '"></label>';
+  body += '<label class="f">' + (t === "section" ? "Blurb" : "Description") +
+    ' <small>(optional, shown under the ' + (t === "section" ? "heading" : "question") + ')</small>' +
+    '<input data-qf="help" value="' + esc(q.help) + '"></label>';
+
+  if (hasOptions(t)){
+    body += '<label class="f">' + (hasRows(t) ? "Columns" : "Options") +
+      ' <small>(one per line)</small><textarea data-qf="options">' +
+      esc(q.options.join("\n")) + '</textarea></label>';
+  }
+  if (hasRows(t)){
+    body += '<label class="f">Rows <small>(one per line)</small>' +
+      '<textarea data-qf="rows">' + esc(q.rows.join("\n")) + '</textarea></label>';
+  }
+  if (isScale(t)){
+    body += '<div class="qrow">' +
+      (t === "scale"
+        ? '<label class="f narrow">From<input class="narrow" type="number" min="0" max="10" data-qf="min" value="' + q.min + '"></label>'
+        : "") +
+      '<label class="f narrow">' + (t === "rating" ? "Stars" : "To") +
+        '<input class="narrow" type="number" min="2" max="20" data-qf="max" value="' + q.max + '"></label>' +
+      '<label class="f">Low-end label <small>(optional)</small>' +
+        '<input data-qf="lowLabel" value="' + esc(q.lowLabel || "") + '"></label>' +
+      '<label class="f">High-end label <small>(optional)</small>' +
+        '<input data-qf="highLabel" value="' + esc(q.highLabel || "") + '"></label></div>';
+  }
+
+  body += '<div class="qrow">' +
+    '<label class="f">Answer ID <small>(its column in the Sheet — changing it starts a new column)</small>' +
+      '<input data-qf="id" value="' + esc(q.id) + '"></label>' +
+    '<label class="f">Placement<select data-qf="placement">' +
+      '<option value="before"' + (q.placement === "before" ? " selected" : "") + '>Before the chapter sort</option>' +
+      '<option value="after"'  + (q.placement === "after"  ? " selected" : "") + '>After the chapter sort</option>' +
+    '</select></label></div>';
+
+  if (t !== "section"){
+    body += '<label class="qcheck"><input type="checkbox" data-qf="required"' +
+      (q.required ? " checked" : "") + '> Required &mdash; a response can\'t be submitted without it</label>';
+    if (canWriteIn(t)){
+      body += '<label class="qcheck"><input type="checkbox" data-qf="other"' +
+        (q.other ? " checked" : "") + '> Add an &ldquo;Other&hellip;&rdquo; write-in option</label>';
+    }
+  }
+
+  card.innerHTML =
+    '<div class="qhead">' +
+      '<span class="qgrip" draggable="true" title="Drag to reorder, or onto the other list to move it there" aria-hidden="true">&#9776;</span>' +
+      '<span class="qnum">Q' + (k + 1) + '</span>' +
+      '<select data-qf="type" aria-label="Question type">' +
+        QTYPES.map(function(x){
+          return '<option value="' + x.t + '"' + (x.t === t ? " selected" : "") + '>' + esc(x.label) + '</option>';
+        }).join("") +
+      '</select><span class="spacer"></span>' +
+      '<button type="button" class="qbtn" data-qact="up" aria-label="Move up" title="Move up"' +
+        (k === 0 ? " disabled" : "") + '>&#9650;</button>' +
+      '<button type="button" class="qbtn" data-qact="down" aria-label="Move down" title="Move down"' +
+        (k === total - 1 ? " disabled" : "") + '>&#9660;</button>' +
+      '<button type="button" class="qbtn del" data-qact="del" aria-label="Delete this question"' +
+        ' title="Delete this question">&#128465;</button>' +
+    '</div>' + body;
+  return card;
+}
+
+var qLists = document.getElementById("qLists");
+function qIndexOf(el){
+  var card = el.closest ? el.closest(".qcard") : null;
+  return card ? Number(card.getAttribute("data-i")) : -1;
+}
+function qFromEl(el){
+  var i = qIndexOf(el);
+  return (QEDIT && i >= 0 && i < QEDIT.length) ? QEDIT[i] : null;
+}
+/** An unused id of the form q1, q2, … */
+function nextQId(){
+  var used = {};
+  QEDIT.forEach(function(q){ used[q.id] = 1; });
+  for (var i = 1; ; i++) if (!used["q" + i]) return "q" + i;
+}
+/** Move QEDIT[from] into `place`, at position `at` among that placement's questions
+ *  (counted after the question itself has been lifted out). Returns the question. */
+function moveQuestion(from, place, at){
+  var item = QEDIT.splice(from, 1)[0];
+  item.placement = place === "before" ? "before" : "after";
+  var seen = 0, insert = -1, i;
+  for (i = 0; i < QEDIT.length && insert === -1; i++){
+    if (QEDIT[i].placement === item.placement){
+      if (seen === at) insert = i;
+      seen++;
+    }
+  }
+  if (insert === -1){
+    var last = -1;
+    for (i = 0; i < QEDIT.length; i++) if (QEDIT[i].placement === item.placement) last = i;
+    insert = last >= 0 ? last + 1 : (item.placement === "before" ? 0 : QEDIT.length);
+  }
+  QEDIT.splice(insert, 0, item);
+  return item;
+}
+/** Where a question sits within its own placement group, and how big that group is. */
+function qGroupPos(idx){
+  var q = QEDIT[idx], pos = 0, n = 0;
+  QEDIT.forEach(function(x, i){
+    if (x.placement !== q.placement) return;
+    if (i < idx) pos++;
+    n++;
+  });
+  return {pos: pos, n: n};
+}
+
+qLists.addEventListener("input", function(e){
+  var f = e.target.getAttribute && e.target.getAttribute("data-qf");
+  if (!f) return;
+  var q = qFromEl(e.target);
+  if (!q) return;
+  if (f === "type" || f === "placement" || f === "required" || f === "other") return;  // on change
+  if (f === "options" || f === "rows"){
+    q[f] = e.target.value.split("\n").map(function(x){ return x.trim(); }).filter(String);
+  } else if (f === "min" || f === "max"){
+    var v = Math.round(Number(e.target.value));
+    if (isFinite(v)) q[f] = v;
+  } else {
+    q[f] = e.target.value;
+  }
+});
+
+qLists.addEventListener("change", function(e){
+  var f = e.target.getAttribute && e.target.getAttribute("data-qf");
+  if (!f) return;
+  var i = qIndexOf(e.target), q = QEDIT && QEDIT[i];
+  if (!q) return;
+  if (f === "type"){
+    var raw = JSON.parse(JSON.stringify(q));
+    raw.type = e.target.value;
+    QEDIT[i] = normQuestion(raw);
+    renderQEditor();
+    var sel = document.querySelector('.qcard[data-i="' + i + '"] [data-qf="type"]');
+    if (sel) sel.focus();
+  } else if (f === "placement"){
+    var moved = moveQuestion(i, e.target.value, Infinity);   // to the end of its new list
+    renderQEditor();
+    var sel2 = document.querySelector('.qcard[data-i="' + QEDIT.indexOf(moved) + '"] [data-qf="placement"]');
+    if (sel2) sel2.focus();
+  } else if (f === "required" || f === "other"){
+    q[f] = e.target.checked;
+  } else if (f === "id"){
+    q.id = slugId(e.target.value) || nextQId();
+    e.target.value = q.id;
+  } else if (f === "min" || f === "max"){
+    QEDIT[i] = normQuestion(q);       // clamp the range once the field is left
+    renderQEditor();
+  }
+});
+
+qLists.addEventListener("click", function(e){
+  var b = e.target.closest ? e.target.closest("[data-qact]") : null;
+  if (!b || !QEDIT) return;
+  var act = b.getAttribute("data-qact"), i = qIndexOf(b), q = QEDIT[i];
+  if (!q) return;
+  if (act === "del"){
+    if (!confirm("Delete this question?\n\n" + (q.prompt || "(no prompt)") +
+                 "\n\nAnswers already collected stay in the Sheet.")) return;
+    QEDIT.splice(i, 1);
+    renderQEditor();
+    return;
+  }
+  var g = qGroupPos(i), to = g.pos + (act === "up" ? -1 : 1);
+  if (to < 0 || to > g.n - 1) return;
+  var moved = moveQuestion(i, q.placement, to);
+  renderQEditor();
+  var again = document.querySelector('.qcard[data-i="' + QEDIT.indexOf(moved) + '"] [data-qact="' + act + '"]');
+  if (again && !again.disabled) again.focus();
+  else if (again) again.parentNode.querySelector("[data-qact=del]").focus();
+});
+
+document.querySelectorAll("[data-addq]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    if (!QEDIT) return;
+    var place = this.getAttribute("data-addq");
+    var q = normQuestion({id: nextQId(), type: "text", prompt: "New question", placement: place});
+    QEDIT.push(q);
+    moveQuestion(QEDIT.length - 1, place, Infinity);
+    renderQEditor();
+    var card = document.querySelector('.qcard[data-i="' + QEDIT.indexOf(q) + '"]');
+    if (!card) return;
+    card.scrollIntoView({behavior: scrollBehavior(), block: "center"});
+    var inp = card.querySelector('[data-qf="prompt"]');
+    if (inp){ inp.focus(); inp.select(); }
+  });
+});
+
+/* Drag to reorder. Only the grip is draggable — making the whole card draggable
+   would stop the mouse from selecting text inside its fields. */
+var qDrag = null;
+qLists.addEventListener("dragstart", function(e){
+  var grip = e.target.closest ? e.target.closest(".qgrip") : null;
+  if (!grip) return;
+  var card = grip.closest(".qcard");
+  qDrag = Number(card.getAttribute("data-i"));
+  card.classList.add("dragging");
+  if (e.dataTransfer){
+    e.dataTransfer.effectAllowed = "move";
+    try{ e.dataTransfer.setData("text/plain", String(qDrag)); }catch(err){}
+    try{ e.dataTransfer.setDragImage(card, 24, 18); }catch(err){}
+  }
+});
+qLists.addEventListener("dragend", function(){
+  qDrag = null;
+  qLists.querySelectorAll(".dragging").forEach(function(el){ el.classList.remove("dragging"); });
+  qLists.querySelectorAll(".dragover").forEach(function(el){ el.classList.remove("dragover"); });
+});
+qLists.addEventListener("dragover", function(e){
+  if (qDrag === null) return;
+  var list = e.target.closest ? e.target.closest(".qlist") : null;
+  if (!list) return;
+  e.preventDefault();
+  if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+  qLists.querySelectorAll(".qlist.dragover").forEach(function(el){
+    if (el !== list) el.classList.remove("dragover");
+  });
+  list.classList.add("dragover");
+});
+qLists.addEventListener("drop", function(e){
+  if (qDrag === null) return;
+  var list = e.target.closest ? e.target.closest(".qlist") : null;
+  if (!list) return;
+  e.preventDefault();
+  // Position among the cards that will still be there once this one is lifted out.
+  var cards = Array.prototype.slice.call(list.querySelectorAll(".qcard"))
+    .filter(function(c){ return Number(c.getAttribute("data-i")) !== qDrag; });
+  var at = cards.length;
+  for (var k = 0; k < cards.length; k++){
+    var r = cards[k].getBoundingClientRect();
+    if (e.clientY < r.top + r.height / 2){ at = k; break; }
+  }
+  moveQuestion(qDrag, list.getAttribute("data-place"), at);
+  qDrag = null;
+  renderQEditor();
+});
+
+function validateQEdit(){
+  var ids = {};
+  for (var k = 0; k < QEDIT.length; k++){
+    var q = QEDIT[k], n = "Question " + (k + 1), id = slugId(q.id);
+    if (!id) return n + " needs an answer ID.";
+    if (id !== String(q.id).trim()){
+      return n + "’s answer ID (“" + q.id + "”) may use only letters, numbers, hyphens and underscores.";
+    }
+    if (ids[id]) return "Two questions share the answer ID “" + id + "” — each one needs its own.";
+    ids[id] = 1;
+    if (!String(q.prompt || "").trim()) return n + " needs some prompt text.";
+    if (hasOptions(q.type) && !q.options.length){
+      return n + " (" + typeLabel(q.type) + ") needs at least one " +
+        (hasRows(q.type) ? "column" : "option") + ".";
+    }
+    if (hasRows(q.type) && !q.rows.length) return n + " (" + typeLabel(q.type) + ") needs at least one row.";
+    if (isScale(q.type) && !(q.max > q.min)) return n + "’s scale needs a high end above its low end.";
+  }
+  return null;
+}
+
+document.getElementById("eqReload").addEventListener("click", function(){
+  QEDIT = (CONFIG.questions || []).map(normQuestion);
+  renderQEditor();
+  toast("Edits discarded — showing the saved questions.");
+});
+
+document.getElementById("eqSave").addEventListener("click", function(){
+  var err = validateQEdit();
+  if (err){ toast(err, true); return; }
+  var btn = this;
+  function applied(msg){
+    CONFIG.questions = QEDIT.map(normQuestion);
+    boot(CONFIG);
+    showEdTab("questions");
+    toast(msg);
+  }
+  if (IS_LIVE){
+    btn.disabled = true; btn.textContent = "Saving…";
+    apiCall({action: "saveQuestions", questions: QEDIT, key: ADMIN.key},
+      function(){
+        btn.disabled = false; btn.textContent = "Save questions";
+        applied("Saved — the live survey now asks these questions.");
+      },
+      function(e){
+        btn.disabled = false; btn.textContent = "Save questions";
+        toast(errMsg(e, "Save failed — please try again."), true);
+      });
+  } else {
+    savePreviewConfig(EDIT, QEDIT);
+    applied("Saved to this browser — the preview survey now asks these questions.");
+  }
+});
+
+/** Preview mode has no backend, so both editors write the whole config to this browser. */
+function savePreviewConfig(chapters, questions){
+  try{
+    localStorage.setItem("meTocConfigOverride", JSON.stringify({
+      cfgv: CFG_VERSION,
+      chapters: chapters || CONFIG.chapters,
+      questions: questions || CONFIG.questions
+    }));
+  }catch(e){}
+}
 
 /* ================= SUBMIT ================= */
 document.getElementById("btnSubmit").addEventListener("click", function(){
@@ -1902,12 +2719,24 @@ document.getElementById("btnSubmit").addEventListener("click", function(){
   }
   var v = wholeOrderViolation();
   if (v){ toast(v.msg, true); revealChip(v.id); return; }
-  var extra = {};
-  document.querySelectorAll("[data-q]").forEach(function(el){
-    var qid = el.dataset.q;
-    if (el.type === "radio"){ if (el.checked) extra[qid] = el.value; if (!(qid in extra)) extra[qid] = extra[qid] || ""; }
-    else extra[qid] = el.value.trim();
+  var extra = collectAnswers();
+  var unanswered = null;
+  (CONFIG.questions || []).forEach(function(q){
+    if (!unanswered && answerMissing(q, extra[q.id])) unanswered = q;
   });
+  if (unanswered){
+    toast("Please answer: " + unanswered.prompt, true);
+    var wrap = null;
+    document.querySelectorAll("[data-qwrap]").forEach(function(el){
+      if (!wrap && el.getAttribute("data-qwrap") === unanswered.id) wrap = el;
+    });
+    if (wrap){
+      wrap.scrollIntoView({behavior: scrollBehavior(), block: "center"});
+      var first = wrap.querySelector("input, select, textarea");
+      if (first) first.focus();
+    }
+    return;
+  }
   var tocReadable = state.sessions.map(function(list, s){
     var items = ghostsFor(s).map(function(g){ return "Ch " + g.id + " — " + byId[g.id].title + " (continued)"; })
       .concat(list.map(function(id){
@@ -1965,13 +2794,71 @@ function enterAnalyzeMode(){
 document.getElementById("anRefresh").addEventListener("click", function(){ loadResponses(); });
 document.getElementById("anExport").addEventListener("click", function(){
   if (!AN.responses) return;
-  var blob = new Blob([JSON.stringify({chapters: CONFIG.chapters, questions: CONFIG.questions,
-    responses: AN.responses}, null, 2)], {type: "application/json"});
-  var a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "toc-survey-responses.json";
-  document.body.appendChild(a); a.click(); a.remove();
+  downloadFile(JSON.stringify({chapters: CONFIG.chapters, questions: CONFIG.questions,
+    responses: AN.responses}, null, 2), "application/json", "toc-survey-responses.json");
 });
+document.getElementById("anExportCsv").addEventListener("click", function(){
+  if (!AN.responses) return;
+  downloadFile(buildResponsesCsv(), "text/csv;charset=utf-8", "toc-survey-responses.csv");
+});
+function downloadFile(text, mime, filename){
+  var url = URL.createObjectURL(new Blob([text], {type: mime}));
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+/* Escapes one CSV field, neutralizing anything a spreadsheet would open as a
+   formula (the same guard Code.gs applies on the way into the sheet). */
+function csvCell(v){
+  var s = v === null || v === undefined ? "" : String(v);
+  if (/^[=+]/.test(s)) s = "'" + s;
+  return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+function csvRow(cells){ return cells.map(csvCell).join(","); }
+/* One row per response: contact details, free text, an answer column per extra
+   question, and — for every chapter — the session it was placed in (or "unused"
+   if it was discarded) and how many sessions it runs. Wide, but it opens in
+   Excel as a tidy dataset that can be filtered and pivoted without any parsing. */
+function buildResponsesCsv(){
+  var rs = AN.responses || [], qs = CONFIG.questions || [], chs = CONFIG.chapters || [];
+  var head = ["Response", "Sheet row", "Timestamp", "Name", "Email", "Institution",
+              "Sessions", "Started from book order", "Chapters placed", "Chapters discarded",
+              "Likes about this TOC", "Anything missing"];
+  qs.forEach(function(q){
+    if (q.type === "section") return;
+    var label = q.prompt || q.id;
+    if (hasRows(q.type)) (q.rows || []).forEach(function(row){ head.push(label + " [" + row + "]"); });
+    else head.push(label);
+  });
+  chs.forEach(function(c){
+    head.push("Ch " + c.id + " session — " + c.title);
+    head.push("Ch " + c.id + " sessions used — " + c.title);
+  });
+  var lines = [csvRow(head)];
+  rs.forEach(function(r, i){
+    var f = respFacts(r), discarded = {};
+    f.unused.forEach(function(id){ discarded[id] = true; });
+    var row = [i + 1, r.row || "", r.timestamp || "", r.name || "", r.email || "",
+               r.institution || "", f.n, r.startedFromPrefill ? "yes" : "no",
+               f.placed.length, f.unused.length, r.likes || "", r.missing || ""];
+    qs.forEach(function(q){
+      if (q.type === "section") return;
+      var v = (r.extra || {})[q.id];
+      // A grid answers row by row, so each row gets its own column, Google-Forms style.
+      if (hasRows(q.type)) (q.rows || []).forEach(function(name){ row.push(answerText((v || {})[name])); });
+      else row.push(answerText(v));
+    });
+    chs.forEach(function(c){
+      var at = f.start[c.id];
+      row.push(at ? at.s + 1 : (discarded[c.id] ? "unused" : ""));
+      row.push(at ? f.spanOf(Number(c.id)) : "");
+    });
+    lines.push(csvRow(row));
+  });
+  return "\ufeff" + lines.join("\r\n") + "\r\n";   // BOM so Excel reads the UTF-8
+}
 function loadResponses(){
   var st = document.getElementById("anStatus");
   if (!IS_LIVE){
@@ -2086,28 +2973,83 @@ function computeStats(rs){
 
   A.camps = computeCamps(facts);
 
-  // extra questions
-  A.questions = (CONFIG.questions || []).map(function(q){
-    var answers = rs.map(function(r){ return (r.extra || {})[q.id]; })
-      .filter(function(v){ return v !== undefined && v !== null && String(v) !== ""; });
-    var out = {q: q, count: answers.length};
-    if (q.type === "scale"){
-      var nums = answers.map(Number).filter(function(v){ return v >= 1 && v <= 5; });
-      out.dist = [0,0,0,0,0];
-      nums.forEach(function(v){ out.dist[v-1]++; });
-      out.mean = mean(nums);
-    } else if (q.type === "choice"){
-      out.counts = {};
-      answers.forEach(function(v){ out.counts[v] = (out.counts[v] || 0) + 1; });
-    } else {
-      out.texts = rs.map(function(r, i){ return {i: i, text: String((r.extra || {})[q.id] || "")}; })
-        .filter(function(t){ return t.text; });
-    }
-    return out;
-  });
-  var adopt = A.questions.filter(function(x){ return x.q.type === "scale" && x.count; })[0];
+  /* Extra questions. Each type reduces to one of six shapes: a bounded numeric
+     distribution (scale/rating), a free numeric summary, counts over one pick,
+     counts over many picks, a row-by-row grid of counts, or verbatim text. */
+  A.questions = (CONFIG.questions || []).filter(function(q){ return q.type !== "section"; })
+    .map(function(q){
+      var kind = qKind(q);
+      var out = {q: q, kind: kind, count: 0};
+      var answered = [];
+      rs.forEach(function(r){
+        var v = (r.extra || {})[q.id];
+        if (!answerEmpty(v)) answered.push(v);
+      });
+      out.count = answered.length;
+      var i;
+      if (kind === "num"){
+        out.dist = [];
+        for (i = q.min; i <= q.max; i++) out.dist.push(0);
+        var nums = [];
+        answered.forEach(function(v){
+          var x = Math.round(Number(v));
+          if (isFinite(x) && x >= q.min && x <= q.max){ out.dist[x - q.min]++; nums.push(x); }
+        });
+        out.mean = mean(nums);
+      } else if (kind === "stat"){
+        var ns = answered.map(Number).filter(function(x){ return isFinite(x); })
+          .sort(function(a, b){ return a - b; });
+        out.mean = mean(ns); out.med = quantile(ns, 0.5);
+        out.lo = ns.length ? ns[0] : null; out.hi = ns.length ? ns[ns.length - 1] : null;
+      } else if (kind === "counts"){
+        out.counts = {};
+        answered.forEach(function(v){
+          var k = String(v).trim();
+          if (k) out.counts[k] = (out.counts[k] || 0) + 1;
+        });
+      } else if (kind === "multi"){
+        out.counts = {}; out.picks = 0;
+        answered.forEach(function(v){
+          asList(v).forEach(function(x){ out.counts[x] = (out.counts[x] || 0) + 1; out.picks++; });
+        });
+      } else if (kind === "grid"){
+        out.rows = q.rows.map(function(row){
+          var c = {}, tot = 0;
+          answered.forEach(function(v){
+            var cell = asMap(v)[row];
+            if (cell === undefined) return;
+            (Array.isArray(cell) ? cell : [cell]).forEach(function(x){
+              x = String(x).trim();
+              if (!x) return;
+              c[x] = (c[x] || 0) + 1; tot++;
+            });
+          });
+          return {row: row, counts: c, total: tot};
+        });
+      } else {
+        out.texts = rs.map(function(r, i2){ return {i: i2, text: answerText((r.extra || {})[q.id]).trim()}; })
+          .filter(function(t){ return t.text; });
+      }
+      return out;
+    });
+  // The first answered scale/rating question stands in for "how well did this land".
+  var adopt = A.questions.filter(function(x){ return x.kind === "num" && x.count; })[0];
   A.adoptMean = adopt ? adopt.mean : null;
+  A.adoptMax  = adopt ? adopt.q.max : 5;
   return A;
+}
+
+/** Which of the six aggregate shapes a question's answers take. */
+function qKind(q){
+  switch (q.type){
+    case "scale": case "rating":                        return "num";
+    case "number":                                      return "stat";
+    case "choice": case "dropdown":
+    case "date": case "time": case "datetime":          return "counts";
+    case "checkbox":                                    return "multi";
+    case "grid": case "checkgrid":                      return "grid";
+    default:                                            return "text";
+  }
 }
 
 /* Dissimilarity between two responses: discordant ordering share on shared
@@ -2198,7 +3140,7 @@ function analyzeRender(){
     tile(A.n, "response" + (A.n === 1 ? "" : "s")) +
     tile(num(A.medSessions, A.medSessions === Math.round(A.medSessions) ? 0 : 1), "median class sessions") +
     tile(num(A.meanPlaced, 1) + " / " + chapters.length, "chapters used on average") +
-    (A.adoptMean !== null ? tile(num(A.adoptMean, 1) + " / 5", "mean adoption likelihood") : "") +
+    (A.adoptMean !== null ? tile(num(A.adoptMean, 1) + " / " + A.adoptMax, "mean adoption likelihood") : "") +
     tile(pct(mean(A.agreement.filter(function(x){ return x !== null; }))), "agreement with book order") +
     '</div></div>';
 
@@ -2299,39 +3241,13 @@ function analyzeRender(){
   }
 
   /* --- extra questions --- */
-  A.questions.forEach(function(qs){
-    if (!qs.count) return;
-    if (qs.q.type === "scale"){
-      var labs = String(qs.q.options || "|").split("|");
-      var mx = Math.max.apply(null, qs.dist.concat([1]));
-      h += '<div class="ansec"><h3>' + esc(qs.q.prompt) + '</h3>' +
-        '<p class="subt">Mean ' + num(qs.mean, 1) + ' of 5 &middot; ' + qs.count + ' answered &middot; 1 = ' +
-        esc(labs[0] || "low") + ', 5 = ' + esc(labs[1] || "high") + '</p>' +
-        qs.dist.map(function(v, i){
-          return '<div class="barrow"><span class="lab"><b>' + (i+1) + '</b></span>' +
-            '<span class="btrack"><i class="bfill" style="width:' + Math.round(v / mx * 100) +
-            '%;background:' + CHART_COLORS[1] + '"></i></span><span class="val">' + v + '</span></div>';
-        }).join("") + '</div>';
-    } else if (qs.q.type === "choice"){
-      var keys = Object.keys(qs.counts);
-      var mx2 = Math.max.apply(null, keys.map(function(k){ return qs.counts[k]; }).concat([1]));
-      h += '<div class="ansec"><h3>' + esc(qs.q.prompt) + '</h3>' +
-        '<p class="subt">' + qs.count + ' answered</p>' +
-        keys.map(function(k){
-          return '<div class="barrow"><span class="lab">' + esc(k) + '</span>' +
-            '<span class="btrack"><i class="bfill" style="width:' + Math.round(qs.counts[k] / mx2 * 100) +
-            '%;background:' + CHART_COLORS[4] + '"></i></span><span class="val">' + qs.counts[k] + '</span></div>';
-        }).join("") + '</div>';
-    }
-  });
+  A.questions.forEach(function(qs){ if (qs.count) h += qChartHtml(qs); });
 
   /* --- free text --- */
   h += quotesSection("What they like", rs.map(function(r, i){ return {i: i, text: r.likes}; }));
   h += quotesSection("What's missing", rs.map(function(r, i){ return {i: i, text: r.missing}; }));
   A.questions.forEach(function(qs){
-    if ((qs.q.type === "text" || qs.q.type === "textarea") && qs.texts && qs.texts.length){
-      h += quotesSection(qs.q.prompt, qs.texts);
-    }
+    if (qs.kind === "text" && qs.texts && qs.texts.length) h += quotesSection(qs.q.prompt, qs.texts);
   });
 
   /* --- individual responses --- */
@@ -2386,6 +3302,61 @@ function analyzeRender(){
   });
 }
 function tile(v, l){ return '<div class="tile"><div class="v">' + v + '</div><div class="l">' + l + '</div></div>'; }
+function barRow(lab, v, mx, color){
+  return '<div class="barrow"><span class="lab">' + lab + '</span>' +
+    '<span class="btrack"><i class="bfill" style="width:' + (mx ? Math.round(v / mx * 100) : 0) +
+    '%;background:' + color + '"></i></span><span class="val">' + v + '</span></div>';
+}
+/** Options first, in the order the question lists them, then anything written in. */
+function countKeys(qs){
+  var keys = (qs.q.options || []).filter(function(o){ return qs.counts[o] !== undefined; });
+  Object.keys(qs.counts).forEach(function(k){ if (keys.indexOf(k) === -1) keys.push(k); });
+  return keys;
+}
+/** One answered question as one dashboard section. Free text is handled separately,
+ *  further down the page, so that quotes from every question sit together. */
+function qChartHtml(qs){
+  var q = qs.q, h = "", mx;
+  if (qs.kind === "num"){
+    mx = Math.max.apply(null, qs.dist.concat([1]));
+    var ends = [];
+    if (q.lowLabel)  ends.push(q.min + " = " + q.lowLabel);
+    if (q.highLabel) ends.push(q.max + " = " + q.highLabel);
+    h = '<p class="subt">Mean ' + num(qs.mean, 1) + " of " + q.max + ' &middot; ' + qs.count +
+      ' answered' + (ends.length ? ' &middot; ' + esc(ends.join(", ")) : "") + '</p>' +
+      qs.dist.map(function(v, i){
+        return barRow('<b>' + (q.min + i) + '</b>', v, mx, CHART_COLORS[1]);
+      }).join("");
+  } else if (qs.kind === "stat"){
+    h = '<p class="subt">' + qs.count + ' answered</p><div class="tiles">' +
+      tile(num(qs.mean, 1), "mean") + tile(num(qs.med, 1), "median") +
+      tile(num(qs.lo, 1), "lowest") + tile(num(qs.hi, 1), "highest") + '</div>';
+  } else if (qs.kind === "counts" || qs.kind === "multi"){
+    var keys = countKeys(qs);
+    if (!keys.length) return "";
+    mx = Math.max.apply(null, keys.map(function(k){ return qs.counts[k]; }).concat([1]));
+    h = '<p class="subt">' + qs.count + ' answered' +
+      (qs.kind === "multi" ? ' &middot; ' + qs.picks + ' selections, more than one allowed' : "") +
+      '</p>' + keys.map(function(k){
+        return barRow(esc(k), qs.counts[k], mx, CHART_COLORS[4]);
+      }).join("");
+  } else if (qs.kind === "grid"){
+    var cols = q.options || [];
+    h = '<p class="subt">' + qs.count + ' answered &middot; shaded by each row&rsquo;s share</p>' +
+      '<div class="qscroll"><table class="angrid"><thead><tr><td></td>' +
+      cols.map(function(c){ return '<th scope="col">' + esc(c) + '</th>'; }).join("") +
+      '</tr></thead><tbody>' + qs.rows.map(function(rw){
+        return '<tr><th scope="row">' + esc(rw.row) + '</th>' + cols.map(function(c){
+          var v = rw.counts[c] || 0, t = rw.total ? v / rw.total : 0;
+          return '<td style="background:' + heatColor(t) + (t > 0.6 ? ';color:#fff' : "") + '">' +
+            (v || "") + '</td>';
+        }).join("") + '</tr>';
+      }).join("") + '</tbody></table></div>';
+  } else {
+    return "";
+  }
+  return '<div class="ansec"><h3>' + esc(q.prompt) + '</h3>' + h + '</div>';
+}
 function quotesSection(title, items){
   items = items.filter(function(t){ return t.text && String(t.text).trim(); });
   if (!items.length) return "";
@@ -2458,13 +3429,13 @@ function renderDetail(i){
   h += qaBlock("What do you like about the TOC you built?", r.likes);
   h += qaBlock("Is anything missing?", r.missing);
   (CONFIG.questions || []).forEach(function(q){
-    h += qaBlock(q.prompt, (r.extra || {})[q.id]);
+    if (q.type !== "section") h += qaBlock(q.prompt, (r.extra || {})[q.id]);
   });
   h += '</div></div>';
   document.getElementById("anDetail").innerHTML = h;
 }
 function qaBlock(q, a){
-  a = a === undefined || a === null ? "" : String(a).trim();
+  a = answerText(a).trim();
   return '<div class="qq">' + esc(q) + '</div><div class="aa' + (a ? '' : ' empty') + '">' +
     (a ? esc(a) : "no answer") + '</div>';
 }
@@ -2517,11 +3488,24 @@ function buildDigest(){
     }).join(" | "));
   }
   A.questions.forEach(function(qs){
-    if (qs.q.type === "scale" && qs.count)
-      L.push("Scale Q \"" + qs.q.prompt + "\": mean " + num(qs.mean, 2) + "/5, distribution 1..5 = " + qs.dist.join("/"));
-    if (qs.q.type === "choice" && qs.count)
-      L.push("Choice Q \"" + qs.q.prompt + "\": " + Object.keys(qs.counts).map(function(k){
-        return k + "=" + qs.counts[k]; }).join(", "));
+    if (!qs.count) return;
+    var q = qs.q;
+    if (qs.kind === "num"){
+      L.push("Scale Q \"" + q.prompt + "\": mean " + num(qs.mean, 2) + "/" + q.max +
+        ", distribution " + q.min + ".." + q.max + " = " + qs.dist.join("/"));
+    } else if (qs.kind === "stat"){
+      L.push("Number Q \"" + q.prompt + "\": mean " + num(qs.mean, 2) + ", median " + num(qs.med, 2) +
+        ", range " + num(qs.lo, 2) + "-" + num(qs.hi, 2) + " (n=" + qs.count + ")");
+    } else if (qs.kind === "counts" || qs.kind === "multi"){
+      L.push((qs.kind === "multi" ? "Checkbox Q \"" : "Choice Q \"") + q.prompt + "\": " +
+        countKeys(qs).map(function(k){ return k + "=" + qs.counts[k]; }).join(", ") +
+        " (n=" + qs.count + (qs.kind === "multi" ? ", multiple picks allowed" : "") + ")");
+    } else if (qs.kind === "grid"){
+      L.push("Grid Q \"" + q.prompt + "\": " + qs.rows.map(function(rw){
+        return rw.row + " [" + Object.keys(rw.counts).map(function(k){
+          return k + "=" + rw.counts[k]; }).join(", ") + "]";
+      }).join(" | "));
+    }
   });
   L.push("\n== INDIVIDUAL RESPONSES ==");
   var clip = rs.length > 80 ? 400 : 1200;   // keeps the digest well inside the context window
@@ -2535,8 +3519,8 @@ function buildDigest(){
       });
       if (items.length) toc.push("S" + (s+1) + ":" + items.join(","));
     }
-    var extras = Object.keys(r.extra || {}).filter(function(k){ return String(r.extra[k]) !== ""; })
-      .map(function(k){ return k + "=" + String(r.extra[k]).slice(0, clip); });
+    var extras = Object.keys(r.extra || {}).filter(function(k){ return !answerEmpty(r.extra[k]); })
+      .map(function(k){ return k + "=" + answerText(r.extra[k]).slice(0, clip); });
     L.push("#" + (i+1) + (r.row ? " (sheet row " + r.row + ")" : "") + " | " +
       (r.name || "anonymous") + (r.institution ? " — " + r.institution : "") +
       " | " + f.n + " sessions | " + toc.join(" ") +
@@ -2648,6 +3632,42 @@ function mdToHtml(md){
 }
 
 /* ---------- synthetic demo data (preview mode only) ---------- */
+/** Plausible preview answers for whatever questions are configured, so the demo
+ *  dashboard exercises every type rather than just the seeded scale. */
+function demoExtra(i){
+  var out = {};
+  (CONFIG.questions || []).forEach(function(q){
+    if (q.type === "section") return;
+    var opts = q.options || [];
+    switch (q.type){
+      case "scale": case "rating":
+        out[q.id] = String(q.min + ((i * 3) % (q.max - q.min + 1))); break;
+      case "choice": case "dropdown":
+        if (opts.length) out[q.id] = opts[i % opts.length]; break;
+      case "checkbox":
+        out[q.id] = opts.filter(function(o, k){ return (i + k) % 3 !== 0; }); break;
+      case "grid": case "checkgrid": {
+        var m = {};
+        q.rows.forEach(function(row, k){
+          if (!opts.length) return;
+          var pick = opts[(i + k) % opts.length];
+          m[row] = q.type === "grid" ? pick : [pick];
+        });
+        out[q.id] = m; break;
+      }
+      case "number":   out[q.id] = String(8 + (i % 25)); break;
+      case "date":     out[q.id] = "2026-0" + (1 + i % 9) + "-1" + (i % 9); break;
+      case "time":     out[q.id] = (9 + i % 8) + ":00"; break;
+      case "datetime": out[q.id] = "2026-0" + (1 + i % 9) + "-1" + (i % 9) + "T1" + (i % 3) + ":00"; break;
+      case "email":    out[q.id] = "demo" + i + "@example.edu"; break;
+      case "url":      out[q.id] = "https://example.edu/syllabus/" + i; break;
+      default:
+        out[q.id] = ["Yes, with a few tweaks.", "", "Depends on the cohort.",
+                     "Only if the cases come with it."][i % 4];
+    }
+  });
+  return out;
+}
 function demoResponses(){
   var names = ["Ada Chen","Ben Ortiz","Carla Novak","Dev Patel","Elena Ruiz","Frank Osei",
                "Grace Kim","Hugo Lind","Iris Wang","Jon Baker","Kim Salo","Lena Voss"];
@@ -2690,7 +3710,7 @@ function demoResponses(){
       name: nm, email: nm.toLowerCase().replace(/[^a-z]/g, ".") + "@example.edu",
       institution: insts[i], numSessions: n, sessions: sessions, unused: unused, spans: spans,
       likes: likeTx[i % likeTx.length], missing: missTx[i % missTx.length],
-      extra: {q_adopt: String(2 + ((i * 7) % 4))}
+      extra: demoExtra(i)
     };
   });
 }
