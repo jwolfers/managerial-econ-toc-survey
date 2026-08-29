@@ -9,15 +9,26 @@
   :root{
     --paper:#fdfcfa; --ink:#2a2624; --ink-soft:#6b6258;
     --red:#9f1912; --berry:#8e004d; --purple:#56246f; --blue:#0b8dc7;
-    --teal:#0e7a66; --slate:#6a898e; --gold:#fdc400; --chartreuse:#c1c400;
-    --line:#ddd8d0; --card:#ffffff; --wash:#f6f3ec;
+    --teal:#0e7a66; --slate:#4f6c71; --gold:#fdc400; --chartreuse:#c1c400;
+    --line:#ddd8d0; --card:#ffffff; --wash:#f6f3ec; --link:#0a6f9e;
     --sans:"Source Sans 3","Source Sans Pro",-apple-system,"Segoe UI",Arial,sans-serif;
     --serif:"Source Serif 4","Source Serif Pro",Georgia,serif;
   }
   *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   html,body{margin:0;padding:0}
   body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45}
-  a{color:var(--blue)}
+  a{color:var(--link)}
+  /* Visually hidden, still announced. */
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+  .skiplink{position:absolute;left:-9999px;top:0;z-index:100;background:var(--card);color:var(--ink);
+    border:1px solid var(--line);border-radius:0 0 6px 0;padding:10px 16px;font-weight:600}
+  .skiplink:focus{left:0}
+  a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;scroll-behavior:auto !important}}
   .shell{max-width:1160px;margin:0 auto;padding:0 20px 80px}
 
   /* ---------- header ---------- */
@@ -94,19 +105,9 @@
   .pbar{flex:1;height:8px;background:#e8e3d9;border-radius:4px;overflow:hidden}
   .pbar i{display:block;height:100%;background:var(--chartreuse);width:0%}
   .builder{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px;align-items:start}
-  /* Narrow screens: chapters first (a phone user should see chapters, not empty sessions),
-     as a self-scrolling panel so the sessions stay within reach below. */
-  @media (max-width:900px){.builder{grid-template-columns:1fr}
-    .bank{position:static !important;order:-1;max-height:65vh}}
-  /* Phones: session-chip buttons get their own row so titles stay readable. */
-  @media (max-width:600px){
-    .slotbody .chip:not(.ghost) .row{flex-wrap:wrap}
-    .slotbody .chip:not(.ghost) .acts{flex-basis:100%;justify-content:flex-end;margin-top:2px}}
-  /* Touch devices: larger tap targets. */
-  @media (pointer:coarse){
-    .chip .acts button{width:30px;height:30px;font-size:15px}
-    .chip .caret{width:26px;height:26px;font-size:14px}
-    .qadd button{padding:10px 14px}}
+  /* Narrow-screen and touch rules live at the very end of this sheet — see
+     "responsive overrides" below. They share specificity with the base rules,
+     so they only win by coming last. */
 
   /* sessions column */
   .session{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:0 0 12px}
@@ -118,7 +119,7 @@
   /* the whole session box is the drop target, header included */
   .session.dragover{background:#fdf6d8;box-shadow:inset 0 0 0 2px var(--gold)}
   .session.dragover h3{border-bottom-color:var(--gold)}
-  .empties{font-size:13px;color:#b0a89c;font-style:italic;padding:2px 4px}
+  .empties{font-size:13px;color:var(--ink-soft);font-style:italic;padding:2px 4px}
 
   /* chapter cards */
   .chip{background:var(--card);border:1px solid var(--line);
@@ -127,11 +128,11 @@
   .chip.dragging{opacity:.45}
   .chip .row{display:flex;align-items:center;gap:6px}
   .chip .caret{border:none;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:13px;
-    width:22px;height:22px;border-radius:4px;line-height:1;flex-shrink:0;transition:transform .15s;padding:0}
+    width:24px;height:24px;border-radius:4px;line-height:1;flex-shrink:0;transition:transform .15s;padding:0}
   .chip .caret.open{transform:rotate(90deg)}
   .chip .caret:hover{background:var(--wash);color:var(--ink)}
   .chip .t{flex:1;min-width:0}
-  .chip .t .ch{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+  .chip .t .ch{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
   .chip .t .ti{font-size:14.5px;font-weight:600;line-height:1.25}
   .chip .t .ti:hover{text-decoration:underline;cursor:pointer}
   .chip .acts{display:flex;gap:2px;flex-shrink:0}
@@ -164,7 +165,8 @@
 
   /* toast + modal */
   #toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;
-    font-size:14.5px;padding:11px 18px;border-radius:8px;max-width:520px;box-shadow:0 6px 24px rgba(0,0,0,.25);
+    font-size:14.5px;padding:11px 18px;border-radius:8px;max-width:min(520px,calc(100vw - 32px));
+    box-shadow:0 6px 24px rgba(0,0,0,.25);
     opacity:0;pointer-events:none;transition:opacity .25s;z-index:60}
   #toast.show{opacity:1}
   #toast.warn{background:var(--berry)}
@@ -186,6 +188,8 @@
   .q .opts{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
   .q .opts label{font-weight:400;font-size:15px;display:flex;align-items:center;gap:5px}
   .q .endlab{font-size:13px;color:var(--ink-soft)}
+  .qfs{border:0;margin:0;padding:0;min-width:0}
+  .qfs legend.prompt{padding:0;margin:0 0 6px}
 
   .previewnote{background:#fdf6d8;border:1px solid var(--gold);border-radius:8px;padding:10px 14px;
     font-size:14px;margin:16px 0 0}
@@ -205,7 +209,7 @@
   .edcard .edhead{display:flex;align-items:center;gap:8px;margin:0 0 4px}
   .edcard .edid{font-weight:700;color:var(--slate);font-size:13px;letter-spacing:.06em;
     text-transform:uppercase;flex-shrink:0}
-  .edcard .edhead input{flex:1;font-size:13px;padding:5px 8px}
+  .edcard .edhead input{flex:1;min-width:0;font-size:13px;padding:5px 8px}
   .edcard .eddel{border:none;background:transparent;cursor:pointer;font-size:15px;color:var(--ink-soft);
     width:28px;height:28px;border-radius:4px;flex-shrink:0}
   .edcard .eddel:hover{background:#f7e9e8;color:var(--red)}
@@ -214,7 +218,7 @@
   .edcard input{max-width:none}
   .pchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
   .pchip{border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:14px;
-    min-width:30px;padding:3px 8px;font-size:13px;font-weight:600;cursor:pointer}
+    min-width:30px;min-height:24px;padding:3px 8px;font-size:13px;font-weight:600;cursor:pointer}
   .pchip:hover{border-color:var(--slate)}
   .pchip.on{background:var(--purple);border-color:var(--purple);color:#fff}
   .done{max-width:640px}
@@ -222,10 +226,10 @@
   .done p{font-family:var(--serif);font-size:17px}
   .credit{margin-top:40px;font-size:12.5px;color:var(--ink-soft);
     display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;justify-content:space-between}
-  .credit .adminlinks{opacity:.35;margin-left:auto;text-align:right;white-space:nowrap}
-  .updated{margin:6px 0 0;font-size:11px;color:var(--ink-soft);opacity:.65}
+  .credit .adminlinks{margin-left:auto;text-align:right;white-space:nowrap}
+  .updated{margin:6px 0 0;font-size:11px;color:var(--ink-soft)}
   .credit .adminlinks a{color:inherit;text-decoration:none;border-bottom:1px dotted currentColor}
-  .credit .adminlinks:hover{opacity:.75}
+  .credit .adminlinks a:hover{color:var(--ink)}
 
   /* ---------- password gate ---------- */
   #gate{position:fixed;inset:0;background:rgba(42,38,36,.45);display:none;align-items:center;
@@ -235,6 +239,7 @@
     padding:24px 26px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
   .gatecard h3{margin:0 0 4px;font-size:19px}
   .gatecard p{font-size:14px;color:var(--ink-soft);margin:0 0 14px}
+  .gatecard label.f{margin:0 0 4px}
   .gatecard .err{color:var(--berry);font-size:13.5px;min-height:18px;margin:8px 0 0}
   .gatecard .row2{display:flex;gap:10px;margin-top:14px;align-items:center}
 
@@ -261,11 +266,14 @@
   .bfill{height:12px;border-radius:0 4px 4px 0;min-width:2px}
   .barrow:hover{background:var(--wash)}
   @media (max-width:700px){.barrow{grid-template-columns:120px 1fr 90px}}
-  .heatwrap{overflow-x:auto}
+  /* position:relative so the absolutely-positioned .sr-only labels inside the table
+     are contained here; otherwise they escape the scroller and drag the whole page
+     sideways on a narrow screen. */
+  .heatwrap{position:relative;overflow-x:auto}
   .heat{border-collapse:separate;border-spacing:2px}
   .heat td,.heat th{padding:0;font-weight:400}
   .heat th{font-size:11.5px;color:var(--ink-soft);text-align:left;padding:0 8px 4px 0;white-space:nowrap}
-  .heat .rowlab{font-size:12.5px;padding-right:10px;white-space:nowrap;max-width:250px;overflow:hidden;text-overflow:ellipsis}
+  .heat .rowlab{font-size:12.5px;padding:0 10px 0 0;white-space:nowrap;max-width:250px;overflow:hidden;text-overflow:ellipsis}
   .heat .cell{width:34px;height:22px;border-radius:3px;background:var(--wash)}
   .heat .cell:hover{outline:2px solid var(--ink);outline-offset:-1px}
   .heat .inc{font-size:12px;color:var(--ink-soft);padding-left:10px;white-space:nowrap}
@@ -295,13 +303,16 @@
   .quote{break-inside:avoid;background:var(--card);border:1px solid var(--line);border-radius:8px;
     padding:10px 13px;margin:0 0 10px;font-family:var(--serif);font-size:13.5px}
   .quote .who{font-family:var(--sans);font-size:11.5px;color:var(--ink-soft);margin-top:6px}
-  .quote .who a{color:var(--blue);cursor:pointer;text-decoration:none}
+  .quote .who button{border:none;background:none;padding:0;font:inherit;color:var(--link);
+    cursor:pointer;text-decoration:underline}
   .rtable{width:100%;border-collapse:collapse;font-size:13.5px}
   .rtable th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
     color:var(--ink-soft);border-bottom:1.5px solid var(--line);padding:6px 8px}
   .rtable td{border-bottom:1px solid var(--line);padding:6px 8px}
   .rtable tr.sel td{background:#fdf6d8}
   .rtable tbody tr{cursor:pointer}
+  .rtable .rowbtn{border:none;background:none;padding:0;font:inherit;color:var(--link);
+    cursor:pointer;text-decoration:underline}
   .rtable tbody tr:hover td{background:var(--wash)}
   .rdetail{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin-top:14px}
   .rdetail h4{margin:0 0 2px;font-size:16px}
@@ -315,7 +326,7 @@
   .rdetail .qa{margin:14px 0 0;font-size:13.5px}
   .rdetail .qa .qq{font-weight:600;margin:10px 0 2px}
   .rdetail .qa .aa{font-family:var(--serif);white-space:pre-wrap}
-  .rdetail .qa .aa.empty{color:#b0a89c;font-style:italic}
+  .rdetail .qa .aa.empty{color:var(--ink-soft);font-style:italic}
   .llm{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;max-width:860px}
   .llm .note{font-size:13px;color:var(--ink-soft);margin:0 0 12px}
   .report{font-family:var(--serif);font-size:14.5px;line-height:1.55;max-width:74ch}
@@ -332,9 +343,59 @@
   .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--red);
     border-radius:50%;animation:spin .8s linear infinite;vertical-align:-2px}
   @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ================= responsive overrides =================
+     Deliberately last in the sheet: every rule here has the same specificity
+     as the base rule it overrides, so source order is what makes it stick. */
+
+  /* Narrow screens: one column, chapters first — a phone user should see
+     chapters, not empty sessions. The chapter list flows with the page instead
+     of scrolling inside itself; a panel that tall swallows the swipe that ought
+     to scroll the page. */
+  @media (max-width:900px){
+    .builder{grid-template-columns:1fr}
+    .bank{position:static;order:-1;max-height:none;overflow:visible}
+  }
+
+  /* Phones. */
+  @media (max-width:600px){
+    .shell{padding:0 14px 60px}
+    .eyebrow{font-size:11.5px}
+    h1.brand{font-size:30px}
+    .tagline{font-size:16px;margin-top:10px}
+    h2{font-size:20px}
+    /* session-chip buttons get their own row so titles stay readable */
+    .slotbody .chip:not(.ghost) .row{flex-wrap:wrap}
+    .slotbody .chip:not(.ghost) .acts{flex-basis:100%;justify-content:flex-end;margin-top:2px}
+    .chipdetails{padding-left:12px}
+    .edgrid{grid-template-columns:minmax(0,1fr)}
+    .campgrid{grid-template-columns:minmax(0,1fr)}
+    .credit .adminlinks{white-space:normal}
+  }
+
+  /* Touch devices: tap targets you can actually hit, and 16px form text so
+     iOS Safari doesn't zoom the page in the moment a field is focused. */
+  @media (pointer:coarse){
+    input[type=text],input[type=email],input[type=number],input[type=password],textarea,select,
+    .edcard textarea,.edcard input{font-size:16px}
+    .chip{padding:8px 9px}
+    .chip .acts{gap:4px;flex-wrap:wrap;justify-content:flex-end}
+    .chip .acts button{width:36px;height:36px;font-size:16px}
+    .chip .caret{width:32px;height:32px;font-size:15px}
+    .stepbtn{width:38px;height:38px;font-size:19px}
+    .edcard .edhead input{font-size:16px}
+    .edcard .eddel{width:36px;height:36px}
+    .pchip{padding:8px 12px;font-size:14px;min-width:38px}
+    .qadd button{padding:11px 14px;font-size:15px}
+    /* radio/checkbox rows in the wrap-up questions */
+    .q .opts{gap:10px 18px}
+    .q .opts label{padding:5px 0}
+    .q .opts input[type=radio],.q .opts input[type=checkbox]{width:20px;height:20px}
+  }
 </style>
 </head>
 <body>
+<a class="skiplink" href="#step-build">Skip to the survey</a>
 <div class="shell">
   <header>
     <div class="headrow">
@@ -609,7 +670,8 @@
     <a href="#analyze" id="previewAnalyzeLink">Results dashboard</a> (demo data).</div>
 
   <!-- BUILDER -->
-  <section class="step active" id="step-build">
+  <section class="step active" id="step-build" tabindex="-1" aria-labelledby="buildHeading">
+    <h2 class="sr-only" id="buildHeading">Build your table of contents</h2>
     <p class="lede" id="ledeBuild">We are writing a new business economics textbook, and we want its structure to match the
       way you actually teach. Drag the chapters on the right into your class sessions, in the order you'd
       cover them — and toss anything you wouldn't teach into the unused pile. Click any title for details.</p>
@@ -618,24 +680,27 @@
         <span class="spin" id="loadSpin" aria-hidden="true"></span>
         <span id="loadMsg">Loading the chapter list&hellip;</span>
       </div>
-      <div class="loadbar"><i id="loadFill"></i></div>
+      <div class="loadbar" aria-hidden="true"><i id="loadFill"></i></div>
       <p class="loadhint" id="loadHint" hidden></p>
       <button type="button" class="btn secondary small" id="loadRetry" hidden>Try again</button>
     </div>
     <div class="buildbar">
-      <span class="count">Class sessions:
-        <button type="button" class="stepbtn" id="btnSessMinus" title="One fewer session">&minus;</button>
+      <span class="count"><label for="numSessions2">Class sessions:</label>
+        <button type="button" class="stepbtn" id="btnSessMinus" aria-label="One fewer class session"
+          title="One fewer session">&minus;</button>
         <input type="number" id="numSessions2" min="1" max="60" value="14">
-        <button type="button" class="stepbtn" id="btnSessPlus" title="One more session">+</button>
+        <button type="button" class="stepbtn" id="btnSessPlus" aria-label="One more class session"
+          title="One more session">+</button>
       </span>
       <button type="button" class="btn secondary small" id="btnPrefill"
         title="Fill the sessions with the chapters in the book's planned order — a starting point you can rearrange">Start from book order</button>
-      <div class="progress"><span id="progText"></span><div class="pbar"><i id="progFill"></i></div></div>
+      <div class="progress"><span id="progText" role="status"></span>
+        <div class="pbar" aria-hidden="true"><i id="progFill"></i></div></div>
     </div>
     <div class="builder">
-      <div class="sessions" id="sessionsCol"></div>
-      <aside class="bank" id="bankCol">
-        <h3>Chapters</h3>
+      <div class="sessions" id="sessionsCol" role="region" aria-label="Your class sessions"></div>
+      <aside class="bank" id="bankCol" aria-labelledby="bankHeading">
+        <h3 id="bankHeading">Chapters</h3>
         <p class="hint" id="bankHint">Drag a chapter into a session, or use <b>+</b> to place it
           (<b>&#8644;</b> moves a placed chapter). Click the arrow by a
           title for details. Once placed, <b>&#10515;</b> continues a chapter into the next session.
@@ -652,10 +717,10 @@
     </div>
     <div class="wrapqs">
       <h2>A few final questions</h2>
-      <div class="q"><p class="prompt">What do you like about the table of contents you've built?</p>
-        <textarea id="qLikes"></textarea></div>
-      <div class="q"><p class="prompt">Is anything missing — topics, chapters, or applications you'd want that you didn't see?</p>
-        <textarea id="qMissing"></textarea></div>
+      <div class="q"><p class="prompt" id="lblLikes">What do you like about the table of contents you've built?</p>
+        <textarea id="qLikes" aria-labelledby="lblLikes"></textarea></div>
+      <div class="q"><p class="prompt" id="lblMissing">Is anything missing — topics, chapters, or applications you'd want that you didn't see?</p>
+        <textarea id="qMissing" aria-labelledby="lblMissing"></textarea></div>
       <div id="extraQs"></div>
       <h2 style="font-size:18px;margin-top:26px">About you <small style="font-weight:400;color:var(--ink-soft)">(optional)</small></h2>
       <label class="f" for="rName">Your name</label>
@@ -687,7 +752,7 @@
       <button class="btn" id="edSave">Save changes</button>
       <button class="btn secondary" id="edAdd">+ Add chapter</button>
       <button class="btn secondary" id="edReload">Discard edits</button>
-      <span class="hint" id="edStatus"></span>
+      <span class="hint" id="edStatus" role="status"></span>
     </div>
     <div class="edgrid" id="edGrid"></div>
   </section>
@@ -701,26 +766,27 @@
     <div class="anbar">
       <button class="btn secondary small" id="anRefresh">&#8635; Refresh data</button>
       <button class="btn secondary small" id="anExport">Download all responses (JSON)</button>
-      <span class="hint" id="anStatus"></span>
+      <span class="hint" id="anStatus" role="status"></span>
     </div>
     <div id="anBody"></div>
   </section>
 
   <p class="credit"><span>Snowberg, Stevenson &amp; Wolfers — <i>Managerial Economics</i> (in development, Macmillan Learning).</span> <span class="adminlinks"><a href="#edit">Chapter editor</a> &middot; <a href="#analyze">Results dashboard</a></span></p>
   <!-- Bump both the datetime attribute and the fallback text whenever this file is deployed. -->
-  <p class="updated">Last updated <time id="lastUpdated" datetime="2026-08-29T13:45:00-04:00">29 August 2026, 1:45&#8239;PM ET</time></p>
+  <p class="updated">Last updated <time id="lastUpdated" datetime="2026-08-29T14:20:00-04:00">29 August 2026, 2:20&#8239;PM ET</time></p>
 </div>
 
-<div id="toast" role="status"></div>
+<div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- PASSWORD GATE (edit + analyze pages) -->
-<div id="gate">
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle" aria-describedby="gateDesc">
   <div class="gatecard">
     <h3 id="gateTitle">Admin access</h3>
-    <p>This page is for the authors. Enter the admin password
+    <p id="gateDesc">This page is for the authors. Enter the admin password
       (TOC Survey menu in the Google Sheet).</p>
-    <input type="password" id="gateKey" autocomplete="current-password" placeholder="Password">
-    <div class="err" id="gateErr"></div>
+    <label class="f" for="gateKey">Admin password</label>
+    <input type="password" id="gateKey" autocomplete="current-password">
+    <div class="err" id="gateErr" role="alert"></div>
     <div class="row2">
       <button class="btn" id="gateGo">Open</button>
       <a href="./" style="font-size:13.5px;color:var(--ink-soft)">back to the survey</a>
@@ -783,6 +849,9 @@ var DEFAULT_CONFIG = {
 };
 
 var PART_COLORS = ["#9f1912","#0b8dc7","#8e004d","#56246f","#0e7a66","#b1740f","#446e29"];
+/* Same hues darkened where needed to clear 4.5:1 on the paper background: PART_COLORS is for
+   borders and swatches (3:1 is enough for those), PART_TEXT_COLORS wherever the hue is text. */
+var PART_TEXT_COLORS = ["#9f1912","#0a6f9e","#8e004d","#56246f","#0e7a66","#8a5a0b","#446e29"];
 /* Lightened chart variants of the same hues (validated for adjacent-pair distinguishability
    on the paper background). Survey chips keep PART_COLORS; dashboard chart fills use these. */
 var CHART_COLORS = ["#c4472f","#0b8dc7","#c22a72","#7d5bb5","#0c9377","#b1740f","#446e29"];
@@ -804,6 +873,7 @@ var CHART_COLORS = ["#c4472f","#0b8dc7","#c22a72","#7d5bb5","#0c9377","#b1740f",
 var CONFIG = null;          // {chapters, questions}
 var byId = {};              // id -> chapter
 var partColor = {};         // part name -> color
+var textColor = {};         // part name -> the same hue, dark enough to use as text
 var chartColor = {};        // part name -> chart fill color
 var state = {n:14, sessions:[], unused:[], spans:{}};   // spans: chapter id -> # consecutive sessions (default 1)
 var openInfo = {};   // chapter id -> details dropdown expanded
@@ -850,6 +920,11 @@ function errMsg(e, fallback){
 /* HTML5 drag events never fire on touch screens, so on a coarse-pointer device the
    tap controls (+, ⇄, arrows, 🗑) ARE the interface — say so instead of "drag". */
 var IS_TOUCH = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+/* Scripted scrolling is motion too — respect the OS setting. */
+function scrollBehavior(){
+  return (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+    ? "auto" : "smooth";
+}
 if (IS_TOUCH){
   document.getElementById("ledeBuild").innerHTML =
     "We are writing a new business economics textbook, and we want its structure to match the " +
@@ -864,7 +939,7 @@ if (IS_TOUCH){
 /* ================= BOOT ================= */
 function boot(cfg){
   CONFIG = cfg;
-  byId = {}; partColor = {}; chartColor = {};
+  byId = {}; partColor = {}; textColor = {}; chartColor = {};
   var order = [];
   CONFIG.chapters.forEach(function(c){
     c.id = Number(c.id);
@@ -874,6 +949,7 @@ function boot(cfg){
   });
   order.forEach(function(p,i){
     partColor[p] = PART_COLORS[i % PART_COLORS.length];
+    textColor[p] = PART_TEXT_COLORS[i % PART_TEXT_COLORS.length];
     chartColor[p] = CHART_COLORS[i % CHART_COLORS.length];
   });
   var bar = document.getElementById("colorbar");
@@ -1105,6 +1181,7 @@ function tryPlace(id, s, i, quiet){
   }
   state.sessions[s].splice(i, 0, id);
   sortSession(s);   // requirements settle the order within a session
+  if (!quiet && IS_TOUCH) toast("Ch " + id + "  →  Session " + (s + 1) + ".");
   if (state.sessions[s].indexOf(id) !== i)
     toast("Within a session, chapters are listed in the order their requirements need.");
   // clamp the span if the new spot is too close to the last session
@@ -1169,49 +1246,58 @@ function chipEl(c, ctx){ // ctx: "session" | "bank" | "unused"
   el.style.borderLeftColor = partColor[c.part];
   el.draggable = true;
   el.dataset.id = c.id;
+  /* Every control here is icon-only, so each carries an aria-label naming both the action and the
+     chapter — a screen-reader user hears "Move Chapter 3 up", not "black up-pointing triangle". */
+  var nm = "Chapter " + c.id;
   var acts = "";
   if (ctx === "session"){
-    acts = '<button title="Move up" data-act="up">&#9650;</button>' +
-           '<button title="Move down" data-act="down">&#9660;</button>' +
-           '<button title="Move to another session" data-act="qadd">&#8644;</button>' +
-           '<button title="Continue this chapter into the next session" data-act="extend">&#10515;</button>' +
-           '<button title="Remove (back to chapter list)" data-act="return">&#10005;</button>' +
-           '<button title="Discard to unused pile" class="danger" data-act="discard">&#128465;</button>';
+    acts = '<button type="button" title="Move up" aria-label="Move ' + nm + ' up" data-act="up">&#9650;</button>' +
+           '<button type="button" title="Move down" aria-label="Move ' + nm + ' down" data-act="down">&#9660;</button>' +
+           '<button type="button" title="Move to another session" aria-label="Move ' + nm + ' to another session" data-act="qadd">&#8644;</button>' +
+           '<button type="button" title="Continue this chapter into the next session" aria-label="Continue ' + nm + ' into the next session" data-act="extend">&#10515;</button>' +
+           '<button type="button" title="Remove (back to chapter list)" aria-label="Remove ' + nm + ' back to the chapter list" data-act="return">&#10005;</button>' +
+           '<button type="button" title="Discard to unused pile" aria-label="Discard ' + nm + ' to the unused pile" class="danger" data-act="discard">&#128465;</button>';
   } else if (ctx === "bank"){
-    acts = '<button title="Add to a session" data-act="qadd"><b>+</b></button>' +
-           '<button title="Discard to unused pile" class="danger" data-act="discard">&#128465;</button>';
+    acts = '<button type="button" title="Add to a session" aria-label="Place ' + nm + ' in a session" data-act="qadd"><b>+</b></button>' +
+           '<button type="button" title="Discard to unused pile" aria-label="Discard ' + nm + ' to the unused pile" class="danger" data-act="discard">&#128465;</button>';
   } else {
-    acts = '<button title="Restore to chapter list" data-act="restore">&#8634;</button>';
+    acts = '<button type="button" title="Restore to chapter list" aria-label="Restore ' + nm + ' to the chapter list" data-act="restore">&#8634;</button>';
   }
   var open = !!openInfo[c.id];
   var det = "";
+  /* Prerequisite lists used to hide the chapter title in a title= tooltip, which never reaches a
+     keyboard or touch user; the titles are spelled out instead. */
+  var detId = "det-" + ctx + "-" + c.id;
   if (open){
-    det = '<div class="chipdetails">';
-    if (c.notes) det += '<p class="sum">' + c.notes + '</p>';
+    var detOpen = '<div class="chipdetails" id="' + detId + '">';
+    det = detOpen;
+    if (c.notes) det += '<p class="sum">' + esc(c.notes) + '</p>';
     if (c.sections && c.sections.length){
       det += '<div class="sech">In this chapter</div><ul>' +
-        c.sections.map(function(s){ return "<li>" + s + "</li>"; }).join("") + '</ul>';
+        c.sections.map(function(s){ return "<li>" + esc(s) + "</li>"; }).join("") + '</ul>';
     }
     if (c.prereqs.length){
       det += '<div class="dep"><b>Comes after:</b> ' + c.prereqs.map(function(p){
-        return '<span title="' + byId[p].title.replace(/"/g,"&quot;") + '">Ch ' + p + '</span>'; }).join(", ") + '</div>';
+        return 'Ch ' + p + ' &mdash; ' + esc(byId[p].title); }).join("; ") + '</div>';
     }
     var deps = dependentsOf(c.id);
     if (deps.length){
       det += '<div class="dep"><b>Needed for:</b> ' + deps.map(function(d){
-        return '<span title="' + byId[d].title.replace(/"/g,"&quot;") + '">Ch ' + d + '</span>'; }).join(", ") + '</div>';
+        return 'Ch ' + d + ' &mdash; ' + esc(byId[d].title); }).join("; ") + '</div>';
     }
-    if (det === '<div class="chipdetails">') det += '<div class="dep">No details yet.</div>';
+    if (det === detOpen) det += '<div class="dep">No details yet.</div>';
     det += '</div>';
   }
   var chLabel = 'Ch ' + c.id;
   if (ctx === "session" && spanOf(c.id) > 1) chLabel += ' &middot; runs ' + spanOf(c.id) + ' sessions';
   el.innerHTML =
     '<div class="row">' +
-    '<button class="caret' + (open ? " open" : "") + '" data-act="info" aria-expanded="' + open +
-      '" title="' + (open ? "Hide" : "Show") + ' chapter details">&#9656;</button>' +
-    '<div class="t"><div class="ch" style="color:' + partColor[c.part] + '">' + chLabel + '</div>' +
-    '<div class="ti" data-act="info" title="Click for details">' + c.title + '</div></div>' +
+    '<button type="button" class="caret' + (open ? " open" : "") + '" data-act="info" aria-expanded="' + open +
+      '"' + (open ? ' aria-controls="' + detId + '"' : '') +
+      ' aria-label="' + (open ? "Hide" : "Show") + ' details for ' + nm + ': ' + esc(c.title) + '"' +
+      ' title="' + (open ? "Hide" : "Show") + ' chapter details">&#9656;</button>' +
+    '<div class="t"><div class="ch" style="color:' + textColor[c.part] + '">' + chLabel + '</div>' +
+    '<div class="ti" data-act="info" title="Click for details">' + esc(c.title) + '</div></div>' +
     '<div class="acts">' + acts + '</div></div>' + det;
   return el;
 }
@@ -1223,12 +1309,33 @@ function ghostEl(c, offset){
   el.dataset.offset = offset;
   el.innerHTML =
     '<div class="row"><div class="t" style="padding-left:28px">' +
-    '<div class="ch" style="color:' + partColor[c.part] + '">Ch ' + c.id + ' &middot; continued</div>' +
-    '<div class="ti">' + c.title + '</div></div>' +
-    '<div class="acts"><button title="Don\'t continue into this session" data-act="unextend">&#10005;</button></div></div>';
+    '<div class="ch" style="color:' + textColor[c.part] + '">Ch ' + c.id + ' &middot; continued</div>' +
+    '<div class="ti">' + esc(c.title) + '</div></div>' +
+    '<div class="acts"><button type="button" title="Don\'t continue into this session"' +
+    ' aria-label="Stop Chapter ' + c.id + ' continuing into this session" data-act="unextend">&#10005;</button></div></div>';
   return el;
 }
+/* render() replaces the builder wholesale, so whatever the keyboard user was on disappears.
+   Capture the chip + action they were using and re-focus the equivalent control afterwards. */
+function captureFocus(){
+  var el = document.activeElement;
+  if (!el || !el.closest) return null;
+  var chip = el.closest(".chip");
+  if (!chip) return null;
+  return {id: chip.dataset.id, act: el.dataset.act || null, ghost: chip.classList.contains("ghost")};
+}
+function restoreFocus(f){
+  if (!f) return;
+  var chip = document.querySelector('.chip' + (f.ghost ? '.ghost' : ':not(.ghost)') +
+               '[data-id="' + f.id + '"]') ||
+             document.querySelector('.chip[data-id="' + f.id + '"]');
+  if (!chip) return;
+  var target = (f.act && chip.querySelector('button[data-act="' + f.act + '"]')) ||
+               chip.querySelector("button");
+  if (target) target.focus({preventScroll: true});
+}
 function render(){
+  var keepFocus = captureFocus();
   // sessions
   var col = document.getElementById("sessionsCol");
   col.innerHTML = "";
@@ -1237,7 +1344,7 @@ function render(){
     box.className = "session";
     box.dataset.drop = "session";      // whole box, not just the chip area, accepts a drop
     box.dataset.session = s;
-    box.innerHTML = '<h3><span class="num">' + (s+1) + '</span> Session ' + (s+1) + '</h3>';
+    box.innerHTML = '<h3><span class="num" aria-hidden="true">' + (s+1) + '</span> Session ' + (s+1) + '</h3>';
     var body = document.createElement("div");
     body.className = "slotbody";
     var ghosts = ghostsFor(s);
@@ -1266,7 +1373,7 @@ function render(){
     if (!free.length) return;
     var g = document.createElement("div");
     g.className = "partgroup";
-    g.innerHTML = '<h4 style="color:' + partColor[p] + '">' + p + '</h4>';
+    g.innerHTML = '<h4 style="color:' + textColor[p] + '">' + esc(p) + '</h4>';
     var chips = document.createElement("div");
     chips.className = "chips";
     chips.dataset.drop = "bank";
@@ -1287,6 +1394,7 @@ function render(){
     placed + " of " + total + " chapters placed" + (state.unused.length ? " · " + state.unused.length + " unused" : "");
   document.getElementById("progFill").style.width = Math.round(100 * (placed + state.unused.length) / total) + "%";
   document.getElementById("numSessions2").value = state.n;
+  restoreFocus(keepFocus);
 }
 function flashChip(id){
   var el = document.querySelector('.slotbody .chip[data-id="' + id + '"]');
@@ -1299,7 +1407,7 @@ function flashChip(id){
 function revealChip(id){
   var el = document.querySelector('.slotbody .chip:not(.ghost)[data-id="' + id + '"]');
   if (!el) return;
-  el.scrollIntoView({behavior:"smooth", block:"center"});
+  el.scrollIntoView({behavior: scrollBehavior(), block:"center"});
   setTimeout(function(){
     el.style.transition = "none"; el.style.background = "#fbe3e1";
     setTimeout(function(){ el.style.transition = "background 1.2s"; el.style.background = ""; }, 700);
@@ -1374,11 +1482,15 @@ document.addEventListener("click", function(e){
   }
 });
 var qaddEl = null;
+var qaddReturn = null;   // the chip button that opened the popup, so focus can go back to it
 function openQuickAdd(anchor, id){
   closeQuickAdd();
   var cur = placedPos(id);   // set when opened from a placed chip's ⇄ button
+  qaddReturn = {id: String(id), act: anchor.dataset.act, ghost: false};
   qaddEl = document.createElement("div");
   qaddEl.className = "qadd";
+  qaddEl.setAttribute("role", "group");
+  qaddEl.setAttribute("aria-label", "Choose a session for " + chapLabel(byId[id]));
   for (var s=0; s<state.sessions.length; s++){
     (function(s){
       var b = document.createElement("button");
@@ -1390,16 +1502,38 @@ function openQuickAdd(anchor, id){
       }
       b.addEventListener("click", function(ev){
         ev.stopPropagation();
+        var back = qaddReturn;
         closeQuickAdd();
-        tryPlace(id, s, state.sessions[s].length);
+        tryPlace(id, s, state.sessions[s].length);   // rebuilds the chip this popup came from
+        restoreFocus(back);
       });
       qaddEl.appendChild(b);
     })(s);
   }
+  /* The popup is appended to <body> (it is positioned against the document, and the sticky
+     chapter bank would otherwise become its containing block), so it lands at the end of the tab
+     order. Keep Tab cycling inside it, and hand focus back to the chip on Escape. */
+  qaddEl.addEventListener("keydown", function(e){
+    if (e.key === "Escape"){ e.stopPropagation(); var back = qaddReturn; closeQuickAdd(); restoreFocus(back); return; }
+    if (e.key !== "Tab") return;
+    var f = qaddEl.querySelectorAll("button:not([disabled])");
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  });
   document.body.appendChild(qaddEl);
   var r = anchor.getBoundingClientRect();
-  qaddEl.style.left = Math.min(r.left, window.innerWidth - 180) + "px";
-  qaddEl.style.top = (r.bottom + window.scrollY + 4) + "px";
+  qaddEl.style.left = Math.max(8, Math.min(r.left, window.innerWidth - qaddEl.offsetWidth - 8)) + "px";
+  // Open upwards when there isn't room below — on a phone the tapped button is
+  // often near the bottom of the screen, and a downward list lands off-screen.
+  var below = window.innerHeight - r.bottom - 8, above = r.top - 8;
+  var flip = qaddEl.offsetHeight > below && above > below;
+  qaddEl.style.maxHeight = Math.max(120, Math.min(260, flip ? above : below)) + "px";
+  qaddEl.style.top = (flip ? r.top + window.scrollY - qaddEl.offsetHeight - 4
+                           : r.bottom + window.scrollY + 4) + "px";
+  var firstEnabled = qaddEl.querySelector("button:not([disabled])");
+  if (firstEnabled) firstEnabled.focus();
 }
 function closeQuickAdd(except){
   if (qaddEl && (!except)){ qaddEl.remove(); qaddEl = null; }
@@ -1410,12 +1544,20 @@ function toggleInfo(id){
   openInfo[id] = !openInfo[id];
   render();
 }
-document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeQuickAdd(); });
+document.addEventListener("keydown", function(e){
+  if (e.key !== "Escape" || !qaddEl) return;
+  var back = qaddReturn;
+  closeQuickAdd();
+  restoreFocus(back);
+});
 
 /* ================= TOAST ================= */
 var toastTimer = null;
 function toast(msg, warn){
   var t = document.getElementById("toast");
+  /* Set the urgency before the text, so the announcement picks it up: a blocked action is an
+     error the respondent needs now, a confirmation can wait for a pause in speech. */
+  t.setAttribute("aria-live", warn ? "assertive" : "polite");
   t.textContent = msg;
   t.className = warn ? "warn show" : "show";
   clearTimeout(toastTimer);
@@ -1486,22 +1628,35 @@ function renderExtraQs(){
   (CONFIG.questions || []).forEach(function(q){
     var div = document.createElement("div");
     div.className = "q";
-    var inner = '<p class="prompt">' + q.prompt + '</p>';
-    if (q.type === "textarea") inner += '<textarea data-q="' + q.id + '"></textarea>';
-    else if (q.type === "text") inner += '<input type="text" data-q="' + q.id + '">';
+    var lid = "qlab_" + q.id;
+    var inner = "";
+    if (q.type === "scale" || q.type === "choice"){
+      /* Radios need a group name, and the group name is the question. */
+      inner = '<fieldset class="qfs"><legend class="prompt">' + esc(q.prompt) + '</legend>';
+    } else {
+      inner = '<p class="prompt" id="' + esc(lid) + '">' + esc(q.prompt) + '</p>';
+    }
+    if (q.type === "textarea") inner += '<textarea data-q="' + esc(q.id) + '" aria-labelledby="' + esc(lid) + '"></textarea>';
+    else if (q.type === "text") inner += '<input type="text" data-q="' + esc(q.id) + '" aria-labelledby="' + esc(lid) + '">';
     else if (q.type === "scale"){
       var labs = String(q.options || "|").split("|");
-      inner += '<div class="opts"><span class="endlab">' + (labs[0] || "") + '</span>';
-      for (var v=1; v<=5; v++)
-        inner += '<label><input type="radio" name="q_' + q.id + '" value="' + v + '" data-q="' + q.id + '">' + v + '</label>';
-      inner += '<span class="endlab">' + (labs[1] || "") + '</span></div>';
+      var lo = labs[0] || "low", hi = labs[1] || "high";
+      inner += '<div class="opts"><span class="endlab" aria-hidden="true">' + esc(labs[0] || "") + '</span>';
+      for (var v=1; v<=5; v++){
+        // The endpoint wording is only printed at the two ends, so carry it in the radio's name.
+        var al = v === 1 ? "1 — " + lo : (v === 5 ? "5 — " + hi : String(v));
+        inner += '<label><input type="radio" name="q_' + esc(q.id) + '" value="' + v + '" data-q="' +
+          esc(q.id) + '" aria-label="' + esc(al) + '">' + v + '</label>';
+      }
+      inner += '<span class="endlab" aria-hidden="true">' + esc(labs[1] || "") + '</span></div></fieldset>';
     } else if (q.type === "choice"){
       inner += '<div class="opts" style="flex-direction:column;align-items:flex-start">';
       String(q.options || "").split("|").forEach(function(opt){
         opt = opt.trim();
-        if (opt) inner += '<label><input type="radio" name="q_' + q.id + '" value="' + opt + '" data-q="' + q.id + '">' + opt + '</label>';
+        if (opt) inner += '<label><input type="radio" name="q_' + esc(q.id) + '" value="' + esc(opt) +
+          '" data-q="' + esc(q.id) + '">' + esc(opt) + '</label>';
       });
-      inner += '</div>';
+      inner += '</div></fieldset>';
     }
     div.innerHTML = inner;
     wrap.appendChild(div);
@@ -1574,6 +1729,16 @@ document.getElementById("gateGo").addEventListener("click", function(){
 document.getElementById("gateKey").addEventListener("keydown", function(e){
   if (e.key === "Enter" && gateAttempt) gateAttempt(this.value.trim());
 });
+/* aria-modal hides the page behind the gate from assistive tech, but Tab would still walk out
+   of it, so keep the focus ring inside the card while it is up. */
+document.getElementById("gate").addEventListener("keydown", function(e){
+  if (e.key !== "Tab") return;
+  var f = this.querySelectorAll("input, button, a[href]");
+  if (!f.length) return;
+  var first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+});
 
 /* ================= EDIT MODE (admin) ================= */
 var EDIT;   // declaration only — an initializer here would run after (and clobber)
@@ -1596,13 +1761,16 @@ function renderEditor(){
     card.className = "edcard";
     card.dataset.id = c.id;
     var chips = EDIT.filter(function(x){ return x.id !== c.id; }).map(function(x){
-      return '<button type="button" class="pchip' + (c.prereqs.indexOf(x.id) !== -1 ? " on" : "") +
-        '" data-pre="' + x.id + '" title="' + esc(x.title) + '">' + x.id + '</button>';
+      var on = c.prereqs.indexOf(x.id) !== -1;
+      return '<button type="button" class="pchip' + (on ? " on" : "") + '" data-pre="' + x.id +
+        '" aria-pressed="' + on + '" aria-label="Chapter ' + x.id + ': ' + esc(x.title) +
+        '" title="' + esc(x.title) + '">' + x.id + '</button>';
     }).join("");
     card.innerHTML =
       '<div class="edhead"><span class="edid">Ch ' + c.id + '</span>' +
       '<input data-f="part" value="' + esc(c.part) + '" title="Part / section name" aria-label="Part">' +
-      '<button class="eddel" title="Delete this chapter">&#128465;</button></div>' +
+      '<button type="button" class="eddel" aria-label="Delete Chapter ' + c.id +
+      '" title="Delete this chapter">&#128465;</button></div>' +
       '<label class="f">Title<input data-f="title" value="' + esc(c.title) + '"></label>' +
       '<label class="f">Summary <small>(shown when a respondent clicks the chapter)</small>' +
       '<textarea data-f="notes">' + esc(c.notes || "") + '</textarea></label>' +
@@ -1628,6 +1796,7 @@ document.getElementById("edGrid").addEventListener("click", function(e){
     var i = c.prereqs.indexOf(pre);
     if (i === -1) c.prereqs.push(pre); else c.prereqs.splice(i, 1);
     chip.classList.toggle("on");
+    chip.setAttribute("aria-pressed", chip.classList.contains("on"));
     return;
   }
   var del = e.target.closest(".eddel");
@@ -1655,7 +1824,9 @@ document.getElementById("edAdd").addEventListener("click", function(){
              title: "New chapter", sections: [], notes: "", prereqs: []});
   renderEditor();
   var cards = document.querySelectorAll(".edcard");
-  cards[cards.length - 1].scrollIntoView({behavior:"smooth", block:"center"});
+  cards[cards.length - 1].scrollIntoView({behavior: scrollBehavior(), block:"center"});
+  var t = cards[cards.length - 1].querySelector('input[data-f="title"]');
+  if (t) t.focus();
 });
 document.getElementById("edReload").addEventListener("click", function(){
   EDIT = JSON.parse(JSON.stringify(CONFIG.chapters));
@@ -1726,7 +1897,7 @@ document.getElementById("btnSubmit").addEventListener("click", function(){
   state.sessions.forEach(function(l){ placed += l.length; });
   if (!placed){
     toast("Place at least one chapter into a session before submitting.", true);
-    document.querySelector(".buildbar").scrollIntoView({behavior:"smooth", block:"start"});
+    document.querySelector(".buildbar").scrollIntoView({behavior: scrollBehavior(), block:"start"});
     return;
   }
   var v = wholeOrderViolation();
@@ -2048,19 +2219,24 @@ function analyzeRender(){
     '<p class="subt">Each row is a chapter (in book order); each cell is a tenth of the course. Darker means ' +
     'more respondents start the chapter there — a tight dark band is consensus, a smear is disagreement. ' +
     'Hover any cell for the exact count.</p>' +
-    '<div class="heatwrap"><table class="heat"><tr><th></th>' +
-    '<th colspan="4" style="text-align:left">start of course</th><th colspan="3">middle</th>' +
-    '<th colspan="3" style="text-align:right">end</th><th></th></tr>' +
+    '<div class="heatwrap"><table class="heat">' +
+    '<caption class="sr-only">Where each chapter starts, by tenth of the course</caption>' +
+    '<tr><th></th>' +
+    '<th colspan="4" scope="colgroup" style="text-align:left">start of course</th>' +
+    '<th colspan="3" scope="colgroup">middle</th>' +
+    '<th colspan="3" scope="colgroup" style="text-align:right">end</th><th></th></tr>' +
     chapters.map(function(c){
       var s = A.ch[c.id];
       var mx = Math.max.apply(null, s.bins.concat([1]));
-      return '<tr><td class="rowlab" style="color:' + partColor[c.part] + '"><b>Ch ' + c.id + '</b> ' +
-        esc(c.title) + '</td>' +
+      return '<tr><th scope="row" class="rowlab" style="color:' + textColor[c.part] + '"><b>Ch ' + c.id + '</b> ' +
+        esc(c.title) + '</th>' +
         s.bins.map(function(v, b){
           var tt = "Ch " + c.id + " starts in the " + (b*10) + "–" + (b*10+10) + "% stretch of the course in " +
             v + " of " + A.n + " responses";
+          // Cell shade alone is not readable text, so the count goes in the cell for screen readers.
           return '<td><div class="cell" style="background:' +
-            heatColor((v / mx) * (s.placed / Math.max(1, A.n))) + '" title="' + esc(tt) + '"></div></td>';
+            heatColor((v / mx) * (s.placed / Math.max(1, A.n))) + '" title="' + esc(tt) + '"></div>' +
+            (v ? '<span class="sr-only">' + (b*10) + " to " + (b*10+10) + "%: " + v + '</span>' : '') + '</td>';
         }).join("") +
         '<td class="inc">' + pct(s.incRate) + ' include</td></tr>';
     }).join("") + '</table></div></div>';
@@ -2075,7 +2251,7 @@ function analyzeRender(){
         return '<div class="barrow" title="' + esc(chapShort(c.id) + ": scheduled by " + s.placed + " of " + A.n +
             ", explicitly discarded by " + s.discarded) + '">' +
           '<span class="lab"><b>Ch ' + c.id + '</b> ' + esc(c.title) + '</span>' +
-          '<span class="btrack"><i class="bfill" style="width:' + Math.round(s.incRate * 100) + '%;background:' +
+          '<span class="btrack" aria-hidden="true"><i class="bfill" style="width:' + Math.round(s.incRate * 100) + '%;background:' +
             chartColor[c.part] + '"></i></span>' +
           '<span class="val">' + pct(s.incRate) + (s.meanSpan ? ' &middot; ' + num(s.meanSpan) + ' sess.' : '') + '</span></div>';
       }).join("") + '</div>';
@@ -2088,7 +2264,7 @@ function analyzeRender(){
       '<p class="subt">Chapter pairs that respondents order both ways — the genuine sequencing debates. ' +
       'Pairs everyone orders the same way don&rsquo;t appear.</p><div class="pairlist">' +
       contested.map(function(p){
-        return '<div class="pairrow"><span class="pairbar" title="' +
+        return '<div class="pairrow"><span class="pairbar" aria-hidden="true" title="' +
           esc(Math.round(p.aFirst*100) + "% schedule Ch " + p.a + " first (" + p.both + " placed both)") + '">' +
           '<i style="width:' + Math.round(p.aFirst*100) + '%;background:' + CHART_COLORS[0] + '"></i>' +
           '<i style="flex:1;background:' + CHART_COLORS[1] + '"></i></span>' +
@@ -2110,10 +2286,13 @@ function analyzeRender(){
           (cp.members.length > 6 ? "&hellip;" : "") + '</p>' +
           '<div class="ord">' +
           cp.order.map(function(id){
-            return '<span style="background:' + chartColor[byId[id].part] + '" title="' + esc(chapShort(id)) + '">' + id + '</span>';
+            return '<span style="background:' + textColor[byId[id].part] + '" title="' + esc(chapShort(id)) + '">' +
+              id + '<span class="sr-only"> ' + esc(byId[id].title) + '</span></span>';
           }).join("") +
           cp.dropped.map(function(id){
-            return '<span class="drop" title="' + esc(chapShort(id)) + ' — left out by most of this camp">' + id + '</span>';
+            // The strikethrough is the only visual cue that these are dropped — say so as well.
+            return '<span class="drop" title="' + esc(chapShort(id)) + ' — left out by most of this camp">' +
+              id + '<span class="sr-only"> ' + esc(byId[id].title) + ', left out by most of this camp</span></span>';
           }).join("") +
           '</div></div>';
       }).join("") + '</div></div>';
@@ -2158,15 +2337,20 @@ function analyzeRender(){
   /* --- individual responses --- */
   h += '<div class="ansec"><h3>Individual responses</h3>' +
     '<p class="subt">Click a row to see that instructor&rsquo;s course exactly as they built it.</p>' +
-    '<div style="overflow-x:auto"><table class="rtable"><thead><tr><th>#</th><th>When</th><th>Name</th>' +
-    '<th>Institution / course</th><th>Sessions</th><th>Used</th><th>Unused</th></tr></thead><tbody>' +
+    '<div style="overflow-x:auto"><table class="rtable">' +
+    '<caption class="sr-only">Every response; open one to see the course as it was built</caption>' +
+    '<thead><tr><th scope="col">#</th><th scope="col">When</th><th scope="col">Name</th>' +
+    '<th scope="col">Institution / course</th><th scope="col">Sessions</th>' +
+    '<th scope="col">Used</th><th scope="col">Unused</th></tr></thead><tbody>' +
     rs.map(function(r, i){
       var f = A.facts[i];
       var when = r.timestamp ? String(r.timestamp).slice(0, 10) : "—";
-      return '<tr data-resp="' + i + '"><td>' + (i+1) + '</td>' +
+      // Clicking the row is a mouse convenience; the button is what a keyboard reaches.
+      return '<tr data-resp="' + i + '"><td><button type="button" class="rowbtn" aria-label="Show response ' +
+        (i+1) + (r.name ? ", " + esc(r.name) : "") + '">' + (i+1) + '</button></td>' +
         '<td>' + esc(when) + '</td><td>' + esc(r.name || "—") + '</td><td>' + esc(r.institution || "—") + '</td>' +
         '<td>' + f.n + '</td><td>' + f.placed.length + '</td><td>' + (f.unused.length || "—") + '</td></tr>';
-    }).join("") + '</tbody></table></div><div id="anDetail"></div></div>';
+    }).join("") + '</tbody></table></div><div id="anDetail" tabindex="-1"></div></div>';
 
   /* --- AI analysis --- */
   h += '<div class="ansec"><h3>AI analysis</h3>' +
@@ -2177,10 +2361,11 @@ function analyzeRender(){
         'Sheet (TOC Survey menu &rarr; Set Anthropic API key). A full report can take a minute or two.</p>'
       : '<p class="note"><b>Preview mode:</b> the AI features need the deployed backend, so these are disabled here.</p>') +
     '<div class="btnrow" style="margin-top:0"><button class="btn" id="llmReport"' + (IS_LIVE ? '' : ' disabled') +
-    '>Generate report</button><span class="hint" id="llmStatus"></span></div>' +
-    '<div class="report" id="llmReportOut"></div>' +
-    '<div class="chatlog" id="chatLog"></div>' +
-    '<div class="chatrow"><textarea id="chatIn" placeholder="Ask about the responses — e.g. “Which two chapters could we merge with the least resistance?”"' +
+    '>Generate report</button><span class="hint" id="llmStatus" role="status"></span></div>' +
+    '<div class="report" id="llmReportOut" role="region" aria-label="AI report" tabindex="-1"></div>' +
+    '<div class="chatlog" id="chatLog" role="log" aria-live="polite" aria-label="Conversation"></div>' +
+    '<div class="chatrow"><textarea id="chatIn" aria-label="Ask a question about the responses"' +
+    ' placeholder="Ask about the responses — e.g. “Which two chapters could we merge with the least resistance?”"' +
     (IS_LIVE ? '' : ' disabled') + '></textarea>' +
     '<button class="btn secondary" id="chatGo"' + (IS_LIVE ? '' : ' disabled') + '>Ask</button></div>' +
     '</div></div>';
@@ -2208,8 +2393,8 @@ function quotesSection(title, items){
     items.map(function(t){
       var r = AN.responses[t.i];
       return '<div class="quote">&ldquo;' + esc(String(t.text).trim()) + '&rdquo;' +
-        '<div class="who">&mdash; <a data-jump="' + t.i + '">' + esc(respLabel(r, t.i)) +
-        (r.institution ? ", " + esc(r.institution) : "") + '</a></div></div>';
+        '<div class="who">&mdash; <button type="button" data-jump="' + t.i + '">' + esc(respLabel(r, t.i)) +
+        (r.institution ? ", " + esc(r.institution) : "") + '</button></div></div>';
     }).join("") + '</div></div>';
 }
 /* Quote attributions jump to the individual view (delegated: quotes re-render often). */
@@ -2224,7 +2409,10 @@ function selectResp(i){
   });
   renderDetail(i);
   var d = document.getElementById("anDetail");
-  if (d) d.scrollIntoView({behavior: "smooth", block: "nearest"});
+  if (d){
+    d.focus({preventScroll: true});   // the detail appears well below the row that opened it
+    d.scrollIntoView({behavior: scrollBehavior(), block: "nearest"});
+  }
 }
 function renderDetail(i){
   var r = AN.responses[i];
@@ -2254,7 +2442,7 @@ function renderDetail(i){
       id = Number(id);
       var c = byId[id], k = f.spanOf(id);
       h += '<div class="minichip" style="border-left-color:' + (c ? partColor[c.part] : "#999") + '">' +
-        '<span class="cn" style="color:' + (c ? partColor[c.part] : "#999") + '">Ch ' + id + '</span> ' +
+        '<span class="cn" style="color:' + (c ? textColor[c.part] : "var(--ink-soft)") + '">Ch ' + id + '</span> ' +
         esc(c ? c.title : "removed chapter") + (k > 1 ? ' <i>(runs ' + k + ' sessions)</i>' : '') + '</div>';
     });
   }
@@ -2370,7 +2558,9 @@ var REPORT_PROMPT =
 function runReport(){
   if (AN.busy) return;
   llmSend("report", [{role: "user", content: REPORT_PROMPT}], 10000, function(text){
-    document.getElementById("llmReportOut").innerHTML = mdToHtml(text);
+    var out = document.getElementById("llmReportOut");
+    out.innerHTML = mdToHtml(text);
+    out.focus({preventScroll: true});
   });
 }
 function runChat(){
