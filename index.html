@@ -94,7 +94,9 @@
   .session h3 .num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
     border-radius:50%;background:var(--chartreuse);color:#3a3a00;font-size:12.5px;font-weight:700;letter-spacing:0}
   .slotbody{min-height:44px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
-  .slotbody.dragover{background:#fdf6d8;box-shadow:inset 0 0 0 2px var(--gold);border-radius:0 0 8px 8px}
+  /* the whole session box is the drop target, header included */
+  .session.dragover{background:#fdf6d8;box-shadow:inset 0 0 0 2px var(--gold)}
+  .session.dragover h3{border-bottom-color:var(--gold)}
   .empties{font-size:13px;color:#b0a89c;font-style:italic;padding:2px 4px}
 
   /* chapter cards */
@@ -198,6 +200,9 @@
   .done h2{color:var(--red)}
   .done p{font-family:var(--serif);font-size:17px}
   .credit{margin-top:40px;font-size:12.5px;color:var(--ink-soft)}
+  .credit .adminlinks{opacity:.35}
+  .credit .adminlinks a{color:inherit;text-decoration:none;border-bottom:1px dotted currentColor}
+  .credit .adminlinks:hover{opacity:.75}
 
   /* ---------- password gate ---------- */
   #gate{position:fixed;inset:0;background:rgba(42,38,36,.45);display:none;align-items:center;
@@ -588,7 +593,7 @@
     <div class="buildbar">
       <span class="count">Class sessions:
         <button type="button" class="stepbtn" id="btnSessMinus" title="One fewer session">&minus;</button>
-        <input type="number" id="numSessions2" min="1" max="60">
+        <input type="number" id="numSessions2" min="1" max="60" value="14">
         <button type="button" class="stepbtn" id="btnSessPlus" title="One more session">+</button>
       </span>
       <button type="button" class="btn secondary small" id="btnPrefill"
@@ -667,7 +672,7 @@
     <div id="anBody"></div>
   </section>
 
-  <p class="credit">Snowberg, Stevenson &amp; Wolfers — <i>Managerial Economics</i> (in development, Macmillan Learning).</p>
+  <p class="credit">Snowberg, Stevenson &amp; Wolfers — <i>Managerial Economics</i> (in development, Macmillan Learning). <span class="adminlinks"><a href="#edit">Chapter editor</a> &middot; <a href="#analyze">Results dashboard</a></span></p>
 </div>
 
 <div id="toast" role="status"></div>
@@ -1084,11 +1089,11 @@ function render(){
   state.sessions.forEach(function(list, s){
     var box = document.createElement("div");
     box.className = "session";
+    box.dataset.drop = "session";      // whole box, not just the chip area, accepts a drop
+    box.dataset.session = s;
     box.innerHTML = '<h3><span class="num">' + (s+1) + '</span> Session ' + (s+1) + '</h3>';
     var body = document.createElement("div");
     body.className = "slotbody";
-    body.dataset.drop = "session";
-    body.dataset.session = s;
     var ghosts = ghostsFor(s);
     if (!list.length && !ghosts.length) body.innerHTML = '<div class="empties">' +
       (IS_TOUCH ? 'tap <b>+</b> on a chapter to place it here' : 'drop a chapter here') + '</div>';
