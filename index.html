@@ -69,6 +69,27 @@
   .addsession{width:100%;border:1.5px dashed var(--line);background:transparent;border-radius:8px;
     color:var(--slate);font-family:var(--sans);font-size:14px;font-weight:600;padding:10px;cursor:pointer}
   .addsession:hover{border-color:var(--slate);background:var(--wash)}
+  /* First-load feedback: the chapter list comes from the Sheet, and a cold Apps Script
+     can take several seconds to answer — show the page's shape and say what's happening. */
+  .loadcard{background:var(--card);border:1px solid var(--line);border-radius:8px;
+    padding:12px 16px;margin:0 0 18px;font-size:14px;color:var(--ink-soft)}
+  .loadcard[hidden]{display:none}
+  .loadcard .loadrow{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink)}
+  .spin{width:15px;height:15px;flex-shrink:0;border-radius:50%;border:2px solid var(--line);
+    border-top-color:var(--red);animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loadbar{height:6px;background:#e8e3d9;border-radius:3px;overflow:hidden;margin:10px 0 0}
+  .loadbar i{display:block;height:100%;width:0;background:var(--red);border-radius:3px;transition:width .35s ease}
+  .loadcard.failed .loadbar i{background:var(--slate)}
+  .loadhint{margin:8px 0 0;font-size:13px}
+  .loadcard .btn{margin:10px 0 0}
+  .loadhint[hidden]{display:none}
+  .skel{border-radius:6px;background:linear-gradient(90deg,#efeae1 25%,#f7f3ec 50%,#efeae1 75%);
+    background-size:400% 100%;animation:shimmer 1.4s ease-in-out infinite}
+  .skelchip{height:36px;margin:0 0 6px}
+  @media (prefers-reduced-motion: reduce){ .spin,.skel{animation:none} }
+  @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+
   .progress{flex:1;min-width:180px;display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft)}
   .pbar{flex:1;height:8px;background:#e8e3d9;border-radius:4px;overflow:hidden}
   .pbar i{display:block;height:100%;background:var(--chartreuse);width:0%}
@@ -592,6 +613,15 @@
     <p class="lede" id="ledeBuild">We are writing a new business economics textbook, and we want its structure to match the
       way you actually teach. Drag the chapters on the right into your class sessions, in the order you'd
       cover them — and toss anything you wouldn't teach into the unused pile. Click any title for details.</p>
+    <div class="loadcard" id="loadCard" hidden>
+      <div class="loadrow" role="status" aria-live="polite">
+        <span class="spin" id="loadSpin" aria-hidden="true"></span>
+        <span id="loadMsg">Loading the chapter list&hellip;</span>
+      </div>
+      <div class="loadbar"><i id="loadFill"></i></div>
+      <p class="loadhint" id="loadHint" hidden></p>
+      <button type="button" class="btn secondary small" id="loadRetry" hidden>Try again</button>
+    </div>
     <div class="buildbar">
       <span class="count">Class sessions:
         <button type="button" class="stepbtn" id="btnSessMinus" title="One fewer session">&minus;</button>
@@ -678,7 +708,7 @@
 
   <p class="credit"><span>Snowberg, Stevenson &amp; Wolfers — <i>Managerial Economics</i> (in development, Macmillan Learning).</span> <span class="adminlinks"><a href="#edit">Chapter editor</a> &middot; <a href="#analyze">Results dashboard</a></span></p>
   <!-- Bump both the datetime attribute and the fallback text whenever this file is deployed. -->
-  <p class="updated">Last updated <time id="lastUpdated" datetime="2026-08-29T13:40:00-04:00">29 August 2026, 1:40&#8239;PM ET</time></p>
+  <p class="updated">Last updated <time id="lastUpdated" datetime="2026-08-29T13:45:00-04:00">29 August 2026, 1:45&#8239;PM ET</time></p>
 </div>
 
 <div id="toast" role="status"></div>
@@ -854,8 +884,80 @@ function boot(cfg){
   renderExtraQs();
   detectRoute();
 }
+/* ================= FIRST-LOAD FEEDBACK =================
+   Until the Sheet answers there are no chapters to draw, so the page would otherwise sit
+   empty. Lay out the session boxes straight away, and keep a labelled bar moving so the
+   wait is visibly a wait (the bar eases toward 92% — a single request has no true
+   percentage — and jumps to 100% when the chapters land). */
+var LOAD = {t0:0, timer:null, stage:-1};
+function loadSkeleton(){
+  var n = state.n;
+  try{
+    var saved = JSON.parse(localStorage.getItem("meTocSurvey") || "null");
+    if (saved && saved.n) n = Math.max(1, Math.min(60, Number(saved.n) || n));
+  }catch(e){}
+  var boxes = "";
+  for (var s=0; s<n; s++)
+    boxes += '<div class="session"><h3><span class="num">' + (s+1) + '</span> Session ' + (s+1) +
+             '</h3><div class="slotbody"><div class="skel skelchip"></div></div></div>';
+  document.getElementById("sessionsCol").innerHTML = boxes;
+  var chips = "";
+  for (var i=0; i<7; i++) chips += '<div class="skel skelchip"></div>';
+  document.getElementById("bankGroups").innerHTML = chips;
+}
+function setLoadStage(stage, msg, hint){
+  if (LOAD.stage >= stage) return;
+  LOAD.stage = stage;
+  document.getElementById("loadMsg").textContent = msg;
+  var h = document.getElementById("loadHint");
+  h.textContent = hint || "";
+  h.hidden = !hint;
+}
+function startLoading(){
+  var card = document.getElementById("loadCard");
+  card.hidden = false;
+  card.classList.remove("failed");
+  document.getElementById("loadSpin").hidden = false;
+  document.getElementById("loadRetry").hidden = true;
+  document.getElementById("loadFill").style.width = "0%";
+  LOAD.stage = -1;
+  setLoadStage(0, "Loading the chapter list…", "");
+  loadSkeleton();
+  LOAD.t0 = Date.now();
+  clearInterval(LOAD.timer);
+  LOAD.timer = setInterval(function(){
+    var t = (Date.now() - LOAD.t0) / 1000;
+    document.getElementById("loadFill").style.width = Math.round(92 * (1 - Math.exp(-t/5))) + "%";
+    if (t > 20) setLoadStage(2, "Still waiting on the survey database…",
+      "Longer than usual. If nothing appears shortly, reload the page.");
+    else if (t > 5) setLoadStage(1, "Waking the survey database…",
+      "The chapter list lives in a Google Sheet, which can take a few seconds to answer.");
+  }, 250);
+}
+function endLoading(ok){
+  clearInterval(LOAD.timer); LOAD.timer = null;
+  var card = document.getElementById("loadCard");
+  document.getElementById("loadFill").style.width = "100%";
+  if (ok){ setTimeout(function(){ card.hidden = true; }, 300); return; }
+  card.classList.add("failed");
+  document.getElementById("loadSpin").hidden = true;
+  document.getElementById("loadRetry").hidden = false;
+  LOAD.stage = -1;   // a failure outranks whatever stage the timer reached
+  setLoadStage(3, "Couldn't reach the survey database.",
+    "Showing the book's own chapter list so you can look around — but a response submitted now may not save.");
+}
+function fetchConfig(){
+  startLoading();
+  apiCall({action:"config"},
+    function(cfg){
+      if (!cfg || !cfg.chapters || !cfg.chapters.length){ endLoading(false); boot(DEFAULT_CONFIG); return; }
+      endLoading(true); boot(cfg);
+    },
+    function(){ endLoading(false); boot(DEFAULT_CONFIG); });
+}
+document.getElementById("loadRetry").addEventListener("click", fetchConfig);
 if (IS_LIVE){
-  apiCall({action:"config"}, boot, function(){ boot(DEFAULT_CONFIG); });
+  fetchConfig();
 } else {
   document.getElementById("previewNote").hidden = false;
   var cfg = DEFAULT_CONFIG;
