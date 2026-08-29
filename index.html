@@ -607,7 +607,9 @@
         <p class="hint" id="bankHint">Drag a chapter into a session, or use <b>+</b> to place it
           (<b>&#8644;</b> moves a placed chapter). Click the arrow by a
           title for details. Once placed, <b>&#10515;</b> continues a chapter into the next session.
-          Drag to <b>Unused</b> (or press 🗑) for anything you wouldn't teach.</p>
+          Drag to <b>Unused</b> (or press 🗑) for anything you wouldn't teach.
+          Chapters sharing a session can be taught in any order you like — we list them
+          in whatever order their requirements need.</p>
         <div id="bankGroups"></div>
         <div class="unused">
           <h4>Unused pile</h4>
@@ -874,35 +876,56 @@ function placedPos(id){
   }
   return null;
 }
-function cmpPos(a,b){ return a.s !== b.s ? a.s - b.s : a.i - b.i; }
 function dependentsOf(id){
   return CONFIG.chapters.filter(function(c){ return c.prereqs.indexOf(id) !== -1; }).map(function(c){ return c.id; });
 }
 function spanOf(id){ return Math.max(1, Number(state.spans[id]) || 1); }
-/* Where a chapter finishes: its own slot if it takes one session, else the top of its last session
-   (i:-0.5 sorts before every real slot in that session, so chapters there count as "after" it). */
-function endFrom(pos, k){ return k === 1 ? pos : {s: pos.s + k - 1, i: -0.5}; }
-function endPosOf(id){
+/* Requirements are enforced session by session, not slot by slot: two chapters sharing a
+   session are assumed to be taught in whichever order the requirements need, and
+   sortSession() lists them that way. Only a prerequisite landing in a *later* session
+   than the chapter that needs it is a real conflict. */
+function endSessionOf(id){                 // last session a chapter occupies (spans cover several)
   var p = placedPos(id);
-  return p ? endFrom(p, spanOf(id)) : null;
+  return p ? p.s + spanOf(id) - 1 : null;
 }
-/* Can chapter `id` sit at (s,i), given current placements (with `id` removed)? */
-function violationFor(id, s, i){
-  var me = {s:s, i:i};
-  var myEnd = endFrom(me, spanOf(id));
+/* Can chapter `id` sit in session `s`, given current placements (with `id` removed)? */
+function violationFor(id, s){
+  var myEnd = s + spanOf(id) - 1;
   var c = byId[id];
   for (var k=0;k<c.prereqs.length;k++){
-    var pe = endPosOf(c.prereqs[k]);
-    if (!pe) return chapLabel(c) + " requires " + chapLabel(byId[c.prereqs[k]]) + " to be scheduled first.";
-    if (cmpPos(pe, me) >= 0) return chapLabel(byId[c.prereqs[k]]) + " must finish before " + chapLabel(c) + " begins.";
+    var pe = endSessionOf(c.prereqs[k]);
+    if (pe === null) return chapLabel(c) + " requires " + chapLabel(byId[c.prereqs[k]]) + " to be scheduled first.";
+    if (pe > s) return chapLabel(byId[c.prereqs[k]]) + " must be covered no later than the session " + chapLabel(c) + " starts in.";
   }
   var deps = dependentsOf(id);
   for (var d=0;d<deps.length;d++){
     var dp = placedPos(deps[d]);
-    if (dp && cmpPos(myEnd, dp) >= 0) return chapLabel(c) + " must finish before " + chapLabel(byId[deps[d]]) + " (a chapter that builds on it) begins.";
+    if (dp && dp.s < myEnd) return chapLabel(c) + " must be covered no later than the session " + chapLabel(byId[deps[d]]) + " (a chapter that builds on it) starts in.";
   }
   return null;
 }
+/* Lists one session's chapters with prerequisites ahead of the chapters that build on them,
+   keeping the instructor's own order wherever the requirements leave it free. */
+function sortSession(s){
+  var list = state.sessions[s];
+  if (!list || list.length < 2) return;
+  var rank = {}, indeg = {}, out = {};
+  list.forEach(function(id, i){ rank[id] = i; indeg[id] = 0; out[id] = []; });
+  list.forEach(function(id){
+    byId[id].prereqs.forEach(function(pre){
+      if (rank[pre] !== undefined){ out[pre].push(id); indeg[id]++; }
+    });
+  });
+  var ready = list.filter(function(id){ return !indeg[id]; }), res = [];
+  while (ready.length){
+    ready.sort(function(a,b){ return rank[a] - rank[b]; });
+    var id = ready.shift();
+    res.push(id);
+    out[id].forEach(function(d){ if (--indeg[d] === 0) ready.push(d); });
+  }
+  if (res.length === list.length) state.sessions[s] = res;   // a requirement cycle: leave it alone
+}
+function sortAllSessions(){ for (var s=0; s<state.sessions.length; s++) sortSession(s); }
 /* Sessions covered by continuations of chapters that started earlier. */
 function ghostsFor(s){
   var out = [];
@@ -922,12 +945,12 @@ function trySetSpan(id, k){
     toast("No later session to continue into — use “+ Add a session” first.", true);
     return;
   }
-  var myEnd = endFrom(p, k);
+  var myEnd = p.s + k - 1;
   var deps = dependentsOf(id);
   for (var j=0;j<deps.length;j++){
     var dp = placedPos(deps[j]);
-    if (dp && cmpPos(myEnd, dp) >= 0){
-      toast(chapLabel(byId[id]) + " must finish before " + chapLabel(byId[deps[j]]) + " begins — move that chapter later first.", true);
+    if (dp && dp.s < myEnd){
+      toast(chapLabel(byId[id]) + " would run past the session " + chapLabel(byId[deps[j]]) + " starts in — move that chapter later first.", true);
       return;
     }
   }
@@ -955,13 +978,16 @@ function tryPlace(id, s, i, quiet){
   detach(id);
   if (from && from.s === s && from.i < i) i--;           // account for removal shift
   i = Math.max(0, Math.min(i, state.sessions[s].length));
-  var v = violationFor(id, s, i);
+  var v = violationFor(id, s);
   if (v){
     if (from) state.sessions[from.s].splice(from.i, 0, id);   // put it back
     toast(v, true);
     return false;
   }
   state.sessions[s].splice(i, 0, id);
+  sortSession(s);   // requirements settle the order within a session
+  if (state.sessions[s].indexOf(id) !== i)
+    toast("Within a session, chapters are listed in the order their requirements need.");
   // clamp the span if the new spot is too close to the last session
   var k = spanOf(id);
   if (s + k - 1 > state.sessions.length - 1){
@@ -1013,6 +1039,7 @@ function setSessionCount(n){
       if (s + spanOf(id) - 1 > n - 1) state.spans[id] = n - s;
     });
   });
+  sortAllSessions();
   persist(); render();
 }
 
@@ -1295,9 +1322,9 @@ function wholeOrderViolation(){
     for (var i=0; i<state.sessions[s].length; i++){
       var c = byId[state.sessions[s][i]];
       for (var k=0; k<c.prereqs.length; k++){
-        var pe = endPosOf(c.prereqs[k]);
-        if (!pe || cmpPos(pe, {s:s, i:i}) >= 0)
-          return {id: c.id, msg: chapLabel(byId[c.prereqs[k]]) + " must finish before " + chapLabel(c) + " begins — the chapter requirements changed. Please adjust your ordering."};
+        var pe = endSessionOf(c.prereqs[k]);
+        if (pe === null || pe > s)
+          return {id: c.id, msg: chapLabel(byId[c.prereqs[k]]) + " must be covered no later than the session " + chapLabel(c) + " starts in — the chapter requirements changed. Please adjust your ordering."};
       }
     }
   }
@@ -1324,6 +1351,7 @@ document.getElementById("btnPrefill").addEventListener("click", function(){
   }
   var prev = state;
   state = {n:n, sessions:sessions, unused:[], spans:{}, prefilled:true};
+  sortAllSessions();
   if (wholeOrderViolation()){   // possible if the sheet's row order disagrees with the prereqs
     state = prev;
     toast("The book's own chapter order conflicts with the chapter requirements — please build your TOC by hand.", true);
