@@ -202,9 +202,9 @@ are sanitized against formula injection. Export any time with File → Download 
 CSV/XLSX, or the dashboard's CSV/JSON downloads. The Sheet itself stays private to your
 Google account; only the survey page is public.
 
-**Response notifications** — the sheet owner gets a short email per submission (name,
-institution, the TOC, likes/missing). Turn off with `NOTIFY_ON_RESPONSE = false` at the
-top of `Code.gs`.
+**Response notifications** — off. Set `NOTIFY_ON_RESPONSE = true` at the top of
+`Code.gs` to have the sheet owner emailed a short summary per submission (name,
+institution, the TOC, likes/missing); responses land in the Sheet either way.
 
 ## Preview without deploying
 
