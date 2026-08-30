@@ -1474,6 +1474,11 @@ function restore(){
       state.sessions = state.sessions.map(function(l){ return l.filter(function(id){ return byId[id]; }); });
       state.unused = (state.unused || []).filter(function(id){ return byId[id] && !isOwn(id); });
       state.spans = state.spans || {};
+      // A chapter deleted from the Sheet since this draft was saved has just been filtered out
+      // of the board; its span should go with it.
+      Object.keys(state.spans).forEach(function(k){
+        if (!placedPos(Number(k))) delete state.spans[k];
+      });
       pruneOwn();
       return true;
     }
