@@ -1550,12 +1550,12 @@ function applyAnswers(extra){
         if (Array.isArray(cell) ? cell.indexOf(el.value) !== -1 : String(cell) === el.value) el.checked = true;
       }
     } else if (q.type === "dropdown"){
-      var t = String(v);
+      var t = answerText(v);
       var known = q.options.indexOf(t) !== -1;
       if (known) els[0].value = t;
       else if (t && other){ els[0].value = "__other__"; other.value = t; }
     } else {
-      els[0].value = String(v);
+      els[0].value = answerText(v);
     }
   });
 }
