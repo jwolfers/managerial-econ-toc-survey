@@ -15,6 +15,15 @@ chapters are recorded in the readable TOC ("runs N sessions") and as `spans` in 
 column. Prerequisite enforcement treats a spanned chapter as finishing in its last
 session: dependent chapters must start at or after that session.
 
+**Nothing a respondent does is lost by accident.** A part-built response is kept in their
+browser — the board, and every word they have typed — so a closed tab or a crashed browser
+costs nothing, and the draft is cleared only once the response is safely submitted. Cutting the
+session count is the one destructive control, so it asks first whenever sessions being removed
+still hold chapters or their own topics, and the count box ignores a value it can't read (an
+emptied box means "no change", not "one session"). A chapter refused a session because of its
+prerequisites goes back exactly where it came from, unused pile included, and a chapter that
+leaves the board forgets how many sessions it ran, so it never returns silently stretched.
+
 **The constraints, said up front.** Chapter 1 is the cost-benefit toolkit every part opener
 requires, so the prerequisites can only ever place it first — but "Approach" in its title reads
 like a preface, and instructors were meeting the rule as an error message. So a note under the
@@ -116,7 +125,9 @@ Do **not** put `Code.gs` in the repo.
 Both are gated by the **admin password** — see or change it in the Sheet under the
 **TOC Survey menu**. The password is checked server-side on every
 privileged call and never appears in the public front-end files; your browser remembers
-it after the first successful entry.
+it after the first successful entry. Because the web app is public, eight wrong guesses in a
+row lock admin calls for a minute — long enough to make guessing hopeless, short enough never
+to be a problem for you (and changing the password lifts it at once).
 
 **`/edit` — survey editor**, in three tabs.
 
@@ -152,7 +163,8 @@ switches back to that round rather than starting a second one. The dashboard the
 round at a time, so a test run never mixes into the real results. (The same thing is on the
 Sheet's **TOC Survey menu → Start a new round of surveys**.)
 
-Saving the Chapters or Questions tab updates the Sheet, so changes reach respondents
+Saving one tab leaves unsaved edits in the other alone, and a save only ever writes its own
+tab. Saving the Chapters or Questions tab updates the Sheet, so changes reach respondents
 immediately. In the local preview, `index.html#edit` saves only to that browser.
 
 **`/analyze` — results dashboard.** Every statistic is computed in the page from the raw
@@ -258,7 +270,12 @@ flattens to `a | b` there and a grid answer to `row: value | row: value`, while 
 copy keeps them structured. Topics respondents added themselves appear in the readable TOC
 as "Their own topic — …", and in the JSON column as negative ids in `sessions` with their
 titles in `custom`. Free-text cells
-are sanitized against formula injection. Export any time with File → Download →
+are sanitized against formula injection — anything a spreadsheet would evaluate (a leading
+`=`, `+`, `-`, `@`, tab or carriage return) is quoted on the way in, in the Sheet and in the
+dashboard's CSV alike — and every cell is truncated to stay inside the 50,000-character
+ceiling, so one very long answer can't fail the whole row. A response built while the Sheet
+was unreachable — the page falls back to its built-in chapter list — carries
+`fallbackConfig` in the JSON column, so it can be told apart in analysis. Export any time with File → Download →
 CSV/XLSX, or the dashboard's CSV/JSON downloads. The Sheet itself stays private to your
 Google account; only the survey page is public.
 
