@@ -793,9 +793,15 @@
   <section class="step active" id="step-build" tabindex="-1" aria-labelledby="buildHeading">
     <h2 class="sr-only" id="buildHeading">Build your table of contents</h2>
     <p class="lede" id="ledeBuild">We are writing a new business economics textbook, and we want its structure to match the
-      way you actually teach. Drag the chapters on the right into your class sessions, in the order you'd
-      cover them — and toss anything you wouldn't teach into the unused pile. Click any title for details.
+      way you actually teach. Set the number of class sessions to your own course length, then drag the chapters on
+      the right into those sessions, in the order you'd cover them — and toss anything you wouldn't teach into the
+      unused pile. Click any title for details.
       Teach something we haven't listed? Add it to the session you'd teach it in.</p>
+    <p class="lede rules" id="ledeRules"><b>Two things before you start.</b> Chapter 1 isn't a preface — its
+      cost-benefit toolkit is what every later chapter draws on, so it can only be taught first. We've put it in
+      Session 1 to begin with, though it's yours to move. A handful of later chapters likewise build on earlier ones
+      (each part's opening chapter, mostly), so the builder won't let one land ahead of a chapter it depends on —
+      it will say which chapter is in the way. Everything else is free.</p>
     <div class="preqs" id="preQs">
       <h2>First, a few questions</h2>
       <div id="extraQsBefore"></div>
@@ -810,7 +816,7 @@
       <button type="button" class="btn secondary small" id="loadRetry" hidden>Try again</button>
     </div>
     <div class="buildbar">
-      <span class="count"><label for="numSessions2">Class sessions:</label>
+      <span class="count"><label for="numSessions2">How many class sessions?</label>
         <button type="button" class="stepbtn" id="btnSessMinus" aria-label="One fewer class session"
           title="One fewer session">&minus;</button>
         <input type="number" id="numSessions2" min="1" max="60" value="15">
@@ -1165,9 +1171,10 @@ function scrollBehavior(){
 if (IS_TOUCH){
   document.getElementById("ledeBuild").innerHTML =
     "We are writing a new business economics textbook, and we want its structure to match the " +
-    "way you actually teach. Tap <b>+</b> on a chapter to place it into a class session, in the order " +
-    "you'd cover them &mdash; and send anything you wouldn't teach to the unused pile. Tap any title for " +
-    "details. Teach something we haven't listed? Add it to the session you'd teach it in.";
+    "way you actually teach. Set the number of class sessions to your own course length, then tap <b>+</b> on a " +
+    "chapter to place it into a session, in the order you'd cover them &mdash; and send anything you wouldn't " +
+    "teach to the unused pile. Tap any title for details. Teach something we haven't listed? Add it to the " +
+    "session you'd teach it in.";
   document.getElementById("bankHint").innerHTML =
     "Tap <b>+</b> to place a chapter into a session, and <b>&#8644;</b> to move it to another. " +
     "Tap a title for details. Once placed, <b>&#10515;</b> continues a chapter into the next session. " +
@@ -1202,7 +1209,7 @@ function boot(cfg){
   var bar = document.getElementById("colorbar");
   bar.innerHTML = "";
   order.forEach(function(p){ var s = document.createElement("span"); s.style.background = partColor[p]; bar.appendChild(s); });
-  restore();
+  if (!restore()) state = freshState();
   setSessionCount(state.n);
   renderExtraQs();
   detectRoute();
@@ -1295,6 +1302,8 @@ if (!HOSTED){
   window.addEventListener("hashchange", function(){ location.reload(); });
 }
 
+/* Returns true when a response in progress was picked up, so boot() knows whether this is a
+   first visit — the one time the opening chapter gets seeded. */
 function restore(){
   try{
     var saved = JSON.parse(localStorage.getItem("meTocSurvey") || "null");
@@ -1307,10 +1316,35 @@ function restore(){
       state.unused = (state.unused || []).filter(function(id){ return byId[id] && !isOwn(id); });
       state.spans = state.spans || {};
       pruneOwn();
+      return true;
     }
   }catch(e){}
+  return false;
 }
 function persist(){ try{ localStorage.setItem("meTocSurvey", JSON.stringify(state)); }catch(e){} }
+/* Chapter 1 is not a preface — it is the toolkit every part opener requires, so it can only
+   ever sit in the first session. Instructors who read "Approach" in its title as front matter
+   discovered that as an error message; seeding it into Session 1 makes it a fact of the board
+   instead. It stays an ordinary chapter otherwise — free to be moved, stretched or discarded. */
+function openerId(){
+  if (!CONFIG || !CONFIG.chapters.length) return null;
+  var c = CONFIG.chapters[0];
+  return c.prereqs.length ? null : c.id;   // a list whose first chapter isn't the opener: seed nothing
+}
+/* The board a respondent starts from — used on a first visit and by Start over. */
+function freshState(){
+  var st = {n:DEFAULT_SESSIONS, sessions:[], unused:[], spans:{}, custom:{}};
+  for (var s=0; s<DEFAULT_SESSIONS; s++) st.sessions.push([]);
+  var id = openerId();
+  if (id) st.sessions[0].push(id);
+  return st;
+}
+/* Is the builder still exactly as it arrived? (Start over then has nothing to confirm.) */
+function isPristine(){
+  var f = freshState();
+  return JSON.stringify([state.n, state.sessions, state.unused, state.spans, state.custom || {}]) ===
+         JSON.stringify([f.n, f.sessions, f.unused, f.spans, f.custom]);
+}
 
 /* ================= HELPERS ================= */
 function chapLabel(c){ return c.own ? "your topic “" + c.title + "”" : "Chapter " + c.id + ": " + c.title; }
@@ -1747,7 +1781,9 @@ function render(){
   add.type = "button";
   add.className = "addsession";
   add.id = "btnAddSession";
-  add.textContent = "+ Add a session";
+  add.dataset.drop = "addsession";   // dropping a chapter past the last session adds one for it
+  add.innerHTML = "+ Add a session" +
+    (IS_TOUCH ? "" : ' <span class="addhint">· or drop a chapter here</span>');
   col.appendChild(add);
   // bank, grouped by part
   var groups = document.getElementById("bankGroups");
@@ -1853,8 +1889,20 @@ document.addEventListener("drop", function(e){
     tryDiscard(id);
   } else if (kind === "bank"){
     tryReturnToBank(id);
+  } else if (kind === "addsession"){
+    addSessionFor(id);
   }
 });
+/* Dropping a chapter past the last session (or picking "new session" in the ⇄ popup) means
+   "this one needs a session of its own" — make it, then place the chapter there. */
+function addSessionFor(id){
+  var before = state.n;
+  setSessionCount(state.n + 1);
+  if (state.n === before){ toast("That's as many sessions as the survey allows.", true); return; }
+  // A refused placement (a chapter that builds on this one sits earlier) shouldn't leave the
+  // empty session behind.
+  if (!tryPlace(id, state.n - 1, 0)) setSessionCount(before);
+}
 
 /* ================= CLICK ACTIONS ================= */
 document.addEventListener("click", function(e){
@@ -1906,6 +1954,20 @@ function openQuickAdd(anchor, id){
       });
       qaddEl.appendChild(b);
     })(s);
+  }
+  /* Tap (and keyboard) equivalent of dropping a chapter on "+ Add a session". */
+  if (state.sessions.length < 60){
+    var nb = document.createElement("button");
+    nb.className = "newsess";
+    nb.textContent = "+  New session at the end";
+    nb.addEventListener("click", function(ev){
+      ev.stopPropagation();
+      var back = qaddReturn;
+      closeQuickAdd();
+      addSessionFor(id);
+      restoreFocus(back);
+    });
+    qaddEl.appendChild(nb);
   }
   /* The popup is appended to <body> (it is positioned against the document, and the sticky
      chapter bank would otherwise become its containing block), so it lands at the end of the tab
@@ -1997,10 +2059,8 @@ function wholeOrderViolation(){
    The submission records that they started from the prefill. */
 document.getElementById("btnPrefill").addEventListener("click", function(){
   if (!CONFIG) return;   // config still loading
-  var placed = 0;
-  state.sessions.forEach(function(l){ placed += l.length; });
   var ownCount = Object.keys(state.custom || {}).length;
-  if ((placed || state.unused.length) &&
+  if (!isPristine() &&
       !confirm("Replace your current arrangement with the book's chapter order?" +
                (ownCount ? " Your " + ownCount + " own topic(s) will be deleted." : ""))) return;
   var ids = CONFIG.chapters.map(function(c){ return c.id; });
@@ -2031,18 +2091,18 @@ document.getElementById("btnPrefill").addEventListener("click", function(){
    the session count back to the default. The survey's own questions are deliberately left
    alone: this button lives in the builder bar and only claims the arrangement. */
 document.getElementById("btnReset").addEventListener("click", function(){
-  var placed = 0;
-  state.sessions.forEach(function(l){ placed += l.length; });
-  if ((placed || state.unused.length || state.n !== DEFAULT_SESSIONS) &&
+  if (!isPristine() &&
       !confirm("Start over? This clears every chapter you've placed, deletes any topics you added " +
                "yourself, and resets the count to " + DEFAULT_SESSIONS +
                " sessions. Your written answers are kept.")) return;
-  state = {n:DEFAULT_SESSIONS, sessions:[], unused:[], spans:{}, custom:{}};
+  state = freshState();
   openInfo = {};
   topicEdit = null;
   syncOwn();
-  setSessionCount(DEFAULT_SESSIONS);   // fills in the empty sessions, then persists and renders
-  toast("Cleared — every chapter is back in the chapter list.");
+  setSessionCount(state.n);   // fills in the empty sessions, then persists and renders
+  toast(openerId()
+    ? "Cleared — every chapter is back in the chapter list, bar Chapter " + openerId() + " in the first session."
+    : "Cleared — every chapter is back in the chapter list.");
 });
 
 /* ================= SURVEY QUESTIONS =================

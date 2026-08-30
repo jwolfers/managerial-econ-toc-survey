@@ -2,14 +2,27 @@
 
 A one-page drag-and-drop survey in which instructors build their preferred table of
 contents for *Managerial Economics* (Snowberg, Stevenson & Wolfers). Respondents set
-their number of class sessions (default 15, adjustable with ± or "+ Add a session"),
-drag the 15 planned chapters into those sessions (or discard them to an "unused" pile),
+their number of class sessions — the count box asks "How many class sessions?" from a ringed
+card, because it is the one setting everyone must change and it was easy to skim past (default
+15, adjustable with ±, or "+ Add a session", which doubles as a drop target: a chapter dropped
+on it gets a new session of its own at the end, and the ⇄ popup offers the same as "New
+session at the end") —
+then drag the 15 planned chapters into those sessions (or discard them to an "unused" pile),
 optionally stretch a chapter across consecutive sessions (the ⤓ button; later sessions
 show a dashed "continued" card), add topics of their own to any session, answer the survey's own questions — which can sit above
 the sessions, below them, or both — and submit. Every response lands as one row in a Google Sheet; multi-session
 chapters are recorded in the readable TOC ("runs N sessions") and as `spans` in the JSON
 column. Prerequisite enforcement treats a spanned chapter as finishing in its last
 session: dependent chapters must start at or after that session.
+
+**The constraints, said up front.** Chapter 1 is the cost-benefit toolkit every part opener
+requires, so the prerequisites can only ever place it first — but "Approach" in its title reads
+like a preface, and instructors were meeting the rule as an error message. So a note under the
+lede says that Chapter 1 comes first and that a few later chapters follow the ones they build
+on, and a fresh board arrives with Chapter 1 already in Session 1. It stays an ordinary chapter
+otherwise — free to be moved, stretched or discarded — and **Start over** returns the board to
+exactly that state. (The seeding is skipped if the Sheet's first chapter has prerequisites of
+its own, i.e. isn't the opener.)
 
 **Topics of their own.** Under every session sits "+ Add a topic of your own", for
 something an instructor teaches that isn't in our chapter list. A written-in topic
@@ -28,8 +41,9 @@ order — one chapter per session, so the session count becomes the chapter coun
 respondents who mostly agree only express deviations; whether a response started from
 that prefill is recorded (`prefilled` in the JSON column) so anchored responses can be
 segmented in analysis. **Start over** (next to it) empties every session and the unused
-pile and returns the count to 15, after a confirmation; own topics go with it, and the
-written answers are kept. On phones and tablets — where browsers don't
+pile and returns the board to how it arrived — 15 sessions, Chapter 1 in the first — after a
+confirmation; own topics go with it, and the written answers are kept. (On an untouched board
+neither button asks: there is nothing to overwrite.) On phones and tablets — where browsers don't
 support drag-and-drop — the chapter list appears first, the instructions switch to
 tap-based wording, and everything is doable by buttons alone: **+** places a chapter,
 **⇄** moves it between sessions, ▲▼ reorder, ⤓ extends, 🗑 discards — and the
