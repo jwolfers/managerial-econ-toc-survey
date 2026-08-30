@@ -248,7 +248,10 @@ Two equivalent ways to manage chapters — the `/edit` page above, or the Sheet 
   prerequisites, with a message explaining why. Prereqs chain transitively, so only
   direct dependencies need listing. Seeded with the real dependencies: Ch 1 before
   everything (each part opener requires it); each part's opening chapter (2, 5, 9, 12)
-  before the rest of its part; and Ch 2 before Ch 12.
+  before the rest of its part; and Ch 2 before Ch 12. An ID here that no chapter has — a
+  typo, or a row you deleted and didn't unpick — is quietly ignored rather than enforced,
+  so if a rule doesn't seem to be biting, check the ID exists. (The `/edit` page's
+  Chapters tab won't save one, which is the easiest way to be told.)
 - **Extra questions** — the `/edit` page's Questions tab is much the easier way, but the
   **Extra Questions** tab holds the same data, one row per question in the order asked:
   *ID*, *Type* (`text`, `textarea`, `choice`, `checkbox`, `dropdown`, `scale`, `rating`,

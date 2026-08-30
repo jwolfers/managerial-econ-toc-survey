@@ -1116,7 +1116,7 @@
 
   <p class="credit"><span>Snowberg, Stevenson &amp; Wolfers — <i>Managerial Economics</i> (in development, Macmillan Learning).</span> <span class="adminlinks"><a href="#edit">Survey editor</a> &middot; <a href="#analyze">Results dashboard</a></span></p>
   <!-- Bump both the datetime attribute and the fallback text whenever this file is deployed. -->
-  <p class="updated">Last updated <time id="lastUpdated" datetime="2026-08-29T20:45:00-04:00">29 August 2026, 8:45&#8239;PM ET</time></p>
+  <p class="updated">Last updated <time id="lastUpdated" datetime="2026-08-30T12:35:00-04:00">30 August 2026, 12:35&#8239;PM ET</time></p>
 </div>
 
 <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
@@ -1341,13 +1341,29 @@ function boot(cfg, fallback){
   CONFIG_FALLBACK = !!fallback;
   byId = {}; partColor = {}; textColor = {}; chartColor = {};
   var order = [];
-  // Own topics take negative ids, so a chapter may only ever have a positive one.
-  CONFIG.chapters = (CONFIG.chapters || []).filter(function(c){ return Number(c.id) > 0; });
+  /* Own topics take negative ids, so a chapter may only ever have a positive one — and two
+     rows sharing an id would give two chips one identity, so only the first row of an id
+     counts (the same rule the questions get from qseen below). */
+  var cseen = {};
+  CONFIG.chapters = (CONFIG.chapters || []).filter(function(c){
+    var id = Number(c.id);
+    if (!(id > 0) || cseen[id]) return false;
+    cseen[id] = 1;
+    return true;
+  });
   CONFIG.chapters.forEach(function(c){
     c.id = Number(c.id);
     c.prereqs = (c.prereqs || []).map(Number).filter(function(p){return p > 0 && p !== c.id;});
     byId[c.id] = c;
     if (order.indexOf(c.part) === -1) order.push(c.part);
+  });
+  /* A requirement naming a chapter the Sheet doesn't have — a row deleted, a title cleared
+     (getConfig drops untitled rows), or a typo in the prerequisites column — used to reach
+     byId as undefined and throw the moment anyone touched that chapter. The /edit page and
+     saveChapters both refuse to save one, so a hand-edited Sheet is the way in; drop them
+     here, after byId is complete, so a forward reference still resolves. */
+  CONFIG.chapters.forEach(function(c){
+    c.prereqs = c.prereqs.filter(function(p){ return byId[p]; });
   });
   order.forEach(function(p,i){
     partColor[p] = PART_COLORS[i % PART_COLORS.length];
@@ -1597,7 +1613,14 @@ function isPristine(){
 }
 
 /* ================= HELPERS ================= */
-function chapLabel(c){ return c.own ? "your topic “" + c.title + "”" : "Chapter " + c.id + ": " + c.title; }
+/* boot() drops any requirement naming a chapter the Sheet doesn't have, so `c` should always
+   resolve. wholeOrderViolation() is the safety net for a config that changed underneath a
+   half-built response, though, and a safety net that throws is no net at all — so name the
+   gap rather than assuming it away. */
+function chapLabel(c){
+  if (!c) return "a chapter that is no longer in the list";
+  return c.own ? "your topic “" + c.title + "”" : "Chapter " + c.id + ": " + c.title;
+}
 function placedPos(id){
   for (var s=0; s<state.sessions.length; s++){
     var i = state.sessions[s].indexOf(id);
@@ -1653,9 +1676,12 @@ function endSessionOf(id){                 // last session a chapter occupies (s
   var p = placedPos(id);
   return p ? p.s + spanOf(id) - 1 : null;
 }
-/* Can chapter `id` sit in session `s`, given current placements (with `id` removed)? */
-function violationFor(id, s){
-  var myEnd = s + spanOf(id) - 1;
+/* Can chapter `id` sit in session `s`, given current placements (with `id` removed)?
+   `runLen` is how many sessions it would actually run there: a run is shortened to fit the
+   sessions that are left, so tryPlace passes the clamped length rather than the one the
+   chapter happened to have somewhere else. Defaults to its current run. */
+function violationFor(id, s, runLen){
+  var myEnd = s + (runLen || spanOf(id)) - 1;
   var c = byId[id];
   for (var k=0;k<c.prereqs.length;k++){
     var pe = endSessionOf(c.prereqs[k]);
@@ -1726,7 +1752,10 @@ function removalViolation(id){
   var deps = dependentsOf(id).filter(function(d){ return placedPos(d); });
   if (deps.length){
     return chapLabel(byId[id]) + " can't be removed while " +
-      deps.map(function(d){ return "Chapter " + d; }).join(", ") + " (which builds on it) is scheduled. Remove that chapter first.";
+      deps.map(function(d){ return "Chapter " + d; }).join(", ") +
+      (deps.length > 1
+        ? " (which build on it) are scheduled. Remove those chapters first."
+        : " (which builds on it) is scheduled. Remove that chapter first.");
   }
   return null;
 }
@@ -1744,7 +1773,10 @@ function tryPlace(id, s, i, quiet){
   detach(id);
   if (from && from.s === s && from.i < i) i--;           // account for removal shift
   i = Math.max(0, Math.min(i, state.sessions[s].length));
-  var v = violationFor(id, s);
+  // The run is about to be clamped to the sessions left (below), so validate the length it
+  // will actually be — checking the old one refused legal moves near the end of the course.
+  var k = Math.min(spanOf(id), state.sessions.length - s);
+  var v = violationFor(id, s, k);
   if (v){
     // Put it back exactly where it was. A chapter dragged out of the unused pile onto an
     // illegal session used to end up in neither place, silently losing the "I'd skip this".
@@ -1758,10 +1790,9 @@ function tryPlace(id, s, i, quiet){
   if (!quiet && IS_TOUCH) toast("Ch " + id + "  →  Session " + (s + 1) + ".");
   if (state.sessions[s].indexOf(id) !== i)
     toast("Within a session, chapters are listed in the order their requirements need.");
-  // clamp the span if the new spot is too close to the last session
-  var k = spanOf(id);
-  if (s + k - 1 > state.sessions.length - 1){
-    state.spans[id] = state.sessions.length - s;
+  // apply the clamp decided above, if the new spot is too close to the last session
+  if (k < spanOf(id)){
+    state.spans[id] = k;
     toast("Shortened " + chapLabel(byId[id]) + " to fit the remaining sessions.");
   }
   persist(); render();
@@ -2188,7 +2219,9 @@ function deleteSession(s){
     if (deps.length){
       blocked = chapLabel(byId[id]) + " can't leave session " + (s+1) + " while " +
         deps.map(function(d){ return "Chapter " + d; }).join(", ") +
-        " (which builds on it) is scheduled. Move it to another session, or remove that chapter first.";
+        (deps.length > 1
+          ? " (which build on it) are scheduled. Move it to another session, or remove those chapters first."
+          : " (which builds on it) is scheduled. Move it to another session, or remove that chapter first.");
     }
   });
   if (blocked){ toast(blocked, true); return; }
@@ -2390,7 +2423,11 @@ function requestSessionCount(n, fromBox){
 document.getElementById("numSessions2").addEventListener("change", function(){
   requestSessionCount(Number(this.value), true);
 });
-document.getElementById("btnSessMinus").addEventListener("click", function(){ requestSessionCount(state.n - 1); });
+document.getElementById("btnSessMinus").addEventListener("click", function(){
+  // Say so at the floor, the way + does at the ceiling; silence read as a broken button.
+  if (state.n <= 1){ toast("A course needs at least one session.", true); return; }
+  requestSessionCount(state.n - 1);
+});
 document.getElementById("btnSessPlus").addEventListener("click", function(){
   if (state.n >= 60){ toast("60 sessions is as long as the survey goes.", true); return; }
   requestSessionCount(state.n + 1);
@@ -4385,7 +4422,7 @@ function renderDetail(i){
       .filter(String).join(" · ")) || "no contact details given") +
     (r.row ? ' · Sheet row ' + r.row : '') + '</p><div class="rsess">';
   for (var s=0; s<f.n; s++){
-    var items = (r.sessions[s] || []);
+    var items = ((r.sessions || [])[s] || []);
     var ghosts = [];
     (r.sessions || []).forEach(function(list, s0){
       (list || []).forEach(function(id){
@@ -4522,7 +4559,7 @@ function buildDigest(){
     var f = A.facts[i];
     var toc = [];
     for (var s=0; s<f.n; s++){
-      var items = (r.sessions[s] || []).map(function(id){
+      var items = ((r.sessions || [])[s] || []).map(function(id){
         var k = f.spanOf(Number(id));
         return (Number(id) < 0 ? "own topic “" + itemTitle(r, id) + "”" : String(id)) +
           (k > 1 ? "(x" + k + " sessions)" : "");
@@ -4700,8 +4737,11 @@ function demoExtra(i){
   });
   return out;
 }
-/** The demo set is built once, so refreshing the preview dashboard doesn't reshuffle it. */
-var DEMO = null;
+/** The demo set is built once, so refreshing the preview dashboard doesn't reshuffle it.
+ *  Declaration only — see the EDIT note above: landing straight on #analyze means boot()
+ *  reaches demoSet() synchronously, and an initializer here would run afterwards and throw
+ *  the cache away, so the first Refresh dealt a whole new random set of responses. */
+var DEMO;
 function demoSet(){ if (!DEMO) DEMO = demoResponses(); return DEMO; }
 function demoResponses(){
   var names = ["Ada Chen","Ben Ortiz","Carla Novak","Dev Patel","Elena Ruiz","Frank Osei",
