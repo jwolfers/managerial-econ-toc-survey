@@ -1681,8 +1681,8 @@ function saveTopicEditor(){
   if (!inp || !topicEdit) return;
   var title = inp.value.trim().slice(0, 120);
   if (!title){ toast("Give your topic a short name first.", true); inp.focus(); return; }
-  var s = topicEdit.s;
-  if (topicEdit.id){
+  var s = topicEdit.s, renamed = !!topicEdit.id;
+  if (renamed){
     state.custom[topicEdit.id] = title;
     topicEdit = null;
   } else {
@@ -1695,7 +1695,7 @@ function saveTopicEditor(){
   }
   syncOwn();
   persist(); render();
-  toast("Added to session " + (s+1) + ".");
+  toast(renamed ? "Renamed." : "Added to session " + (s+1) + ".");
 }
 function deleteOwnTopic(id){
   detach(id);
