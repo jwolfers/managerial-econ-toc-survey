@@ -24,9 +24,12 @@ session is the one destructive control, so both ways of doing it — cutting the
 per-session 🗑 — ask first whenever the sessions going away still hold chapters or their own
 topics, and the count box ignores a value it can't read (an
 emptied box means "no change", not "one session"). Deleting a session in the middle shifts
-everything after it up a slot, which preserves the relative order of every chapter, so no
-prerequisite can be broken by the delete; a chapter that ran through the deleted session simply
-runs one session fewer. A chapter refused a session because of its
+everything after it up a slot, so the relative order of every chapter that stays is preserved;
+a chapter that ran through the deleted session simply runs one session fewer. What doesn't stay
+is that session's own chapters, which go back to the chapter list — so the bin's rule applies
+there too, and a session won't delete while something scheduled later still builds on a chapter
+inside it. (Trimming from the end never needs that check: a chapter that builds on another
+always sits in a later session, so it is being removed as well.) A chapter refused a session because of its
 prerequisites goes back exactly where it came from, unused pile included, and a chapter that
 leaves the board forgets how many sessions it ran, so it never returns silently stretched.
 
@@ -208,7 +211,10 @@ responses; chapter positions are normalized to each respondent's course length s
 
 The dashboard's "AI analysis" section asks Claude to write a synthesis report, and offers
 a chat box for follow-ups ("which two chapters could we merge with the least
-resistance?"). Setup: in the Sheet, **TOC Survey menu → Set Anthropic API key**, pasting
+resistance?"). Changing the round picker mid-conversation doesn't end the conversation —
+comparing rounds is half the point of asking — but it does mark the seam: a divider appears in
+the log, and the next question tells the model that the statistics have changed underneath it
+and that earlier answers were about other responses. Setup: in the Sheet, **TOC Survey menu → Set Anthropic API key**, pasting
 a key from console.anthropic.com. The key stays in the script's properties — it is never
 sent to the browser — and the page sends its *precomputed* statistics plus the verbatim
 free text, so the model interprets rather than recalculates.
