@@ -5,21 +5,35 @@ contents for *Managerial Economics* (Snowberg, Stevenson & Wolfers). Respondents
 their number of class sessions (default 15, adjustable with ± or "+ Add a session"),
 drag the 15 planned chapters into those sessions (or discard them to an "unused" pile),
 optionally stretch a chapter across consecutive sessions (the ⤓ button; later sessions
-show a dashed "continued" card), answer the survey's own questions — which can sit above
+show a dashed "continued" card), add topics of their own to any session, answer the survey's own questions — which can sit above
 the sessions, below them, or both — and submit. Every response lands as one row in a Google Sheet; multi-session
 chapters are recorded in the readable TOC ("runs N sessions") and as `spans` in the JSON
 column. Prerequisite enforcement treats a spanned chapter as finishing in its last
 session: dependent chapters must start at or after that session.
 
-A **Start from book order** button seeds the sessions with all chapters in the book's
+**Topics of their own.** Under every session sits "+ Add a topic of your own", for
+something an instructor teaches that isn't in our chapter list. A written-in topic
+becomes a dashed card in that session and behaves like a chapter — reorder it, move it
+to another session, run it across several — but it has no requirements, never appears in
+the chapter bank or the unused pile, and is renamed (✎) or deleted (🗑) rather than
+discarded. Own topics take negative ids so they can never collide with a real chapter:
+the ids sit in the `sessions` arrays of the JSON column and their titles in a `custom`
+map beside them, and the readable TOC column names them "Their own topic — …". Because
+they are one respondent's invention, they are excluded from every chapter statistic
+(inclusion rates, consensus ordering, contested pairs, camps) and reported on their own
+instead — see the dashboard's "Topics they added themselves".
+
+A **Recommended sequence** button seeds the sessions with all chapters in the book's
 order — one chapter per session, so the session count becomes the chapter count — so
 respondents who mostly agree only express deviations; whether a response started from
 that prefill is recorded (`prefilled` in the JSON column) so anchored responses can be
 segmented in analysis. **Start over** (next to it) empties every session and the unused
-pile and returns the count to 15, after a confirmation; the written answers are kept. On phones and tablets — where browsers don't
+pile and returns the count to 15, after a confirmation; own topics go with it, and the
+written answers are kept. On phones and tablets — where browsers don't
 support drag-and-drop — the chapter list appears first, the instructions switch to
 tap-based wording, and everything is doable by buttons alone: **+** places a chapter,
-**⇄** moves it between sessions, ▲▼ reorder, ⤓ extends, 🗑 discards.
+**⇄** moves it between sessions, ▲▼ reorder, ⤓ extends, 🗑 discards — and the
+add-a-topic field is a plain text input, so it works the same everywhere.
 
 Styled to match the Stevenson & Wolfers 3e design: Source Sans 3 / Source Serif 4, with
 the 3e cover palette (deep red, blue, berry, purple, teal; chartreuse and gold accents).
@@ -90,7 +104,7 @@ Both are gated by the **admin password** — see or change it in the Sheet under
 privileged call and never appears in the public front-end files; your browser remembers
 it after the first successful entry.
 
-**`/edit` — survey editor**, in two tabs.
+**`/edit` — survey editor**, in three tabs.
 
 *Chapters.* Edit titles, parts, section lists, notes; toggle prerequisite chips; add or
 delete chapters. The page blocks impossible saves (missing titles, dangling or circular
@@ -114,13 +128,27 @@ match a Google Form:
 | Date, Time, Date and time, Number, Email address, Link (URL) | validated single fields |
 | Section heading | a heading and blurb — not a question, collects no answer |
 
-Saving either tab updates the Sheet, so changes reach respondents immediately. In the
-local preview, `index.html#edit` saves only to that browser.
+*Rounds.* A round is a name for a stretch of surveying — *Test* while you are trying
+things out, then the real thing, then *2027* when the book is revised. The tab shows which
+round responses are being recorded into, how many have arrived in it and when it started,
+and a field to name and start a new one. Starting a round changes nothing about the survey
+and deletes nothing: responses already collected keep the label they have, the link stays
+the same, and only what arrives from that moment on carries the new name. Reusing a name
+switches back to that round rather than starting a second one. The dashboard then shows one
+round at a time, so a test run never mixes into the real results. (The same thing is on the
+Sheet's **TOC Survey menu → Start a new round of surveys**.)
+
+Saving the Chapters or Questions tab updates the Sheet, so changes reach respondents
+immediately. In the local preview, `index.html#edit` saves only to that browser.
 
 **`/analyze` — results dashboard.** Every statistic is computed in the page from the raw
 responses; chapter positions are normalized to each respondent's course length so a
 10-session and a 28-session course are comparable. It shows:
 
+- a **round picker** in the toolbar whenever responses span more than one round. A fresh
+  load opens on the round the newest response arrived in — so the moment a real round
+  starts, the test run stops colouring the results — and "All rounds" is one click away.
+  Every number on the page, both downloads, and the AI report all follow the picker;
 - headline tiles — responses, median sessions, chapters used, adoption likelihood,
   agreement with book order;
 - the **consensus ordering** — chapters by median start position, with inclusion rates;
@@ -129,16 +157,20 @@ responses; chapter positions are normalized to each respondent's course length s
 - **inclusion & class time** per chapter — who schedules it, how many sessions it gets;
 - the **most contested pairs** — orderings respondents genuinely disagree about;
 - **camps** — respondents clustered by TOC similarity, each with its majority ordering;
+- **topics they added themselves** — every write-in topic with its author and the session
+  it was slotted into, which is the most direct read on what the book is missing;
 - a chart per question, in the shape its answers take — a distribution for scales and
   ratings, counts for choice, dropdown, checkbox and date/time answers, mean/median/range
   for numbers, a shaded matrix for grids — and all free-text answers as quotes linked to
   their authors;
-- an **individual browser** — click any respondent to see their course rendered exactly
-  as they built it, plus all their answers;
-- **Download all responses** for offline analysis, as **CSV** (one row per respondent,
-  with a column per extra question and, for every chapter, the session it was placed in
-  — or `unused` — and how many sessions it runs) or as **JSON** (the raw structure,
-  bundled with the chapter and question definitions).
+- an **individual browser** — every response with the date and time it was submitted
+  (and its round, when several are on screen); click any respondent to see their course
+  rendered exactly as they built it, plus all their answers;
+- **Download all responses** for offline analysis — whichever round is on screen — as
+  **CSV** (one row per respondent, with its timestamp and round, a column per extra question, an **Own topics added** column, and, for every
+  chapter, the session it was placed in — or `unused` — and how many sessions it
+  runs) or as **JSON** (the raw structure, bundled with the chapter and question
+  definitions).
 
 ### AI report & chat
 
@@ -190,14 +222,28 @@ Two equivalent ways to manage chapters — the `/edit` page above, or the Sheet 
   and the rest default to an optional question after the sort. Re-run **TOC Survey menu →
   Set up / repair survey tabs** once to add the new column headers.
 
+## Rounds of surveying
+
+Responses are grouped into named **rounds** — "Test", "Fall 2026 pilot", "2027 survey".
+Whichever round is active when a response arrives is stamped into its **Round** column and
+never changes afterwards, so naming a new round is a safe, purely forward-looking act: it
+relabels nothing. Rounds are named on the `/edit` page's Rounds tab (or the Sheet's TOC
+Survey menu), listed oldest-first in the **Rounds** tab with the date each began, and used
+by the dashboard to show one round at a time. Responses collected before any round was
+named stay unlabelled, and the dashboard offers them as their own bucket. A sheet that
+predates rounds simply gains the Round column, appended at the right-hand end, the next
+time a response arrives.
+
 ## Where the data lives, and getting it out
 
-Every submission is one row in the Sheet's **Responses** tab: the readable TOC, the
-unused pile, all answers, and a JSON copy of the full structure for programmatic
-analysis. Each extra question also gets its own `Q: <id>` column (created automatically
+Every submission is one row in the Sheet's **Responses** tab: the time it arrived, the
+round it belongs to, the readable TOC, the unused pile, all answers, and a JSON copy of
+the full structure for programmatic analysis. Each extra question also gets its own `Q: <id>` column (created automatically
 after the core columns) so answers can be filtered and pivoted directly; a checkbox answer
 flattens to `a | b` there and a grid answer to `row: value | row: value`, while the JSON
-copy keeps them structured. Free-text cells
+copy keeps them structured. Topics respondents added themselves appear in the readable TOC
+as "Their own topic — …", and in the JSON column as negative ids in `sessions` with their
+titles in `custom`. Free-text cells
 are sanitized against formula injection. Export any time with File → Download →
 CSV/XLSX, or the dashboard's CSV/JSON downloads. The Sheet itself stays private to your
 Google account; only the survey page is public.

@@ -51,6 +51,10 @@
   .step.active{display:block}
   h2{font-family:var(--sans);font-weight:700;font-size:22px;margin:0 0 6px;color:var(--ink)}
   .lede{font-family:var(--serif);max-width:62ch;color:var(--ink);margin:0 0 18px}
+  /* The ordering rules, said once up front — cheaper than discovering them as error messages. */
+  .lede.rules{font-family:var(--sans);font-size:14.5px;color:var(--ink-soft);max-width:74ch;
+    background:var(--wash);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:11px 15px}
+  .lede.rules b{color:var(--ink)}
   label.f{display:block;font-weight:600;font-size:14px;margin:14px 0 4px}
   label.f small{font-weight:400;color:var(--ink-soft)}
   input[type=text],input[type=email],input[type=number],input[type=password],textarea,select{
@@ -72,14 +76,22 @@
   /* ---------- builder layout ---------- */
   .buildbar{display:flex;flex-wrap:wrap;align-items:center;gap:16px;background:var(--wash);
     border:1px solid var(--line);border-radius:8px;padding:10px 16px;margin:0 0 18px}
-  .buildbar .count{font-weight:600;display:flex;align-items:center;gap:6px}
-  .buildbar .count input{width:64px;padding:5px 8px;text-align:center}
+  /* The session count is the one setting every respondent has to change, and as a small
+     number box among the buttons it was easy to skim past — so it sits on its own card with
+     a gold ring, the page's usual "look here" cue. */
+  .buildbar .count{font-weight:700;display:flex;align-items:center;gap:8px;background:var(--card);
+    border:1px solid var(--line);border-radius:8px;padding:7px 12px;
+    box-shadow:0 0 0 3px rgba(253,196,0,.4)}
+  .buildbar .count input{width:66px;padding:5px 8px;text-align:center;font-size:17px;font-weight:700}
   .stepbtn{width:30px;height:30px;border-radius:6px;border:1.5px solid var(--red);background:transparent;
     color:var(--red);font-size:17px;font-weight:700;line-height:1;cursor:pointer}
   .stepbtn:hover{background:#f7e9e8}
   .addsession{width:100%;border:1.5px dashed var(--line);background:transparent;border-radius:8px;
     color:var(--slate);font-family:var(--sans);font-size:14px;font-weight:600;padding:10px;cursor:pointer}
   .addsession:hover{border-color:var(--slate);background:var(--wash)}
+  .addsession .addhint{font-weight:400;color:var(--ink-soft)}
+  /* It is also a drop target: a chapter dropped here gets a session of its own at the end. */
+  .addsession.dragover{border-style:solid;border-color:var(--gold);background:#fdf6d8;color:var(--ink)}
   /* First-load feedback: the chapter list comes from the Sheet, and a cold Apps Script
      can take several seconds to answer — show the page's shape and say what's happening. */
   .loadcard{background:var(--card);border:1px solid var(--line);border-radius:8px;
@@ -120,6 +132,18 @@
   .session.dragover{background:#fdf6d8;box-shadow:inset 0 0 0 2px var(--gold)}
   .session.dragover h3{border-bottom-color:var(--gold)}
   .empties{font-size:13px;color:var(--ink-soft);font-style:italic;padding:2px 4px}
+  /* A topic the instructor typed in themselves: dashed, so it reads as their addition
+     rather than one of ours, and tinted the same slate as its label. */
+  .chip.own{border-style:dashed;border-left-style:solid;background:#f7f9f9}
+  .chip.own .ch{letter-spacing:.04em;text-transform:uppercase;font-size:11px}
+  .topicadd{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:0 10px 9px}
+  .topicadd input{flex:1 1 190px;min-width:0;font-family:var(--sans);font-size:14px;
+    border:1px solid var(--line);border-radius:6px;padding:7px 9px}
+  .topicadd input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+  .topicbtn{border:none;background:transparent;color:var(--slate);font-family:var(--sans);
+    font-size:13px;font-weight:600;padding:3px 2px;cursor:pointer;text-decoration:underline;
+    text-underline-offset:3px}
+  .topicbtn:hover{color:var(--ink)}
 
   /* chapter cards */
   .chip{background:var(--card);border:1px solid var(--line);
@@ -181,6 +205,7 @@
     font-size:14px;cursor:pointer;border-radius:5px}
   .qadd button:hover{background:var(--wash)}
   .qadd button:disabled{color:#b0a89c;cursor:default;background:transparent}
+  .qadd button.newsess{border-top:1px solid var(--line);font-weight:600;color:var(--red)}
 
   /* wrap-up */
   .q{margin:0 0 22px;max-width:680px}
@@ -254,6 +279,23 @@
     margin-bottom:-2px;border-bottom:3px solid transparent}
   .edtabs button:hover{background:var(--wash)}
   .edtabs button[aria-selected=true]{color:var(--red);border-bottom-color:var(--red)}
+  /* rounds of surveying */
+  .rndnow{background:var(--wash);border:1px solid var(--line);border-radius:8px;
+    padding:12px 14px;margin:0 0 16px}
+  .rndnow .big{font-size:16px;font-weight:700}
+  .rndnow .sub{font-size:13px;color:var(--ink-soft);margin:4px 0 0}
+  .rndstart{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 6px}
+  .rndstart input{flex:1;min-width:220px;max-width:360px;max-width:min(360px,100%)}
+  .rndstart .hint{font-size:13px;color:var(--ink-soft)}
+  .rndnote{font-size:13px;color:var(--ink-soft);margin:0 0 20px;max-width:70ch}
+  .rndtable{width:100%;border-collapse:collapse;font-size:13.5px}
+  .rndtable th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-soft);border-bottom:2px solid var(--line);padding:6px 8px;font-weight:700}
+  .rndtable td{border-bottom:1px solid var(--line);padding:7px 8px;vertical-align:middle}
+  .rndtable .nm{font-weight:600}
+  .rndtable .num{text-align:right;white-space:nowrap}
+  .rndtag{display:inline-block;background:var(--purple);color:#fff;border-radius:11px;
+    padding:2px 9px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
   .qgroup{margin:0 0 30px}
   .qgroup h3{font-size:13px;margin:0 0 2px;color:var(--slate);letter-spacing:.07em;text-transform:uppercase}
   .qgroup .ghint{font-size:13px;color:var(--ink-soft);margin:0 0 10px;max-width:70ch}
@@ -319,6 +361,9 @@
   .anbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--wash);
     border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:0 0 20px}
   .anbar .hint{font-size:13px;color:var(--ink-soft)}
+  .anbar label{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .anbar label[hidden]{display:none}   /* an author rule outranks the browser's [hidden] */
+  .anbar select{font-size:13.5px;padding:5px 8px;max-width:260px}
   .ansec{margin:0 0 34px}
   .ansec h3{font-size:17px;margin:0 0 3px;color:var(--ink)}
   .ansec .subt{font-size:13.5px;color:var(--ink-soft);margin:0 0 12px;max-width:74ch}
@@ -391,6 +436,7 @@
     border-left:4px solid var(--slate);border-radius:5px;padding:4px 9px;margin:3px 0;font-size:13px}
   .minichip .cn{font-weight:700;font-size:11.5px;flex-shrink:0}
   .minichip.ghost2{border-style:dashed;color:var(--ink-soft);font-style:italic}
+  .minichip.own{border-style:dashed;border-left-style:solid;background:#f7f9f9}
   .rdetail .qa{margin:14px 0 0;font-size:13.5px}
   .rdetail .qa .qq{font-weight:600;margin:10px 0 2px}
   .rdetail .qa .aa{font-family:var(--serif);white-space:pre-wrap}
@@ -748,7 +794,8 @@
     <h2 class="sr-only" id="buildHeading">Build your table of contents</h2>
     <p class="lede" id="ledeBuild">We are writing a new business economics textbook, and we want its structure to match the
       way you actually teach. Drag the chapters on the right into your class sessions, in the order you'd
-      cover them — and toss anything you wouldn't teach into the unused pile. Click any title for details.</p>
+      cover them — and toss anything you wouldn't teach into the unused pile. Click any title for details.
+      Teach something we haven't listed? Add it to the session you'd teach it in.</p>
     <div class="preqs" id="preQs">
       <h2>First, a few questions</h2>
       <div id="extraQsBefore"></div>
@@ -771,7 +818,7 @@
           title="One more session">+</button>
       </span>
       <button type="button" class="btn secondary small" id="btnPrefill"
-        title="Give every chapter its own session, in the book's planned order — a starting point you can rearrange">Start from book order</button>
+        title="Give every chapter its own session, in the book's planned order — a starting point you can rearrange">Recommended sequence</button>
       <button type="button" class="btn secondary small" id="btnReset"
         title="Empty every session and put all the chapters back in the chapter list">Start over</button>
       <div class="progress"><span id="progText" role="status"></span>
@@ -826,13 +873,16 @@
   <!-- EDIT MODE (admin) -->
   <section class="editview" id="editView">
     <h2>Survey editor</h2>
-    <p class="lede">Two things to edit: the chapters respondents sort, and the questions they
-      answer around the sort. <span id="edModeNote"></span></p>
+    <p class="lede">Three things to set: the chapters respondents sort, the questions they
+      answer around the sort, and which round of surveying their answers are filed under.
+      <span id="edModeNote"></span></p>
     <div class="edtabs" role="tablist" aria-label="What to edit">
       <button type="button" role="tab" id="tabChapters" aria-controls="panelChapters"
         aria-selected="true">Chapters</button>
       <button type="button" role="tab" id="tabQuestions" aria-controls="panelQuestions"
         aria-selected="false" tabindex="-1">Questions</button>
+      <button type="button" role="tab" id="tabRounds" aria-controls="panelRounds"
+        aria-selected="false" tabindex="-1">Rounds</button>
     </div>
 
     <div id="panelChapters" role="tabpanel" aria-labelledby="tabChapters" tabindex="-1">
@@ -873,6 +923,24 @@
         </div>
       </div>
     </div>
+
+    <div id="panelRounds" role="tabpanel" aria-labelledby="tabRounds" tabindex="-1" hidden>
+      <p class="lede">A round is simply a name for a stretch of surveying &mdash; <em>Test</em> while
+        you&rsquo;re trying things out, then the real thing, then perhaps <em>2027</em> when the book
+        is revised. Every response is stamped with whichever round was running when it arrived, so the
+        results dashboard can show one round at a time.</p>
+      <div class="rndnow" id="rndNow"></div>
+      <div class="rndstart">
+        <input id="rndName" type="text" maxlength="80" autocomplete="off"
+          placeholder="Name the round &mdash; e.g. Fall 2026 pilot" aria-label="Name for the new round">
+        <button class="btn" id="rndStart">Start this round</button>
+        <span class="hint" id="rndStatus" role="status"></span>
+      </div>
+      <p class="rndnote">Starting a round changes nothing about the survey itself and deletes nothing:
+        responses already collected keep the label they already have, and the survey link stays the
+        same. Reusing a name switches back to that round rather than starting a second one.</p>
+      <div id="rndList"></div>
+    </div>
   </section>
 
   <!-- ANALYZE MODE (admin) -->
@@ -882,6 +950,7 @@
       Chapter positions are normalized to each respondent's course length, so a 10-session and a
       28-session course are comparable.</p>
     <div class="anbar">
+      <label id="anRoundWrap" hidden>Round <select id="anRound"></select></label>
       <button class="btn secondary small" id="anRefresh">&#8635; Refresh data</button>
       <button class="btn secondary small" id="anExportCsv">Download all responses (CSV)</button>
       <button class="btn secondary small" id="anExport">Download all responses (JSON)</button>
@@ -892,7 +961,7 @@
 
   <p class="credit"><span>Snowberg, Stevenson &amp; Wolfers — <i>Managerial Economics</i> (in development, Macmillan Learning).</span> <span class="adminlinks"><a href="#edit">Survey editor</a> &middot; <a href="#analyze">Results dashboard</a></span></p>
   <!-- Bump both the datetime attribute and the fallback text whenever this file is deployed. -->
-  <p class="updated">Last updated <time id="lastUpdated" datetime="2026-08-29T14:45:00-04:00">29 August 2026, 2:45&#8239;PM ET</time></p>
+  <p class="updated">Last updated <time id="lastUpdated" datetime="2026-08-29T20:45:00-04:00">29 August 2026, 8:45&#8239;PM ET</time></p>
 </div>
 
 <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
@@ -1040,7 +1109,7 @@ var partColor = {};         // part name -> color
 var textColor = {};         // part name -> the same hue, dark enough to use as text
 var chartColor = {};        // part name -> chart fill color
 var DEFAULT_SESSIONS = 15;   // sessions a respondent starts with
-var state = {n:DEFAULT_SESSIONS, sessions:[], unused:[], spans:{}};   // spans: chapter id -> # consecutive sessions (default 1)
+var state = {n:DEFAULT_SESSIONS, sessions:[], unused:[], spans:{}, custom:{}};   // spans: chapter id -> # consecutive sessions (default 1)
 var openInfo = {};   // chapter id -> details dropdown expanded
 var HOSTED = (typeof google !== "undefined" && google.script && google.script.run);  // served by Apps Script
 var IS_LIVE = HOSTED || !!API_URL;
@@ -1062,6 +1131,8 @@ function apiCall(body, onOk, onFail){
       case "saveChapters": run.saveChapters(JSON.stringify(body.chapters), body.key); break;
       case "saveQuestions": run.saveQuestions(JSON.stringify(body.questions), body.key); break;
       case "responses":    run.getResponses(body.key); break;
+      case "rounds":       run.getRounds(body.key); break;
+      case "startRound":   run.startRound(body.key, body.name); break;
       case "llm":          run.callClaude(body.key, JSON.stringify(
                              {system: body.system, messages: body.messages,
                               maxTokens: body.maxTokens, purpose: body.purpose})); break;
@@ -1095,7 +1166,8 @@ if (IS_TOUCH){
   document.getElementById("ledeBuild").innerHTML =
     "We are writing a new business economics textbook, and we want its structure to match the " +
     "way you actually teach. Tap <b>+</b> on a chapter to place it into a class session, in the order " +
-    "you'd cover them &mdash; and send anything you wouldn't teach to the unused pile. Tap any title for details.";
+    "you'd cover them &mdash; and send anything you wouldn't teach to the unused pile. Tap any title for " +
+    "details. Teach something we haven't listed? Add it to the session you'd teach it in.";
   document.getElementById("bankHint").innerHTML =
     "Tap <b>+</b> to place a chapter into a session, and <b>&#8644;</b> to move it to another. " +
     "Tap a title for details. Once placed, <b>&#10515;</b> continues a chapter into the next session. " +
@@ -1227,18 +1299,21 @@ function restore(){
   try{
     var saved = JSON.parse(localStorage.getItem("meTocSurvey") || "null");
     if (saved && saved.sessions){
-      // drop any chapters that no longer exist in the config
-      saved.sessions = saved.sessions.map(function(l){ return l.filter(function(id){ return byId[id]; }); });
-      saved.unused = (saved.unused || []).filter(function(id){ return byId[id]; });
-      saved.spans = saved.spans || {};
+      saved.custom = saved.custom || {};
       state = saved;
+      syncOwn();   // own topics must be back in byId before the filter below, or they'd be dropped
+      // drop any chapters that no longer exist in the config
+      state.sessions = state.sessions.map(function(l){ return l.filter(function(id){ return byId[id]; }); });
+      state.unused = (state.unused || []).filter(function(id){ return byId[id] && !isOwn(id); });
+      state.spans = state.spans || {};
+      pruneOwn();
     }
   }catch(e){}
 }
 function persist(){ try{ localStorage.setItem("meTocSurvey", JSON.stringify(state)); }catch(e){} }
 
 /* ================= HELPERS ================= */
-function chapLabel(c){ return "Chapter " + c.id + ": " + c.title; }
+function chapLabel(c){ return c.own ? "your topic “" + c.title + "”" : "Chapter " + c.id + ": " + c.title; }
 function placedPos(id){
   for (var s=0; s<state.sessions.length; s++){
     var i = state.sessions[s].indexOf(id);
@@ -1250,6 +1325,42 @@ function dependentsOf(id){
   return CONFIG.chapters.filter(function(c){ return c.prereqs.indexOf(id) !== -1; }).map(function(c){ return c.id; });
 }
 function spanOf(id){ return Math.max(1, Number(state.spans[id]) || 1); }
+
+/* ---------- topics the instructor adds themselves ----------
+   Anyone can drop a topic of their own into a session — something they teach that isn't in
+   our chapter list. Own topics take negative ids, so they can never collide with a real
+   chapter, and are registered in byId as pseudo-chapters with no prerequisites. Everything
+   downstream — placement, within-session ordering, spans, drag-and-drop, the keyboard
+   controls — then works on them unchanged. They live only in the session they were put in:
+   there is no bank or unused pile for a topic only one respondent has. */
+var OWN_COLOR = "#4f6c71";
+function isOwn(id){ return Number(id) < 0; }
+function syncOwn(){
+  Object.keys(byId).forEach(function(k){ if (isOwn(k)) delete byId[k]; });
+  state.custom = state.custom || {};
+  Object.keys(state.custom).forEach(function(k){
+    byId[Number(k)] = {id: Number(k), title: String(state.custom[k]), part: null,
+                       prereqs: [], sections: [], notes: "", own: true};
+  });
+}
+/* How one placed item reads in the Sheet's plain-text TOC column. */
+function itemLabel(id){
+  return (isOwn(id) ? "Their own topic — " : "Ch " + id + " — ") + byId[id].title;
+}
+function nextOwnId(){
+  var lo = 0;
+  Object.keys(state.custom || {}).forEach(function(k){ lo = Math.min(lo, Number(k)); });
+  return lo - 1;
+}
+/* An own topic that no longer sits in any session has nowhere to live, so it goes. */
+function pruneOwn(){
+  var live = {};
+  state.sessions.forEach(function(l){ l.forEach(function(id){ if (isOwn(id)) live[id] = 1; }); });
+  Object.keys(state.custom || {}).forEach(function(k){
+    if (!live[k]){ delete state.custom[k]; delete state.spans[k]; }
+  });
+  syncOwn();
+}
 /* Requirements are enforced session by session, not slot by slot: two chapters sharing a
    session are assumed to be taught in whichever order the requirements need, and
    sortSession() lists them that way. Only a prerequisite landing in a *later* session
@@ -1369,12 +1480,19 @@ function tryPlace(id, s, i, quiet){
   if (!quiet) flashChip(id);
   return true;
 }
+function ownOnlyLivesInASession(id){
+  if (!isOwn(id)) return false;
+  toast("Topics you add live in their session — use the pencil to rename one, or the bin to delete it.", true);
+  return true;
+}
 function tryReturnToBank(id){
+  if (ownOnlyLivesInASession(id)) return;
   var v = removalViolation(id);
   if (v){ toast(v, true); return; }
   detach(id); persist(); render();
 }
 function tryDiscard(id){
+  if (ownOnlyLivesInASession(id)) return;
   var v = removalViolation(id);
   if (v){ toast(v, true); return; }
   detach(id); state.unused.push(id); persist(); render();
@@ -1398,10 +1516,20 @@ function setSessionCount(n){
   n = Math.max(1, Math.min(60, Math.round(n) || 1));
   while (state.sessions.length < n) state.sessions.push([]);
   if (n < state.sessions.length){
-    var spill = [];
-    for (var s=n; s<state.sessions.length; s++) spill = spill.concat(state.sessions[s]);
+    var spill = [], lost = 0;
+    for (var s=n; s<state.sessions.length; s++){
+      state.sessions[s].forEach(function(id){
+        // a chapter goes back to the bank; an own topic has no bank to go back to
+        if (isOwn(id)){ delete state.custom[id]; delete state.spans[id]; lost++; }
+        else spill.push(id);
+      });
+    }
     state.sessions.length = n;
-    if (spill.length) toast(spill.length + " chapter(s) from removed sessions went back to the chapter list.");
+    syncOwn();
+    var msg = [];
+    if (spill.length) msg.push(spill.length + " chapter(s) went back to the chapter list");
+    if (lost) msg.push(lost + " of your own topic(s) were deleted");
+    if (msg.length) toast("Removed sessions: " + msg.join(", ") + ".");
   }
   state.n = n;
   // clamp spans that now hang past the last session
@@ -1416,16 +1544,24 @@ function setSessionCount(n){
 
 /* ================= RENDER ================= */
 function chipEl(c, ctx){ // ctx: "session" | "bank" | "unused"
+  var own = !!c.own;
   var el = document.createElement("div");
-  el.className = "chip";
-  el.style.borderLeftColor = partColor[c.part];
+  el.className = "chip" + (own ? " own" : "");
+  el.style.borderLeftColor = own ? OWN_COLOR : partColor[c.part];
   el.draggable = true;
   el.dataset.id = c.id;
   /* Every control here is icon-only, so each carries an aria-label naming both the action and the
      chapter — a screen-reader user hears "Move Chapter 3 up", not "black up-pointing triangle". */
-  var nm = "Chapter " + c.id;
+  var nm = own ? "your topic " + c.title : "Chapter " + c.id;
   var acts = "";
-  if (ctx === "session"){
+  if (own){
+    acts = '<button type="button" title="Move up" aria-label="Move ' + esc(nm) + ' up" data-act="up">&#9650;</button>' +
+           '<button type="button" title="Move down" aria-label="Move ' + esc(nm) + ' down" data-act="down">&#9660;</button>' +
+           '<button type="button" title="Move to another session" aria-label="Move ' + esc(nm) + ' to another session" data-act="qadd">&#8644;</button>' +
+           '<button type="button" title="Continue this topic into the next session" aria-label="Continue ' + esc(nm) + ' into the next session" data-act="extend">&#10515;</button>' +
+           '<button type="button" title="Rename this topic" aria-label="Rename ' + esc(nm) + '" data-act="renameown">&#9998;</button>' +
+           '<button type="button" title="Delete this topic" aria-label="Delete ' + esc(nm) + '" class="danger" data-act="delown">&#128465;</button>';
+  } else if (ctx === "session"){
     acts = '<button type="button" title="Move up" aria-label="Move ' + nm + ' up" data-act="up">&#9650;</button>' +
            '<button type="button" title="Move down" aria-label="Move ' + nm + ' down" data-act="down">&#9660;</button>' +
            '<button type="button" title="Move to another session" aria-label="Move ' + nm + ' to another session" data-act="qadd">&#8644;</button>' +
@@ -1438,7 +1574,7 @@ function chipEl(c, ctx){ // ctx: "session" | "bank" | "unused"
   } else {
     acts = '<button type="button" title="Restore to chapter list" aria-label="Restore ' + nm + ' to the chapter list" data-act="restore">&#8634;</button>';
   }
-  var open = !!openInfo[c.id];
+  var open = !own && !!openInfo[c.id];
   var det = "";
   /* Prerequisite lists used to hide the chapter title in a title= tooltip, which never reaches a
      keyboard or touch user; the titles are spelled out instead. */
@@ -1463,31 +1599,38 @@ function chipEl(c, ctx){ // ctx: "session" | "bank" | "unused"
     if (det === detOpen) det += '<div class="dep">No details yet.</div>';
     det += '</div>';
   }
-  var chLabel = 'Ch ' + c.id;
+  var chLabel = own ? "Your own topic" : 'Ch ' + c.id;
   if (ctx === "session" && spanOf(c.id) > 1) chLabel += ' &middot; runs ' + spanOf(c.id) + ' sessions';
-  el.innerHTML =
-    '<div class="row">' +
+  /* An own topic has no notes, sections or requirements to open, so it gets no caret — its
+     title just indents to line up with the chapters above and below it. */
+  var caret = own ? '' :
     '<button type="button" class="caret' + (open ? " open" : "") + '" data-act="info" aria-expanded="' + open +
       '"' + (open ? ' aria-controls="' + detId + '"' : '') +
       ' aria-label="' + (open ? "Hide" : "Show") + ' details for ' + nm + ': ' + esc(c.title) + '"' +
-      ' title="' + (open ? "Hide" : "Show") + ' chapter details">&#9656;</button>' +
-    '<div class="t"><div class="ch" style="color:' + textColor[c.part] + '">' + chLabel + '</div>' +
-    '<div class="ti" data-act="info" title="Click for details">' + esc(c.title) + '</div></div>' +
+      ' title="' + (open ? "Hide" : "Show") + ' chapter details">&#9656;</button>';
+  el.innerHTML =
+    '<div class="row">' + caret +
+    '<div class="t"' + (own ? ' style="padding-left:28px"' : '') +
+    '><div class="ch" style="color:' + (own ? OWN_COLOR : textColor[c.part]) + '">' + chLabel + '</div>' +
+    '<div class="ti"' + (own ? '' : ' data-act="info" title="Click for details"') + '>' + esc(c.title) + '</div></div>' +
     '<div class="acts">' + acts + '</div></div>' + det;
   return el;
 }
 function ghostEl(c, offset){
+  var own = !!c.own;
   var el = document.createElement("div");
-  el.className = "chip ghost";
-  el.style.borderLeftColor = partColor[c.part];
+  el.className = "chip ghost" + (own ? " own" : "");
+  el.style.borderLeftColor = own ? OWN_COLOR : partColor[c.part];
   el.dataset.id = c.id;
   el.dataset.offset = offset;
   el.innerHTML =
     '<div class="row"><div class="t" style="padding-left:28px">' +
-    '<div class="ch" style="color:' + textColor[c.part] + '">Ch ' + c.id + ' &middot; continued</div>' +
+    '<div class="ch" style="color:' + (own ? OWN_COLOR : textColor[c.part]) + '">' +
+    (own ? "Your own topic" : 'Ch ' + c.id) + ' &middot; continued</div>' +
     '<div class="ti">' + esc(c.title) + '</div></div>' +
     '<div class="acts"><button type="button" title="Don\'t continue into this session"' +
-    ' aria-label="Stop Chapter ' + c.id + ' continuing into this session" data-act="unextend">&#10005;</button></div></div>';
+    ' aria-label="Stop ' + esc(own ? "your topic " + c.title : "Chapter " + c.id) +
+    ' continuing into this session" data-act="unextend">&#10005;</button></div></div>';
   return el;
 }
 /* render() replaces the builder wholesale, so whatever the keyboard user was on disappears.
@@ -1509,6 +1652,72 @@ function restoreFocus(f){
                chip.querySelector("button");
   if (target) target.focus({preventScroll: true});
 }
+/* Which session (if any) currently has its "add your own topic" editor open, and whether
+   the input still needs focus. render() rebuilds the board wholesale, so the editor's open
+   state has to live out here rather than in the DOM. */
+var topicEdit = null;    // {s: session index, id: own-topic id when renaming, else null}
+var topicFocus = false;
+function topicFormHtml(s){
+  if (!topicEdit || topicEdit.s !== s)
+    return '<button type="button" class="topicbtn" data-topic="open" data-session="' + s +
+      '">+ Add a topic of your own</button>';
+  var renaming = !!topicEdit.id;
+  var val = renaming ? (state.custom[topicEdit.id] || "") : "";
+  return '<label class="sr-only" for="topicIn">' +
+      (renaming ? "Rename your topic" : "Your own topic for session " + (s+1)) + '</label>' +
+    '<input id="topicIn" type="text" maxlength="120" autocomplete="off" value="' + esc(val) +
+      '" placeholder="e.g. Negotiation and bargaining">' +
+    '<button type="button" class="btn small" data-topic="save" data-session="' + s + '">' +
+      (renaming ? "Save" : "Add") + '</button>' +
+    '<button type="button" class="btn secondary small" data-topic="cancel">Cancel</button>';
+}
+function openTopicEditor(s, id){
+  topicEdit = {s: s, id: id || null};
+  topicFocus = true;
+  render();
+}
+function saveTopicEditor(){
+  var inp = document.getElementById("topicIn");
+  if (!inp || !topicEdit) return;
+  var title = inp.value.trim().slice(0, 120);
+  if (!title){ toast("Give your topic a short name first.", true); inp.focus(); return; }
+  var s = topicEdit.s;
+  if (topicEdit.id){
+    state.custom[topicEdit.id] = title;
+    topicEdit = null;
+  } else {
+    var id = nextOwnId();
+    state.custom[id] = title;
+    syncOwn();
+    state.sessions[s].push(id);
+    topicEdit = {s: s, id: null};   // stay open, so several topics can go in one after another
+    topicFocus = true;
+  }
+  syncOwn();
+  persist(); render();
+  toast("Added to session " + (s+1) + ".");
+}
+function deleteOwnTopic(id){
+  detach(id);
+  delete state.custom[id];
+  delete state.spans[id];
+  syncOwn();
+  if (topicEdit && topicEdit.id === id) topicEdit = null;
+  persist(); render();
+}
+document.addEventListener("click", function(e){
+  var b = e.target.closest ? e.target.closest("[data-topic]") : null;
+  if (!b) return;
+  if (b.dataset.topic === "open") openTopicEditor(Number(b.dataset.session), null);
+  else if (b.dataset.topic === "cancel"){ topicEdit = null; render(); }
+  else if (b.dataset.topic === "save") saveTopicEditor();
+});
+document.addEventListener("keydown", function(e){
+  if (!e.target || e.target.id !== "topicIn") return;
+  if (e.key === "Enter"){ e.preventDefault(); saveTopicEditor(); }
+  else if (e.key === "Escape"){ e.preventDefault(); topicEdit = null; render(); }
+});
+
 function render(){
   var keepFocus = captureFocus();
   // sessions
@@ -1528,6 +1737,10 @@ function render(){
     ghosts.forEach(function(g){ body.appendChild(ghostEl(byId[g.id], g.offset)); });
     list.forEach(function(id){ body.appendChild(chipEl(byId[id], "session")); });
     box.appendChild(body);
+    var foot = document.createElement("div");
+    foot.className = "topicadd";
+    foot.innerHTML = topicFormHtml(s);
+    box.appendChild(foot);
     col.appendChild(box);
   });
   var add = document.createElement("button");
@@ -1562,14 +1775,21 @@ function render(){
   un.innerHTML = "";
   state.unused.forEach(function(id){ un.appendChild(chipEl(byId[id], "unused")); });
   // progress
-  var placed = 0;
-  state.sessions.forEach(function(l){ placed += l.length; });
+  var placed = 0, own = 0;
+  state.sessions.forEach(function(l){ l.forEach(function(id){ if (isOwn(id)) own++; else placed++; }); });
   var total = CONFIG.chapters.length;
   document.getElementById("progText").textContent =
-    placed + " of " + total + " chapters placed" + (state.unused.length ? " · " + state.unused.length + " unused" : "");
+    placed + " of " + total + " chapters placed" +
+    (state.unused.length ? " · " + state.unused.length + " unused" : "") +
+    (own ? " · " + own + " topic" + (own === 1 ? "" : "s") + " of your own" : "");
   document.getElementById("progFill").style.width = Math.round(100 * (placed + state.unused.length) / total) + "%";
   document.getElementById("numSessions2").value = state.n;
   restoreFocus(keepFocus);
+  if (topicFocus){
+    topicFocus = false;
+    var ti = document.getElementById("topicIn");
+    if (ti){ ti.focus(); ti.select(); }
+  }
 }
 function flashChip(id){
   var el = document.querySelector('.slotbody .chip[data-id="' + id + '"]');
@@ -1654,6 +1874,8 @@ document.addEventListener("click", function(e){
     case "discard": tryDiscard(id); break;
     case "info": toggleInfo(id); break;
     case "qadd": openQuickAdd(btn, id); break;
+    case "renameown": var p = placedPos(id); if (p) openTopicEditor(p.s, id); break;
+    case "delown": deleteOwnTopic(id); break;
   }
 });
 var qaddEl = null;
@@ -1777,8 +1999,10 @@ document.getElementById("btnPrefill").addEventListener("click", function(){
   if (!CONFIG) return;   // config still loading
   var placed = 0;
   state.sessions.forEach(function(l){ placed += l.length; });
+  var ownCount = Object.keys(state.custom || {}).length;
   if ((placed || state.unused.length) &&
-      !confirm("Replace your current arrangement with the book's chapter order?")) return;
+      !confirm("Replace your current arrangement with the book's chapter order?" +
+               (ownCount ? " Your " + ownCount + " own topic(s) will be deleted." : ""))) return;
   var ids = CONFIG.chapters.map(function(c){ return c.id; });
   var n = Math.max(1, Math.min(60, ids.length)), sessions = [];
   for (var s=0; s<n; s++) sessions.push([]);
@@ -1788,29 +2012,35 @@ document.getElementById("btnPrefill").addEventListener("click", function(){
     for (var j=0; j<take; j++) sessions[s].push(ids[k++]);
   }
   var prev = state;
-  state = {n:n, sessions:sessions, unused:[], spans:{}, prefilled:true};
+  state = {n:n, sessions:sessions, unused:[], spans:{}, custom:{}, prefilled:true};
+  syncOwn();
   sortAllSessions();
   if (wholeOrderViolation()){   // possible if the sheet's row order disagrees with the prereqs
     state = prev;
+    syncOwn();
     toast("The book's own chapter order conflicts with the chapter requirements — please build your TOC by hand.", true);
     return;
   }
+  topicEdit = null;
   persist(); render();
   toast("All " + ids.length + " chapters placed in the book's order, one per session — now rearrange it to match how you'd teach.");
 });
 
 /* ================= START OVER ================= */
-/* Empties the builder — every session, the unused pile, spans and the prefill flag — and puts
+/* Empties the builder — every session, the unused pile, spans, own topics and the prefill flag — and puts
    the session count back to the default. The survey's own questions are deliberately left
    alone: this button lives in the builder bar and only claims the arrangement. */
 document.getElementById("btnReset").addEventListener("click", function(){
   var placed = 0;
   state.sessions.forEach(function(l){ placed += l.length; });
   if ((placed || state.unused.length || state.n !== DEFAULT_SESSIONS) &&
-      !confirm("Start over? This clears every chapter you've placed and resets the count to " +
-               DEFAULT_SESSIONS + " sessions. Your written answers are kept.")) return;
-  state = {n:DEFAULT_SESSIONS, sessions:[], unused:[], spans:{}};
+      !confirm("Start over? This clears every chapter you've placed, deletes any topics you added " +
+               "yourself, and resets the count to " + DEFAULT_SESSIONS +
+               " sessions. Your written answers are kept.")) return;
+  state = {n:DEFAULT_SESSIONS, sessions:[], unused:[], spans:{}, custom:{}};
   openInfo = {};
+  topicEdit = null;
+  syncOwn();
   setSessionCount(DEFAULT_SESSIONS);   // fills in the empty sessions, then persists and renders
   toast("Cleared — every chapter is back in the chapter list.");
 });
@@ -2215,28 +2445,35 @@ function enterEditMode(){
 
 /* The two editors save to different Sheet tabs, so each panel keeps its own save
    button; the tabs just decide which panel is on screen. */
+var ED_TABS = [["chapters", "tabChapters", "panelChapters"],
+               ["questions", "tabQuestions", "panelQuestions"],
+               ["rounds",    "tabRounds",    "panelRounds"]];
 function showEdTab(which){
-  var isQ = which === "questions";
-  document.getElementById("panelChapters").hidden = isQ;
-  document.getElementById("panelQuestions").hidden = !isQ;
-  [["tabChapters", !isQ], ["tabQuestions", isQ]].forEach(function(p){
-    var b = document.getElementById(p[0]);
-    b.setAttribute("aria-selected", p[1] ? "true" : "false");
-    b.tabIndex = p[1] ? 0 : -1;
+  ED_TABS.forEach(function(t){
+    var on = t[0] === which;
+    document.getElementById(t[2]).hidden = !on;
+    var b = document.getElementById(t[1]);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+    b.tabIndex = on ? 0 : -1;
   });
+  if (which === "rounds") loadRounds();
+}
+function edTabOf(id){
+  for (var i=0; i<ED_TABS.length; i++) if (ED_TABS[i][1] === id) return ED_TABS[i][0];
+  return "chapters";
 }
 document.querySelector(".edtabs").addEventListener("click", function(e){
   var b = e.target.closest ? e.target.closest("[role=tab]") : null;
-  if (b) showEdTab(b.id === "tabQuestions" ? "questions" : "chapters");
+  if (b) showEdTab(edTabOf(b.id));
 });
 document.querySelector(".edtabs").addEventListener("keydown", function(e){
   if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-  var tabs = ["tabChapters", "tabQuestions"];
+  var tabs = ED_TABS.map(function(t){ return t[1]; });
   var i = tabs.indexOf(document.activeElement.id);
   if (i === -1) return;
   e.preventDefault();
   var next = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
-  showEdTab(next === "tabQuestions" ? "questions" : "chapters");
+  showEdTab(edTabOf(next));
   document.getElementById(next).focus();
 });
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
@@ -2707,11 +2944,162 @@ function savePreviewConfig(chapters, questions){
   }catch(e){}
 }
 
+/* ================= ROUNDS (admin) =================
+   A round is a name for a stretch of surveying — "Test" while we try things out, then
+   the real thing, then "2027" for the next edition. The backend stamps every incoming
+   response with whichever round is active, so nothing here rewrites history: naming a
+   new round only labels what arrives from now on, and the dashboard uses those labels
+   to look at one round at a time. */
+var ROUNDS = null;   // last payload from the Sheet: {active, rounds:[…], unlabelled, total}
+
+/** A timestamp as a person reads it — "4 Jun 2026" or "4 Jun 2026, 2:45 PM". */
+function whenText(ts, withTime){
+  if (!ts) return "";
+  var d = new Date(ts);
+  if (isNaN(d.getTime())) return String(ts).slice(0, withTime ? 16 : 10).replace("T", " ");
+  var opt = {day:"numeric", month:"short", year:"numeric"};
+  if (withTime){ opt.hour = "numeric"; opt.minute = "2-digit"; }
+  try{ return d.toLocaleString(undefined, opt); }
+  catch(e){ return d.toISOString().slice(0, withTime ? 16 : 10).replace("T", " "); }
+}
+function nResp(n){
+  return (n === null || n === undefined) ? "—" : n + " response" + (n === 1 ? "" : "s");
+}
+
+/** Preview mode has no Sheet, so rounds live in this browser exactly as the config does. */
+var PREVIEW_ROUNDS_SEED = {active: "Fall 2026 pilot", rounds: [
+  {name: "Test run",        started: "2026-05-04T12:00:00Z", notes: ""},
+  {name: "Fall 2026 pilot", started: "2026-06-01T12:00:00Z", notes: ""}]};
+function previewRoundStore(){
+  try{
+    var raw = JSON.parse(localStorage.getItem("meTocRounds") || "null");
+    if (raw && raw.rounds) return raw;
+  }catch(e){}
+  return JSON.parse(JSON.stringify(PREVIEW_ROUNDS_SEED));
+}
+function previewRounds(){
+  var store = previewRoundStore(), counts = {}, total = 0;
+  demoSet().forEach(function(r){
+    var k = String(r.round || "");
+    counts[k] = (counts[k] || 0) + 1;
+    total++;
+  });
+  var known = {};
+  var rounds = store.rounds.map(function(r){
+    known[r.name] = 1;
+    return {name: r.name, started: r.started, notes: r.notes, count: counts[r.name] || 0};
+  });
+  Object.keys(counts).forEach(function(k){
+    if (k && !known[k]) rounds.push({name: k, started: "", notes: "", count: counts[k]});
+  });
+  return {active: store.active, rounds: rounds, unlabelled: counts[""] || 0, total: total};
+}
+function previewStartRound(name){
+  var store = previewRoundStore(), found = null;
+  store.rounds.forEach(function(r){ if (r.name.toLowerCase() === name.toLowerCase()) found = r.name; });
+  if (found) name = found;
+  else store.rounds.push({name: name, started: new Date().toISOString(), notes: ""});
+  store.active = name;
+  try{ localStorage.setItem("meTocRounds", JSON.stringify(store)); }catch(e){}
+  return previewRounds();
+}
+
+function loadRounds(){
+  var st = document.getElementById("rndStatus");
+  if (!IS_LIVE){ ROUNDS = previewRounds(); renderRounds(); return; }
+  renderRounds();                       // keep the last answer on screen while refreshing
+  st.innerHTML = '<span class="spin"></span> Loading rounds&hellip;';
+  apiCall({action: "rounds", key: ADMIN.key}, function(p){
+    st.textContent = "";
+    ROUNDS = p || null;
+    renderRounds();
+  }, function(e){
+    st.textContent = "";
+    ROUNDS = null;
+    document.getElementById("rndNow").innerHTML =
+      '<div class="big">Couldn&rsquo;t load the rounds</div><p class="sub">' +
+      esc(errMsg(e, "The survey database didn't answer.")) + '</p>';
+    document.getElementById("rndList").innerHTML = "";
+  });
+}
+
+function renderRounds(){
+  var now = document.getElementById("rndNow"), list = document.getElementById("rndList");
+  var p = ROUNDS;
+  if (!p){ now.innerHTML = '<p class="sub">Loading&hellip;</p>'; list.innerHTML = ""; return; }
+  var cur = null;
+  (p.rounds || []).forEach(function(r){ if (r.name === p.active) cur = r; });
+  var where = IS_LIVE ? "" : ' &middot; preview copy, saved in this browser only';
+  now.innerHTML = p.active
+    ? '<div class="big">Recording responses as &ldquo;' + esc(p.active) + '&rdquo;</div>' +
+      '<p class="sub">' + nResp(cur ? cur.count : null) + ' in this round' +
+      (cur && cur.started ? ' &middot; started ' + esc(whenText(cur.started)) : '') + where + '</p>'
+    : '<div class="big">No round has been named yet</div>' +
+      '<p class="sub">' + nResp(p.unlabelled) + ' recorded so far, unlabelled. Name a round below and ' +
+      'everything from that moment on is filed under it.' + where + '</p>';
+
+  var body = (p.rounds || []).slice().reverse().map(function(r){   // newest round first
+    var on = r.name === p.active;
+    return '<tr><td class="nm">' + esc(r.name) + (on ? ' <span class="rndtag">Active</span>' : '') +
+      '</td><td>' + (r.started ? esc(whenText(r.started)) : "&mdash;") +
+      '</td><td class="num">' + (r.count === null || r.count === undefined ? "&mdash;" : r.count) +
+      '</td><td class="num">' + (on ? '<span class="hint">recording now</span>'
+        : '<button type="button" class="btn secondary small" data-round="' + esc(r.name) +
+          '">Record into this round</button>') + '</td></tr>';
+  }).join("");
+  if (p.unlabelled){
+    body += '<tr><td class="nm">(before rounds were named)</td><td>&mdash;</td><td class="num">' +
+      p.unlabelled + '</td><td class="num"><span class="hint">can&rsquo;t be reopened</span></td></tr>';
+  }
+  list.innerHTML = body
+    ? '<div style="overflow-x:auto"><table class="rndtable"><caption class="sr-only">Rounds of ' +
+      'surveying</caption><thead><tr><th scope="col">Round</th><th scope="col">Started</th>' +
+      '<th scope="col">Responses</th><th scope="col"><span class="sr-only">Actions</span></th>' +
+      '</tr></thead><tbody>' + body + '</tbody></table></div>'
+    : '<p class="rndnote">No rounds yet.</p>';
+}
+
+function startRoundNamed(name){
+  name = String(name || "").trim().replace(/\s+/g, " ");
+  var inp = document.getElementById("rndName"), st = document.getElementById("rndStatus");
+  if (!name){
+    toast("Give the round a name first — for example “Test” or “2027 survey”.", true);
+    inp.focus();
+    return;
+  }
+  function applied(p){
+    ROUNDS = p;
+    inp.value = "";
+    renderRounds();
+    if (AN) AN.round = undefined;   // the dashboard re-picks its default round on next load
+    toast("Responses from now on are labelled “" + p.active + "”.");
+  }
+  if (!IS_LIVE){ applied(previewStartRound(name)); return; }
+  st.innerHTML = '<span class="spin"></span> Starting&hellip;';
+  apiCall({action: "startRound", key: ADMIN.key, name: name}, function(p){
+    st.textContent = "";
+    applied(p);
+  }, function(e){
+    st.textContent = "";
+    toast(errMsg(e, "Couldn't start that round — please try again."), true);
+  });
+}
+document.getElementById("rndStart").addEventListener("click", function(){
+  startRoundNamed(document.getElementById("rndName").value);
+});
+document.getElementById("rndName").addEventListener("keydown", function(e){
+  if (e.key === "Enter"){ e.preventDefault(); startRoundNamed(this.value); }
+});
+document.getElementById("rndList").addEventListener("click", function(e){
+  var b = e.target.closest ? e.target.closest("[data-round]") : null;
+  if (b) startRoundNamed(b.dataset.round);
+});
+
 /* ================= SUBMIT ================= */
 document.getElementById("btnSubmit").addEventListener("click", function(){
   var btn = this;
   var placed = 0;
-  state.sessions.forEach(function(l){ placed += l.length; });
+  state.sessions.forEach(function(l){ l.forEach(function(id){ if (!isOwn(id)) placed++; }); });
   if (!placed){
     toast("Place at least one chapter into a session before submitting.", true);
     document.querySelector(".buildbar").scrollIntoView({behavior: scrollBehavior(), block:"start"});
@@ -2738,10 +3126,10 @@ document.getElementById("btnSubmit").addEventListener("click", function(){
     return;
   }
   var tocReadable = state.sessions.map(function(list, s){
-    var items = ghostsFor(s).map(function(g){ return "Ch " + g.id + " — " + byId[g.id].title + " (continued)"; })
+    var items = ghostsFor(s).map(function(g){ return itemLabel(g.id) + " (continued)"; })
       .concat(list.map(function(id){
         var k = spanOf(id);
-        return "Ch " + id + " — " + byId[id].title + (k > 1 ? " (runs " + k + " sessions)" : "");
+        return itemLabel(id) + (k > 1 ? " (runs " + k + " sessions)" : "");
       }));
     return items.length ? "Session " + (s+1) + ": " + items.join(" | ") : null;
   }).filter(Boolean).join("\n");
@@ -2755,6 +3143,7 @@ document.getElementById("btnSubmit").addEventListener("click", function(){
     sessions: state.sessions,
     unused: state.unused,
     spans: spans,
+    custom: state.custom || {},
     startedFromPrefill: !!state.prefilled,
     tocReadable: tocReadable,
     unusedReadable: state.unused.map(function(id){ return "Ch " + id + " — " + byId[id].title; }).join(" | "),
@@ -2786,7 +3175,10 @@ document.getElementById("btnSubmit").addEventListener("click", function(){
    text, so the model interprets rather than calculates. */
 var AN;   // declaration only — see the EDIT note above; initialized on entry
 function enterAnalyzeMode(){
-  if (!AN) AN = {responses: null, stats: null, sel: -1, chat: [], busy: false};
+  // `all` is every response the Sheet holds; `responses` is the round being looked at
+  // (see applyRound). `round` is null for "all rounds", undefined until first chosen.
+  if (!AN) AN = {all: null, responses: null, round: undefined, stats: null, sel: -1,
+                 chat: [], busy: false};
   document.body.classList.remove("editmode");
   document.body.classList.add("anmode");
   loadResponses();
@@ -2823,9 +3215,9 @@ function csvRow(cells){ return cells.map(csvCell).join(","); }
    Excel as a tidy dataset that can be filtered and pivoted without any parsing. */
 function buildResponsesCsv(){
   var rs = AN.responses || [], qs = CONFIG.questions || [], chs = CONFIG.chapters || [];
-  var head = ["Response", "Sheet row", "Timestamp", "Name", "Email", "Institution",
+  var head = ["Response", "Sheet row", "Timestamp", "Round", "Name", "Email", "Institution",
               "Sessions", "Started from book order", "Chapters placed", "Chapters discarded",
-              "Likes about this TOC", "Anything missing"];
+              "Own topics added", "Likes about this TOC", "Anything missing"];
   qs.forEach(function(q){
     if (q.type === "section") return;
     var label = q.prompt || q.id;
@@ -2840,9 +3232,12 @@ function buildResponsesCsv(){
   rs.forEach(function(r, i){
     var f = respFacts(r), discarded = {};
     f.unused.forEach(function(id){ discarded[id] = true; });
-    var row = [i + 1, r.row || "", r.timestamp || "", r.name || "", r.email || "",
+    var row = [i + 1, r.row || "", r.timestamp || "", r.round || "", r.name || "", r.email || "",
                r.institution || "", f.n, r.startedFromPrefill ? "yes" : "no",
-               f.placed.length, f.unused.length, r.likes || "", r.missing || ""];
+               f.placed.length, f.unused.length,
+               f.added.map(function(id){
+                 return "S" + (f.start[id].s + 1) + ": " + itemTitle(r, id); }).join(" | "),
+               r.likes || "", r.missing || ""];
     qs.forEach(function(q){
       if (q.type === "section") return;
       var v = (r.extra || {})[q.id];
@@ -2861,34 +3256,96 @@ function buildResponsesCsv(){
 }
 function loadResponses(){
   var st = document.getElementById("anStatus");
-  if (!IS_LIVE){
-    AN.responses = demoResponses();
-    st.textContent = "Preview mode — showing " + AN.responses.length + " synthetic demo responses.";
+  function arrived(preview){
+    // A fresh load defaults to the round the newest response landed in, so a finished
+    // test round stops colouring the results the moment a real one starts.
+    if (AN.round === undefined) AN.round = defaultRound();
+    applyRound();
+    renderRoundFilter();
+    st.textContent = (preview ? "Preview mode — " : "") + roundStatusText(preview);
     analyzeRender();
-    return;
   }
+  if (!IS_LIVE){ AN.all = demoSet(); arrived(true); return; }
   st.innerHTML = '<span class="spin"></span> Loading responses&hellip;';
   apiCall({action:"responses", key: ADMIN.key}, function(rs){
-    AN.responses = rs || [];
-    st.textContent = AN.responses.length + " response" + (AN.responses.length === 1 ? "" : "s") + " loaded.";
-    analyzeRender();
+    AN.all = rs || [];
+    arrived(false);
   }, function(e){
     st.textContent = "";
     toast(errMsg(e, "Couldn't load responses."), true);
   });
 }
+/* ---------- rounds on the dashboard ----------
+   Every response carries the name of the round it arrived in (see the editor's Rounds
+   tab). The dashboard shows one round at a time so a test run never mixes into the real
+   results, with "All rounds" a click away. */
+/** Distinct round labels, in the order they first appear (oldest first). */
+function roundNames(){
+  var seen = {}, names = [];
+  (AN.all || []).forEach(function(r){
+    var k = String(r.round || "");
+    if (!(k in seen)){ seen[k] = 1; names.push(k); }
+  });
+  return names;
+}
+function roundLabel(k){ return k === "" ? "(unlabelled)" : k; }
+function defaultRound(){
+  var all = AN.all || [];
+  if (roundNames().length < 2) return null;               // nothing to separate
+  return String(all[all.length - 1].round || "");         // the round still running
+}
+function applyRound(){
+  var all = AN.all || [];
+  AN.responses = AN.round === null ? all.slice()
+    : all.filter(function(r){ return String(r.round || "") === AN.round; });
+  AN.sel = -1;
+}
+function roundStatusText(preview){
+  var all = AN.all || [], shown = AN.responses || [];
+  var what = shown.length + (preview ? " synthetic demo response" : " response") +
+             (shown.length === 1 ? "" : "s");
+  if (AN.round === null) return what + (preview ? " shown." : " loaded.");
+  return what + " in “" + roundLabel(AN.round) + "” (of " + all.length + " in all rounds).";
+}
+/** The round picker sits in the toolbar, and only when there is more than one round. */
+function renderRoundFilter(){
+  var wrap = document.getElementById("anRoundWrap"), sel = document.getElementById("anRound");
+  var names = roundNames(), all = AN.all || [];
+  wrap.hidden = names.length < 2;
+  if (wrap.hidden) return;
+  var counts = {};
+  all.forEach(function(r){ var k = String(r.round || ""); counts[k] = (counts[k] || 0) + 1; });
+  sel.innerHTML = ['<option value="*">All rounds (' + all.length + ')</option>'].concat(
+    names.slice().reverse().map(function(k){
+      return '<option value="r:' + esc(k) + '">' + esc(roundLabel(k)) + ' (' + counts[k] + ')</option>';
+    })).join("");
+  sel.value = AN.round === null ? "*" : "r:" + AN.round;
+}
+document.getElementById("anRound").addEventListener("change", function(){
+  AN.round = this.value === "*" ? null : this.value.slice(2);
+  applyRound();
+  document.getElementById("anStatus").textContent = roundStatusText(!IS_LIVE);
+  analyzeRender();
+});
 
 /* ---------- per-response derived facts ---------- */
 function respFacts(r){
   var n = Math.max(1, Number(r.numSessions) || (r.sessions ? r.sessions.length : 1));
   var start = {};   // chapter id -> {s, i}
+  var added = [];   // topics this respondent added themselves, in teaching order
   (r.sessions || []).forEach(function(list, s){
-    (list || []).forEach(function(id, i){ start[Number(id)] = {s:s, i:i}; });
+    (list || []).forEach(function(id, i){
+      id = Number(id);
+      start[id] = {s:s, i:i};
+      if (id < 0) added.push(id);
+    });
   });
   var span = {};
   Object.keys(r.spans || {}).forEach(function(k){ span[Number(k)] = Math.max(1, Number(r.spans[k]) || 1); });
   return {
-    n: n, start: start, placed: Object.keys(start).map(Number),
+    n: n, start: start,
+    placed: Object.keys(start).map(Number).filter(function(id){ return id > 0; }),
+    added: added,
     unused: (r.unused || []).map(Number),
     spanOf: function(id){ return span[id] || 1; },
     pos: function(id){ return start[id] ? (start[id].s + 0.5) / n : null; },   // 0..1, where it starts
@@ -3113,6 +3570,13 @@ function computeCamps(facts){
 function pct(v){ return v === null || v === undefined ? "—" : Math.round(v * 100) + "%"; }
 function num(v, d){ return v === null || v === undefined ? "—" : Number(v).toFixed(d === undefined ? 1 : d); }
 function chapShort(id){ return "Ch " + id + " — " + (byId[id] ? byId[id].title : "removed chapter"); }
+/* A response's sessions can hold topics the respondent typed in themselves (negative ids);
+   their titles travel with the response, not with our chapter list. */
+function itemTitle(r, id){
+  if (Number(id) < 0) return (r.custom || {})[id] || "their own topic";
+  return byId[id] ? byId[id].title : "removed chapter";
+}
+function itemNumber(id){ return Number(id) < 0 ? "Own topic" : "Ch " + id; }
 function heatColor(t){ // 0..1 -> wash..deep red, one hue, lightness-monotonic
   if (t <= 0) return "var(--wash)";
   var mix = Math.pow(Math.min(1, t), 0.7);
@@ -3250,22 +3714,32 @@ function analyzeRender(){
     if (qs.kind === "text" && qs.texts && qs.texts.length) h += quotesSection(qs.q.prompt, qs.texts);
   });
 
+  /* --- topics respondents added themselves --- */
+  h += ownTopicsSection(rs, A);
+
   /* --- individual responses --- */
+  // With one round on screen the label is already in the toolbar; across rounds it earns a column.
+  var mixedRounds = AN.round === null && roundNames().length > 1;
   h += '<div class="ansec"><h3>Individual responses</h3>' +
-    '<p class="subt">Click a row to see that instructor&rsquo;s course exactly as they built it.</p>' +
+    '<p class="subt">Click a row to see that instructor&rsquo;s course exactly as they built it. ' +
+    'Times are when the response was submitted.</p>' +
     '<div style="overflow-x:auto"><table class="rtable">' +
     '<caption class="sr-only">Every response; open one to see the course as it was built</caption>' +
-    '<thead><tr><th scope="col">#</th><th scope="col">When</th><th scope="col">Name</th>' +
+    '<thead><tr><th scope="col">#</th><th scope="col">When</th>' +
+    (mixedRounds ? '<th scope="col">Round</th>' : '') + '<th scope="col">Name</th>' +
     '<th scope="col">Institution / course</th><th scope="col">Sessions</th>' +
-    '<th scope="col">Used</th><th scope="col">Unused</th></tr></thead><tbody>' +
+    '<th scope="col">Used</th><th scope="col">Unused</th><th scope="col">Own</th></tr></thead><tbody>' +
     rs.map(function(r, i){
       var f = A.facts[i];
-      var when = r.timestamp ? String(r.timestamp).slice(0, 10) : "—";
+      var when = whenText(r.timestamp, true) || "—";
       // Clicking the row is a mouse convenience; the button is what a keyboard reaches.
       return '<tr data-resp="' + i + '"><td><button type="button" class="rowbtn" aria-label="Show response ' +
         (i+1) + (r.name ? ", " + esc(r.name) : "") + '">' + (i+1) + '</button></td>' +
-        '<td>' + esc(when) + '</td><td>' + esc(r.name || "—") + '</td><td>' + esc(r.institution || "—") + '</td>' +
-        '<td>' + f.n + '</td><td>' + f.placed.length + '</td><td>' + (f.unused.length || "—") + '</td></tr>';
+        '<td>' + esc(when) + '</td>' +
+        (mixedRounds ? '<td>' + esc(roundLabel(String(r.round || ""))) + '</td>' : '') +
+        '<td>' + esc(r.name || "—") + '</td><td>' + esc(r.institution || "—") + '</td>' +
+        '<td>' + f.n + '</td><td>' + f.placed.length + '</td><td>' + (f.unused.length || "—") +
+        '</td><td>' + (f.added.length || "—") + '</td></tr>';
     }).join("") + '</tbody></table></div><div id="anDetail" tabindex="-1"></div></div>';
 
   /* --- AI analysis --- */
@@ -3357,6 +3831,31 @@ function qChartHtml(qs){
   }
   return '<div class="ansec"><h3>' + esc(q.prompt) + '</h3>' + h + '</div>';
 }
+/* Every topic respondents typed in for themselves, newest chapters aside — this is the
+   clearest signal of what the book is missing, so it gets its own section rather than
+   hiding inside the individual responses. */
+function ownTopicsSection(rs, A){
+  var rows = [];
+  rs.forEach(function(r, i){
+    A.facts[i].added.forEach(function(id){
+      rows.push({i: i, title: itemTitle(r, id), s: A.facts[i].start[id].s + 1, n: A.facts[i].n});
+    });
+  });
+  if (!rows.length) return "";
+  var who = {};
+  rs.forEach(function(r, i){ if (A.facts[i].added.length) who[i] = 1; });
+  return '<div class="ansec"><h3>Topics they added themselves</h3>' +
+    '<p class="subt">' + rows.length + ' topic' + (rows.length === 1 ? '' : 's') +
+    ' written in by ' + Object.keys(who).length + ' of ' + rs.length +
+    ' respondents, with the session each was slotted into.</p><div class="quotes">' +
+    rows.map(function(t){
+      var r = rs[t.i];
+      return '<div class="quote">&ldquo;' + esc(t.title) + '&rdquo;' +
+        '<div class="who">&mdash; <button type="button" data-jump="' + t.i + '">' + esc(respLabel(r, t.i)) +
+        (r.institution ? ", " + esc(r.institution) : "") + '</button>' +
+        ' &middot; session ' + t.s + ' of ' + t.n + '</div></div>';
+    }).join("") + '</div></div>';
+}
 function quotesSection(title, items){
   items = items.filter(function(t){ return t.text && String(t.text).trim(); });
   if (!items.length) return "";
@@ -3390,7 +3889,8 @@ function renderDetail(i){
   if (!r) return;
   var f = AN.stats.facts[i];
   var h = '<div class="rdetail"><h4>' + esc(respLabel(r, i)) + '</h4>' +
-    '<p class="rmeta">' + (esc([r.institution, r.email, r.timestamp ? String(r.timestamp).slice(0,10) : ""]
+    '<p class="rmeta">' + (esc([r.institution, r.email, whenText(r.timestamp, true),
+      r.round ? "round: " + r.round : ""]
       .filter(String).join(" · ")) || "no contact details given") +
     (r.row ? ' · Sheet row ' + r.row : '') + '</p><div class="rsess">';
   for (var s=0; s<f.n; s++){
@@ -3406,23 +3906,25 @@ function renderDetail(i){
     h += '<div class="sh">Session ' + (s+1) + '</div>';
     ghosts.forEach(function(id){
       var c = byId[id];
-      h += '<div class="minichip ghost2" style="border-left-color:' + (c ? partColor[c.part] : "#999") + '">' +
-        '<span class="cn">Ch ' + id + '</span> ' + esc(c ? c.title : "removed chapter") + ' (continued)</div>';
+      h += '<div class="minichip ghost2' + (id < 0 ? ' own' : '') + '" style="border-left-color:' +
+        (id < 0 ? OWN_COLOR : (c ? partColor[c.part] : "#999")) + '">' +
+        '<span class="cn">' + itemNumber(id) + '</span> ' + esc(itemTitle(r, id)) + ' (continued)</div>';
     });
     items.forEach(function(id){
       id = Number(id);
       var c = byId[id], k = f.spanOf(id);
-      h += '<div class="minichip" style="border-left-color:' + (c ? partColor[c.part] : "#999") + '">' +
-        '<span class="cn" style="color:' + (c ? textColor[c.part] : "var(--ink-soft)") + '">Ch ' + id + '</span> ' +
-        esc(c ? c.title : "removed chapter") + (k > 1 ? ' <i>(runs ' + k + ' sessions)</i>' : '') + '</div>';
+      h += '<div class="minichip' + (id < 0 ? ' own' : '') + '" style="border-left-color:' +
+        (id < 0 ? OWN_COLOR : (c ? partColor[c.part] : "#999")) + '">' +
+        '<span class="cn" style="color:' + (id < 0 ? OWN_COLOR : (c ? textColor[c.part] : "var(--ink-soft)")) +
+        '">' + itemNumber(id) + '</span> ' +
+        esc(itemTitle(r, id)) + (k > 1 ? ' <i>(runs ' + k + ' sessions)</i>' : '') + '</div>';
     });
   }
   if (f.unused.length){
     h += '<div class="sh">Unused pile</div>';
     f.unused.forEach(function(id){
-      var c = byId[id];
       h += '<div class="minichip" style="border-left-color:#c9c2b8;color:var(--ink-soft)">' +
-        '<span class="cn">Ch ' + id + '</span> ' + esc(c ? c.title : "removed chapter") + '</div>';
+        '<span class="cn">Ch ' + id + '</span> ' + esc(itemTitle(r, id)) + '</div>';
     });
   }
   h += '</div><div class="qa">';
@@ -3450,6 +3952,11 @@ function buildDigest(){
     "their own course's class sessions (in teaching order), optionally running a chapter across several " +
     "sessions, and discarding chapters they would not teach to an 'unused' pile. Positions below are " +
     "normalized: 0% = first session, 100% = last session of that respondent's course.");
+  L.push(AN.round === null
+    ? "These responses span every round of surveying run so far" +
+      (roundNames().length > 1 ? " (" + roundNames().map(roundLabel).join(", ") + ")." : ".")
+    : "These are the responses from the “" + roundLabel(AN.round) + "” round of surveying only; " +
+      (AN.all || []).length + " responses exist across all rounds.");
   L.push("All statistics were computed deterministically by the dashboard. Rely on them; do not recompute. " +
     "Quote respondents verbatim where it helps, and refer to them by name/number so the authors can look " +
     "them up. Be candid about weak spots in the data (small n, selection effects) where relevant.");
@@ -3507,6 +4014,17 @@ function buildDigest(){
       }).join(" | "));
     }
   });
+  var allAdded = [];
+  rs.forEach(function(r, i){
+    A.facts[i].added.forEach(function(id){
+      allAdded.push(itemTitle(r, id) + " (" + respLabel(r, i) + ", session " +
+        (A.facts[i].start[id].s + 1) + " of " + A.facts[i].n + ")");
+    });
+  });
+  if (allAdded.length){
+    L.push("Topics respondents wrote in themselves (not in our chapter list, so not counted in " +
+      "any statistic above): " + allAdded.join("; "));
+  }
   L.push("\n== INDIVIDUAL RESPONSES ==");
   var clip = rs.length > 80 ? 400 : 1200;   // keeps the digest well inside the context window
   rs.forEach(function(r, i){
@@ -3515,7 +4033,8 @@ function buildDigest(){
     for (var s=0; s<f.n; s++){
       var items = (r.sessions[s] || []).map(function(id){
         var k = f.spanOf(Number(id));
-        return id + (k > 1 ? "(x" + k + " sessions)" : "");
+        return (Number(id) < 0 ? "own topic “" + itemTitle(r, id) + "”" : String(id)) +
+          (k > 1 ? "(x" + k + " sessions)" : "");
       });
       if (items.length) toc.push("S" + (s+1) + ":" + items.join(","));
     }
@@ -3668,6 +4187,9 @@ function demoExtra(i){
   });
   return out;
 }
+/** The demo set is built once, so refreshing the preview dashboard doesn't reshuffle it. */
+var DEMO = null;
+function demoSet(){ if (!DEMO) DEMO = demoResponses(); return DEMO; }
 function demoResponses(){
   var names = ["Ada Chen","Ben Ortiz","Carla Novak","Dev Patel","Elena Ruiz","Frank Osei",
                "Grace Kim","Hugo Lind","Iris Wang","Jon Baker","Kim Salo","Lena Voss"];
@@ -3705,10 +4227,19 @@ function demoResponses(){
     });
     var spans = {};
     if (i % 3 === 1) spans[8] = 2;
+    // a few of them write in a topic of their own, the way a real respondent can
+    var custom = {}, ownTx = ["Negotiation and bargaining", "Data and experimentation",
+                              "Platform and network markets", "Capstone: pricing a new product"];
+    if (i % 4 === 0){
+      custom[-1] = ownTx[(i / 4) % ownTx.length];
+      sessions[Math.min(n - 1, Math.floor(n * 0.6))].push(-1);
+    }
     return {
-      row: i + 2, timestamp: "2026-0" + (5 + (i % 4)) + "-1" + (i % 9) + "T12:00:00Z",
+      row: i + 2, timestamp: "2026-0" + (5 + (i % 4)) + "-1" + (i % 9) + "T1" + (i % 9) + ":05:00Z",
+      round: i % 3 === 0 ? "Test run" : "Fall 2026 pilot",
       name: nm, email: nm.toLowerCase().replace(/[^a-z]/g, ".") + "@example.edu",
       institution: insts[i], numSessions: n, sessions: sessions, unused: unused, spans: spans,
+      custom: custom,
       likes: likeTx[i % likeTx.length], missing: missTx[i % missTx.length],
       extra: demoExtra(i)
     };
