@@ -206,6 +206,11 @@
   .session h3 .num{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;
     border-radius:50%;background:var(--chartreuse);color:#3a3a00;font-size:12.5px;font-weight:700;letter-spacing:0;
     box-shadow:0 0 0 3px rgba(193,196,0,.2)}
+  /* A session can be deleted where it stands, not only trimmed off the end by the counter.
+     The bin sits quietly at the right of the header until someone reaches for it. */
+  .session h3 .del{margin-left:auto;border:none;background:transparent;color:var(--ink-soft);
+    cursor:pointer;font-size:14px;width:26px;height:26px;border-radius:4px;line-height:1;padding:0}
+  .session h3 .del:hover{background:#f7e9e8;color:var(--red)}
   .slotbody{min-height:44px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
   /* the whole session box is the drop target, header included */
   .session.dragover{background:#fdf6d8;box-shadow:inset 0 0 0 2px var(--gold)}
@@ -546,6 +551,10 @@
   .msg{border-radius:8px;padding:9px 13px;max-width:64ch;font-size:14px}
   .msg.user{background:var(--wash);border:1px solid var(--line);align-self:flex-end;font-weight:600}
   .msg.asst{background:var(--paper);border:1px solid var(--line);align-self:flex-start}
+  /* Not a turn in the conversation — a note that the ground moved under it. */
+  .msg.note{align-self:stretch;max-width:none;background:transparent;border:0;border-top:1px dashed var(--line);
+    border-radius:0;padding:9px 0 0;font-size:13px;color:var(--ink-soft);text-align:center}
+  .msg.note b{color:var(--ink)}
   .chatrow{display:flex;gap:10px;margin-top:12px;align-items:flex-start}
   .chatrow textarea{min-height:44px;flex:1;font-family:var(--sans)}
   .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--red);
@@ -1294,7 +1303,11 @@ function apiCall(body, onOk, onFail){
       if (res && res.ok) onOk(res.data);
       else onFail(new Error(res && res.error ? res.error : "Request failed."));
     })
-    .catch(function(){ onFail(new Error("Couldn't reach the survey database — check your connection and try again.")); });
+    .catch(function(){
+      var err = new Error("Couldn't reach the survey database — check your connection and try again.");
+      err.offline = true;   // client-generated, so safe to show a respondent verbatim
+      onFail(err);
+    });
 }
 function errMsg(e, fallback){
   var m = e && e.message ? String(e.message) : "";
@@ -2001,7 +2014,11 @@ function render(){
     box.className = "session";
     box.dataset.drop = "session";      // whole box, not just the chip area, accepts a drop
     box.dataset.session = s;
-    box.innerHTML = '<h3><span class="num" aria-hidden="true">' + (s+1) + '</span> Session ' + (s+1) + '</h3>';
+    box.innerHTML = '<h3><span class="num" aria-hidden="true">' + (s+1) + '</span> Session ' + (s+1) +
+      (state.sessions.length > 1
+        ? '<button type="button" class="del" data-delsession="' + s + '" title="Delete session ' +
+          (s+1) + '" aria-label="Delete session ' + (s+1) + '">&#128465;</button>'
+        : '') + '</h3>';
     var body = document.createElement("div");
     body.className = "slotbody";
     var ghosts = ghostsFor(s);
@@ -2143,6 +2160,71 @@ function addSessionFor(id){
   if (!tryPlace(id, state.n - 1, 0)) setSessionCount(before);
 }
 
+/* Delete one session where it stands. The session counter can only trim from the end, which
+   is no help to someone who finds their week 4 is really part of week 3. Everything after
+   shifts up a slot, so the relative order of everything that stays is preserved.
+   What doesn't stay is this session's own chapters — they go back to the chapter list, so the
+   bin's rule applies here too: a chapter can't leave while something still scheduled builds on
+   it. Trimming from the end never needs that check (a dependent always sits in a later session,
+   so it is being removed as well); deleting from the middle does. */
+function deleteSession(s){
+  if (state.sessions.length <= 1){ toast("A course needs at least one session.", true); return; }
+  var list = state.sessions[s];
+  var chapters = list.filter(function(id){ return !isOwn(id); });
+  var own = list.filter(isOwn);
+  var blocked = null;
+  chapters.forEach(function(id){
+    if (blocked) return;
+    // Dependents inside this session are leaving with it, so they don't stand in the way.
+    var deps = dependentsOf(id).filter(function(d){
+      var p = placedPos(d);
+      return p && p.s !== s;
+    });
+    if (deps.length){
+      blocked = chapLabel(byId[id]) + " can't leave session " + (s+1) + " while " +
+        deps.map(function(d){ return "Chapter " + d; }).join(", ") +
+        " (which builds on it) is scheduled. Move it to another session, or remove that chapter first.";
+    }
+  });
+  if (blocked){ toast(blocked, true); return; }
+  if ((chapters.length || own.length) &&
+      !confirm("Delete session " + (s+1) + "? That will " +
+        [chapters.length ? "return " + chapters.length + " placed chapter" +
+                           (chapters.length === 1 ? "" : "s") + " to the chapter list" : "",
+         own.length ? "delete " + own.length + " topic" + (own.length === 1 ? "" : "s") +
+                      " you added yourself" : ""]
+        .filter(Boolean).join(" and ") + ".")) return;
+  own.forEach(function(id){ delete state.custom[id]; });
+  list.forEach(function(id){ delete state.spans[id]; });
+  // A chapter that started earlier and ran through this session now covers one session fewer.
+  state.sessions.forEach(function(l, s0){
+    if (s0 >= s) return;
+    l.forEach(function(id){
+      var k = spanOf(id);
+      if (s0 + k - 1 >= s){
+        if (k - 1 <= 1) delete state.spans[id]; else state.spans[id] = k - 1;
+      }
+    });
+  });
+  state.sessions.splice(s, 1);
+  state.n = state.sessions.length;
+  // The "add your own topic" editor is remembered by session index, which just shifted.
+  if (topicEdit){
+    if (topicEdit.s === s) topicEdit = null;
+    else if (topicEdit.s > s) topicEdit.s--;
+  }
+  syncOwn();
+  persist(); render();
+  var msg = [];
+  if (chapters.length) msg.push(chapters.length + " chapter(s) went back to the chapter list");
+  if (own.length) msg.push(own.length + " of your own topic(s) were deleted");
+  toast("Deleted a session" + (msg.length ? ": " + msg.join(", ") : "") + ".");
+  // Keep a keyboard user where they were: the bin of whatever session took this one's place.
+  var next = document.querySelector('.session[data-session="' +
+    Math.min(s, state.sessions.length - 1) + '"] .del');
+  if (next) next.focus({preventScroll: true});
+}
+
 /* ================= CLICK ACTIONS ================= */
 document.addEventListener("click", function(e){
   var btn = e.target.closest ? e.target.closest("[data-act]") : null;
@@ -2259,7 +2341,8 @@ function toast(msg, warn){
   t.textContent = msg;
   t.className = warn ? "warn show" : "show";
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ t.className = ""; }, 4200);
+  // Warnings say more than confirmations do, and are the ones worth reading twice.
+  toastTimer = setTimeout(function(){ t.className = ""; }, warn ? 7000 : 4200);
 }
 
 /* ================= STEP NAV ================= */
@@ -2308,7 +2391,10 @@ document.getElementById("btnSessPlus").addEventListener("click", function(){
   requestSessionCount(state.n + 1);
 });
 document.getElementById("sessionsCol").addEventListener("click", function(e){
-  if (!e.target.closest || !e.target.closest("#btnAddSession")) return;
+  if (!e.target.closest) return;
+  var del = e.target.closest("[data-delsession]");
+  if (del){ deleteSession(Number(del.dataset.delsession)); return; }
+  if (!e.target.closest("#btnAddSession")) return;
   if (state.n >= 60){ toast("That's as many sessions as the survey allows.", true); return; }
   setSessionCount(state.n + 1);
 });
@@ -3532,9 +3618,17 @@ document.getElementById("btnSubmit").addEventListener("click", function(){
     clearAnswers();
     show("step-done");
   }
-  function fail(){
+  /* Two very different things land here. A failure to reach the network is the one a
+     respondent can do something about, and it is worded by us, so show it. Anything else is
+     an Apps Script exception relayed verbatim — Google's wording, sometimes naming the
+     spreadsheet — which helps nobody on a public page. Either way, say the thing that
+     actually matters: their work is still here. */
+  function fail(e){
     btn.disabled = false; btn.textContent = "Submit my TOC";
-    toast("Something went wrong saving your response — please try again.", true);
+    toast((e && e.offline
+      ? "Couldn't reach the survey database — check your connection and try again."
+      : "Something went wrong saving your response — please try again.") +
+      " Your answers are safe in this browser.", true);
   }
   if (IS_LIVE){
     apiCall({action:"submit", payload: payload}, ok, fail);
@@ -3699,11 +3793,26 @@ function renderRoundFilter(){
   sel.value = AN.round === null ? "*" : "r:" + AN.round;
 }
 document.getElementById("anRound").addEventListener("change", function(){
+  var was = AN.round;
   AN.round = this.value === "*" ? null : this.value.slice(2);
+  if (AN.round !== was) noteRoundSwitch();
   applyRound();
   document.getElementById("anStatus").textContent = roundStatusText(!IS_LIVE);
   analyzeRender();
 });
+/* Switching rounds changes the statistics under the conversation's feet: every answer above
+   was about a different set of responses, and the digest sent with the next question will
+   describe the new one. Throwing the conversation away would be worse — comparing rounds
+   mid-conversation is a reasonable thing to do — so mark the seam instead, in the log and
+   in what the model is sent. A "note" is display-and-prompt scaffolding, never a chat turn:
+   runChat folds it into the front of the next question so the roles still alternate. */
+function noteRoundSwitch(){
+  if (!AN || !AN.chat.length) return;
+  var label = AN.round === null ? "all rounds" : "the “" + roundLabel(AN.round) + "” round";
+  var last = AN.chat[AN.chat.length - 1];
+  if (last.role === "note") last.content = label;   // switched twice without asking anything
+  else AN.chat.push({role: "note", content: label});
+}
 
 /* ---------- per-response derived facts ---------- */
 function respFacts(r){
@@ -4453,7 +4562,7 @@ function runChat(){
   renderChatLog();
   var msgs = [{role: "user", content: "Answer the authors' questions about this survey data. Be specific — " +
       "cite respondents and numbers from the data you were given. If the data can't answer something, say so."},
-    {role: "assistant", content: "Understood — ask away."}].concat(AN.chat);
+    {role: "assistant", content: "Understood — ask away."}].concat(chatTurns());
   llmSend("chat", msgs, 3000, function(text){
     AN.chat.push({role: "assistant", content: text});
     renderChatLog();
@@ -4461,6 +4570,25 @@ function runChat(){
     AN.chat.pop();   // remove the unanswered question so it can be retried
     renderChatLog();
   });
+}
+/* AN.chat as the API wants it: real turns only, with any round switch folded into the front
+   of the question that followed it. Keeping notes out of the message list is what guarantees
+   user/assistant still alternate. */
+function chatTurns(){
+  var out = [], pending = "";
+  AN.chat.forEach(function(m){
+    if (m.role === "note"){ pending = m.content; return; }
+    if (m.role === "user" && pending){
+      out.push({role: "user", content:
+        "(The authors switched the dashboard to " + pending + ", so the survey statistics you " +
+        "have been given now describe that. Earlier answers in this conversation were about a " +
+        "different set of responses — don't carry figures across without saying so.)\n\n" + m.content});
+      pending = "";
+      return;
+    }
+    out.push(m);
+  });
+  return out;
 }
 /* purpose is "report" or "chat" — the backend maps it to a thinking-effort level. */
 function llmSend(purpose, messages, maxTokens, onOk, onFailExtra){
@@ -4491,6 +4619,9 @@ function renderChatLog(){
   var log = document.getElementById("chatLog");
   if (!log) return;
   log.innerHTML = AN.chat.map(function(m){
+    if (m.role === "note")
+      return '<div class="msg note">Now showing <b>' + esc(m.content) + '</b>. Everything above ' +
+        'was answered about the responses on screen before the switch.</div>';
     return '<div class="msg ' + (m.role === "user" ? "user" : "asst") + '">' +
       (m.role === "user" ? esc(m.content) : mdToHtml(m.content)) + '</div>';
   }).join("");

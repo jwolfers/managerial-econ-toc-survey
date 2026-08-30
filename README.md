@@ -6,7 +6,9 @@ their number of class sessions — the count box asks "How many class sessions?"
 card, because it is the one setting everyone must change and it was easy to skim past (default
 15, adjustable with ±, or "+ Add a session", which doubles as a drop target: a chapter dropped
 on it gets a new session of its own at the end, and the ⇄ popup offers the same as "New
-session at the end") —
+session at the end"; each session header also carries a 🗑 that deletes that session where it
+stands, since the count box can only trim from the end and a week that turns out to belong to
+the one before it is rarely the last one) —
 then drag the 15 planned chapters into those sessions (or discard them to an "unused" pile),
 optionally stretch a chapter across consecutive sessions (the ⤓ button; later sessions
 show a dashed "continued" card), add topics of their own to any session, answer the survey's own questions — which can sit above
@@ -17,10 +19,14 @@ session: dependent chapters must start at or after that session.
 
 **Nothing a respondent does is lost by accident.** A part-built response is kept in their
 browser — the board, and every word they have typed — so a closed tab or a crashed browser
-costs nothing, and the draft is cleared only once the response is safely submitted. Cutting the
-session count is the one destructive control, so it asks first whenever sessions being removed
-still hold chapters or their own topics, and the count box ignores a value it can't read (an
-emptied box means "no change", not "one session"). A chapter refused a session because of its
+costs nothing, and the draft is cleared only once the response is safely submitted. Removing a
+session is the one destructive control, so both ways of doing it — cutting the count, and the
+per-session 🗑 — ask first whenever the sessions going away still hold chapters or their own
+topics, and the count box ignores a value it can't read (an
+emptied box means "no change", not "one session"). Deleting a session in the middle shifts
+everything after it up a slot, which preserves the relative order of every chapter, so no
+prerequisite can be broken by the delete; a chapter that ran through the deleted session simply
+runs one session fewer. A chapter refused a session because of its
 prerequisites goes back exactly where it came from, unused pile included, and a chapter that
 leaves the board forgets how many sessions it ran, so it never returns silently stretched.
 
