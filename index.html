@@ -1490,12 +1490,16 @@ function detach(id){
 /* ================= ACTIONS (all validated) ================= */
 function tryPlace(id, s, i, quiet){
   var from = placedPos(id);
+  var fromUnused = state.unused.indexOf(id);   // -1 unless it was sitting in the unused pile
   detach(id);
   if (from && from.s === s && from.i < i) i--;           // account for removal shift
   i = Math.max(0, Math.min(i, state.sessions[s].length));
   var v = violationFor(id, s);
   if (v){
-    if (from) state.sessions[from.s].splice(from.i, 0, id);   // put it back
+    // Put it back exactly where it was. A chapter dragged out of the unused pile onto an
+    // illegal session used to end up in neither place, silently losing the "I'd skip this".
+    if (from) state.sessions[from.s].splice(from.i, 0, id);
+    else if (fromUnused !== -1) state.unused.splice(fromUnused, 0, id);
     toast(v, true);
     return false;
   }
@@ -1519,17 +1523,20 @@ function ownOnlyLivesInASession(id){
   toast("Topics you add live in their session — use the pencil to rename one, or the bin to delete it.", true);
   return true;
 }
+/* A chapter leaving the board forgets how long it ran. Without this it kept its span in
+   state.spans and, placed again later, silently spread over several sessions again. Moving
+   a chapter (tryPlace) deliberately keeps the span; only leaving the board clears it. */
 function tryReturnToBank(id){
   if (ownOnlyLivesInASession(id)) return;
   var v = removalViolation(id);
   if (v){ toast(v, true); return; }
-  detach(id); persist(); render();
+  detach(id); delete state.spans[id]; persist(); render();
 }
 function tryDiscard(id){
   if (ownOnlyLivesInASession(id)) return;
   var v = removalViolation(id);
   if (v){ toast(v, true); return; }
-  detach(id); state.unused.push(id); persist(); render();
+  detach(id); delete state.spans[id]; state.unused.push(id); persist(); render();
 }
 function tryMove(id, dir){ // dir -1 up / +1 down, across session boundaries
   var p = placedPos(id);
@@ -1555,7 +1562,7 @@ function setSessionCount(n){
       state.sessions[s].forEach(function(id){
         // a chapter goes back to the bank; an own topic has no bank to go back to
         if (isOwn(id)){ delete state.custom[id]; delete state.spans[id]; lost++; }
-        else spill.push(id);
+        else { delete state.spans[id]; spill.push(id); }
       });
     }
     state.sessions.length = n;
@@ -2029,11 +2036,49 @@ function show(step){
   document.getElementById(step).classList.add("active");
   window.scrollTo({top:0});
 }
-document.getElementById("numSessions2").addEventListener("change", function(){ setSessionCount(Number(this.value)); });
-document.getElementById("btnSessMinus").addEventListener("click", function(){ setSessionCount(state.n - 1); });
-document.getElementById("btnSessPlus").addEventListener("click", function(){ setSessionCount(state.n + 1); });
+/* Every respondent-driven change to the session count goes through here. Two things the
+   raw setSessionCount() must not do on its own: read a half-typed box as a number (clearing
+   the field to retype it used to mean "1 session", emptying the whole board), and throw away
+   placed chapters without asking. */
+function requestSessionCount(n, fromBox){
+  var box = document.getElementById("numSessions2");
+  if (!isFinite(n) || Math.round(n) < 1){
+    box.value = state.n;                     // a blank or unreadable box means "no change"
+    if (fromBox) toast("Enter a number of class sessions between 1 and 60.", true);
+    return;
+  }
+  n = Math.round(n);
+  if (n > 60){
+    n = 60;
+    toast("60 sessions is as long as the survey goes \u2014 set to 60.", true);
+  }
+  var chapters = 0, own = 0;
+  for (var s=n; s<state.sessions.length; s++){
+    state.sessions[s].forEach(function(id){ if (isOwn(id)) own++; else chapters++; });
+  }
+  if ((chapters || own) &&
+      !confirm("Cutting back to " + n + " session" + (n === 1 ? "" : "s") + " will " +
+        [chapters ? "return " + chapters + " placed chapter" + (chapters === 1 ? "" : "s") +
+                    " to the chapter list" : "",
+         own ? "delete " + own + " topic" + (own === 1 ? "" : "s") + " you added yourself" : ""]
+        .filter(Boolean).join(" and ") + ". Continue?")){
+    box.value = state.n;
+    return;
+  }
+  setSessionCount(n);
+}
+document.getElementById("numSessions2").addEventListener("change", function(){
+  requestSessionCount(Number(this.value), true);
+});
+document.getElementById("btnSessMinus").addEventListener("click", function(){ requestSessionCount(state.n - 1); });
+document.getElementById("btnSessPlus").addEventListener("click", function(){
+  if (state.n >= 60){ toast("60 sessions is as long as the survey goes.", true); return; }
+  requestSessionCount(state.n + 1);
+});
 document.getElementById("sessionsCol").addEventListener("click", function(e){
-  if (e.target.closest && e.target.closest("#btnAddSession")) setSessionCount(state.n + 1);
+  if (!e.target.closest || !e.target.closest("#btnAddSession")) return;
+  if (state.n >= 60){ toast("That's as many sessions as the survey allows.", true); return; }
+  setSessionCount(state.n + 1);
 });
 /* Safety net: revalidates the full ordering (matters if the chapter config changed mid-response).
    Returns {msg, id} — id is the chapter that needs to move — or null. */
