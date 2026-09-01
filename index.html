@@ -280,6 +280,10 @@
     opacity:0;pointer-events:none;transition:opacity .25s;z-index:60}
   #toast.show{opacity:1}
   #toast.warn{background:var(--berry)}
+  .submitfail{margin-top:14px;padding:12px 15px;border-radius:9px;background:#fdf1f6;
+    border:1px solid var(--berry);color:var(--berry);font-size:14.5px;line-height:1.5;
+    max-width:640px}
+  .submitfail b{display:block;margin-bottom:2px}
   .chip.ghost{border-style:dashed;background:var(--wash);cursor:default;opacity:.9}
   .chip.ghost .t .ti{font-weight:400;font-style:italic}
   .chip.ghost .t .ti:hover{text-decoration:none;cursor:default}
@@ -1004,6 +1008,7 @@
       <div class="btnrow">
         <button class="btn" id="btnSubmit">Submit my TOC</button>
       </div>
+      <div id="submitFail" class="submitfail" role="alert" hidden></div>
     </div>
   </section>
 
@@ -1278,7 +1283,9 @@ var ADMIN = {key: ""};      // verified admin password (edit + analyze pages)
 function apiCall(body, onOk, onFail){
   onFail = onFail || function(){};
   if (HOSTED){
-    var run = google.script.run.withSuccessHandler(onOk).withFailureHandler(onFail);
+    var run = google.script.run.withSuccessHandler(onOk).withFailureHandler(function(e){
+      onFail(transportErr(errMsg(e, "Request failed."), "refused"));
+    });
     switch (body.action){
       case "config":       run.getConfig(); break;
       case "submit":       run.submitResponse(JSON.stringify(body.payload)); break;
@@ -1298,16 +1305,58 @@ function apiCall(body, onOk, onFail){
   var req = (body.action === "config")
     ? fetch(API_URL + (API_URL.indexOf("?") === -1 ? "?" : "&") + "action=config")
     : fetch(API_URL, {method: "POST", body: JSON.stringify(body)});
-  req.then(function(r){ return r.json(); })
-    .then(function(res){
-      if (res && res.ok) onOk(res.data);
-      else onFail(new Error(res && res.error ? res.error : "Request failed."));
+  req.then(function(r){
+      /* Read the body as text before trusting it as JSON. An Apps Script that is over quota,
+         mid-redeploy or simply broken answers with an HTML error page, and a parse failure on
+         that is not the respondent's connection playing up — saying so sends them
+         off checking their wifi over a fault at our end. */
+      return r.text().then(function(txt){ return {r: r, txt: txt}; });
     })
-    .catch(function(){
-      var err = new Error("Couldn't reach the survey database — check your connection and try again.");
-      err.offline = true;   // client-generated, so safe to show a respondent verbatim
-      onFail(err);
+    .then(function(got){
+      var res = null;
+      try{ res = JSON.parse(got.txt); }catch(e){}
+      if (!res) throw transportErr(got.r.ok
+        ? "The survey database sent back something we couldn't read."
+        : "The survey database answered with an error (" + got.r.status + ").", "unreadable");
+      /* A well-formed {ok:false} means the server heard us and declined. Sending it again
+         would only earn the same refusal, so it is marked final. */
+      if (!res.ok) throw transportErr(res.error ? String(res.error) : "Request failed.", "refused");
+      return res.data;
+    })
+    .catch(function(e){
+      if (e && e.kind) throw e;
+      throw transportErr(navigator.onLine === false
+        ? "You appear to be offline — check your connection and try again."
+        : "Couldn't reach the survey database — check your connection and try again.", "offline");
+    })
+    /* Both handlers are dispatched clear of the promise chain. An exception thrown inside one
+       of them then stays its own bug — it surfaces in the console — instead
+       of being caught above and reported to the respondent as a network failure it never was. */
+    .then(function(data){ setTimeout(function(){ onOk(data); }, 0); },
+          function(e){ setTimeout(function(){ onFail(e); }, 0); });
+}
+/* kind: "offline" (nothing came back) | "unreadable" (something did, but not our JSON) |
+   "refused" (the server answered properly and said no). Only the first two are worth resending. */
+function transportErr(msg, kind){
+  var e = new Error(msg);
+  e.kind = kind;
+  return e;
+}
+/* One transient blip should not end a twenty-minute session. Only transport failures are
+   resent; the submission id in the payload is what stops a resend landing in the Sheet twice
+   (see alreadyRecorded_ in Code.gs). */
+function apiCallRetry(body, onOk, onFail){
+  var delays = [1000, 3000], attempt = 0;
+  (function go(){
+    apiCall(body, onOk, function(e){
+      attempt++;
+      if (attempt <= delays.length && e && e.kind !== "refused"){
+        setTimeout(go, delays[attempt - 1]);
+        return;
+      }
+      onFail(e, attempt);
     });
+  })();
 }
 function errMsg(e, fallback){
   var m = e && e.message ? String(e.message) : "";
@@ -1502,6 +1551,17 @@ function restore(){
   return false;
 }
 function persist(){ try{ localStorage.setItem("meTocSurvey", JSON.stringify(state)); }catch(e){} }
+/* One id per draft, not per attempt: a resend — right now, or from a draft restored
+   on this device next week — has to carry the same id, or the guard in Code.gs cannot
+   tell it from a genuinely new response. It rides inside `state`, so restore() brings it back
+   for free, and ok() drops it once the response is safely in. */
+function submissionId(){
+  if (!state.sid){
+    state.sid = "s-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+    persist();
+  }
+  return state.sid;
+}
 /* The board survived a reload but the writing did not, which is backwards: the free text is
    the most valuable part of a response and the most expensive to retype. Snapshot every
    answer on each keystroke, and put them back on the next visit. */
@@ -3586,6 +3646,26 @@ document.getElementById("rndList").addEventListener("click", function(e){
 });
 
 /* ================= SUBMIT ================= */
+/* A failed submission has to outlast being looked away from. A toast is right for a validation
+   slip the respondent is already staring at; it is wrong for the one message they most need to
+   still find after glancing away, so this one stays on the page until the next attempt. */
+function submitFailed(msg, attempts){
+  var box = document.getElementById("submitFail");
+  var head = document.createElement("b");
+  head.textContent = "Your response wasn't sent.";
+  box.textContent = "";
+  box.appendChild(head);
+  box.appendChild(document.createTextNode(
+    msg + (attempts > 1 ? " We tried " + attempts + " times." : "") +
+    " Your answers are safe in this browser — press Submit to try again, or come " +
+    "back to this page on this device later and your TOC will still be here."));
+  box.hidden = false;
+  try{ box.scrollIntoView({behavior: scrollBehavior(), block: "center"}); }catch(e){}
+}
+function submitFailClear(){
+  var box = document.getElementById("submitFail");
+  if (box) box.hidden = true;
+}
 document.getElementById("btnSubmit").addEventListener("click", function(){
   var btn = this;
   var placed = 0;
@@ -3637,6 +3717,7 @@ document.getElementById("btnSubmit").addEventListener("click", function(){
   var spans = {};
   state.sessions.forEach(function(list){ list.forEach(function(id){ if (spanOf(id) > 1) spans[id] = spanOf(id); }); });
   var payload = {
+    sid: submissionId(),
     name: document.getElementById("rName").value.trim(),
     email: document.getElementById("rEmail").value.trim(),
     institution: document.getElementById("rInst").value.trim(),
@@ -3654,26 +3735,27 @@ document.getElementById("btnSubmit").addEventListener("click", function(){
     extra: extra,
     userAgent: navigator.userAgent
   };
+  submitFailClear();
   btn.disabled = true; btn.textContent = "Submitting…";
   function ok(){
     try{ localStorage.removeItem("meTocSurvey"); }catch(e){}
+    delete state.sid;   // a deliberate second response is a new submission, not a repeat
     clearAnswers();
     show("step-done");
   }
-  /* Two very different things land here. A failure to reach the network is the one a
-     respondent can do something about, and it is worded by us, so show it. Anything else is
-     an Apps Script exception relayed verbatim — Google's wording, sometimes naming the
-     spreadsheet — which helps nobody on a public page. Either way, say the thing that
-     actually matters: their work is still here. */
-  function fail(e){
+  /* Two very different things land here. A transport failure is the one a respondent can do
+     something about, and it is worded by us, so show it. A refusal is an Apps Script exception
+     relayed verbatim — Google's wording, sometimes naming the spreadsheet —
+     which helps nobody on a public page. Either way, say the thing that actually matters: their
+     work is still here — and say it somewhere still on screen a minute from now. */
+  function fail(e, attempts){
     btn.disabled = false; btn.textContent = "Submit my TOC";
-    toast((e && e.offline
-      ? "Couldn't reach the survey database — check your connection and try again."
-      : "Something went wrong saving your response — please try again.") +
-      " Your answers are safe in this browser.", true);
+    submitFailed((e && e.kind === "refused")
+      ? "Something went wrong saving your response."
+      : errMsg(e, "Couldn't reach the survey database."), attempts);
   }
   if (IS_LIVE){
-    apiCall({action:"submit", payload: payload}, ok, fail);
+    apiCallRetry({action:"submit", payload: payload}, ok, fail);
   } else {
     console.log("PREVIEW SUBMISSION", payload);
     setTimeout(ok, 400);
